@@ -4,7 +4,7 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/365connectcommunity.github.io/",
+  base: "/",
   plugins: [react()],
   resolve: {
     alias: {
