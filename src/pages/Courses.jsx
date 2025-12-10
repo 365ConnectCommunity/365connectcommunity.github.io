@@ -4,34 +4,24 @@ import { BookOpen } from 'lucide-react';
 
 const Courses = () => {
     return (
-        <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center mb-16"
-            >
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">Courses</h1>
-                <p className="text-gray-400 text-xl">Enhance your skills with our curated learning paths.</p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[1, 2, 3, 4].map((item) => (
-                    <motion.div
-                        key={item}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:transform hover:scale-105 transition-all duration-300"
-                    >
-                        <div className="h-48 bg-gray-800 flex items-center justify-center">
-                            <BookOpen size={48} className="text-gray-700" />
-                        </div>
-                        <div className="p-6">
-                            <h3 className="text-xl font-bold text-white mb-2">Introduction to D365</h3>
-                            <p className="text-gray-400 text-sm mb-4">A comprehensive guide for beginners to start their journey.</p>
-                            <button className="w-full py-3 border border-white/20 rounded-lg text-white font-medium hover:bg-white hover:text-primary transition-colors">View Course</button>
-                        </div>
-                    </motion.div>
-                ))}
+        <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black py-20 flex items-center justify-center">
+            <div className="container mx-auto px-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center"
+                >
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <BookOpen className="text-white" size={48} />
+                    </div>
+                    <h1 className="text-5xl font-black mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                        Courses
+                    </h1>
+                    <p className="text-3xl text-gray-300 mb-4">Coming Soon</p>
+                    <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                        We're working on bringing you amazing courses on Microsoft D365 and Power Platform. Stay tuned!
+                    </p>
+                </motion.div>
             </div>
         </div>
     );
