@@ -1,4 +1,3 @@
-```javascript
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { communityAPI } from '../services/apiService';
@@ -62,10 +61,10 @@ const Team = () => {
                             className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all"
                         >
                             {member.entityimage && (
-                                <img 
-                                    src={`data: image / png; base64, ${ member.entityimage } `} 
-                                    alt={member.fullname} 
-                                    className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 object-cover" 
+                                <img
+                                    src={`data:image/png;base64,${member.entityimage}`}
+                                    alt={member.fullname}
+                                    className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 object-cover"
                                 />
                             )}
                             <h3 className="text-xl font-bold text-white text-center">{member.fullname || 'Team Member'}</h3>

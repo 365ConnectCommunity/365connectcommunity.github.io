@@ -10,6 +10,9 @@ import Courses from './pages/Courses'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import LoginVerify from './pages/LoginVerify'
+import Blog from './pages/Blog'
+import MyProfile from './pages/MyProfile'
+import MyCertificates from './pages/MyCertificates'
 
 function App() {
     return (
@@ -24,7 +27,9 @@ function App() {
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<Signup />} />
                     <Route path="login-verify" element={<LoginVerify />} />
-                    {/* Protected routes will be added in next phase */}
+                    <Route path="blog" element={<Blog />} />
+                    <Route path="my-profile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
+                    <Route path="my-certificates" element={<ProtectedRoute><MyCertificates /></ProtectedRoute>} />
                 </Route>
             </Routes>
         </AuthProvider>
