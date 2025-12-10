@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, X, User, LogOut, Award, UserCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
+import { getUserImage } from '../services/authService';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [showUserMenu, setShowUserMenu] = useState(false);
+    const { user, isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -20,8 +25,13 @@ const Navbar = () => {
         { name: 'Our Family', path: '/team' },
         { name: 'Events', path: '/events' },
         { name: 'Courses', path: '/courses' },
-        { name: 'Contact', path: '/#contact' },
     ];
+
+    const handleLogout = () => {
+        logout();
+        setShowUserMenu(false);
+        navigate('/');
+    };
 
     return (
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-primary/80 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'}`}>
@@ -41,9 +51,71 @@ const Navbar = () => {
                                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue transition-all group-hover:w-full"></span>
                             </Link>
                         ))}
-                        <a href="https://365connectcommunity.azurewebsites.net/" className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white font-medium hover:opacity-90 transition-all shadow-lg shadow-blue-500/25">
-                            Join Community
-                        </a>
+
+                        {isAuthenticated ? (
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowUserMenu(!showUserMenu)}
+                                    className="flex items-center space-x-2 focus:outline-none"
+                                >
+                                    <img
+                                        src={getUserImage()}
+                                        alt="Profile"
+                                        className="w-10 h-10 rounded-full border-2 border-orange-500 hover:border-orange-400 transition-all"
+                                    />
+                                </button>
+
+                                <AnimatePresence>
+                                    {showUserMenu && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-lg shadow-xl border border-gray-700 overflow-hidden"
+                                        >
+                                            <div className="px-4 py-3 border-b border-gray-700">
+                                                <p className="text-sm text-white font-medium">{user?.name}</p>
+                                                <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+                                            </div>
+                                            <div className="py-2">
+                                                <Link
+                                                    to="/my-profile"
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                                                    onClick={() => setShowUserMenu(false)}
+                                                >
+                                                    <UserCircle size={16} className="mr-3" />
+                                                    My Profile
+                                                </Link>
+                                                <Link
+                                                    to="/my-certificates"
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                                                    onClick={() => setShowUserMenu(false)}
+                                                >
+                                                    <Award size={16} className="mr-3" />
+                                                    My Certificates
+                                                </Link>
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="w-full flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                                                >
+                                                    <LogOut size={16} className="mr-3" />
+                                                    Sign Out
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        ) : (
+                            <div className="flex items-center space-x-4">
+                                <Link to="/login" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
+                                    Sign In
+                                </Link>
+                                <Link to="/signup" className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white font-medium hover:opacity-90 transition-all shadow-lg shadow-blue-500/25">
+                                    Join Community
+                                </Link>
+                            </div>
+                        )}
                     </div>
 
                     <div className="md:hidden">
@@ -73,6 +145,54 @@ const Navbar = () => {
                                     {link.name}
                                 </Link>
                             ))}
+
+                            {isAuthenticated ? (
+                                <>
+                                    <div className="border-t border-gray-700 my-2"></div>
+                                    <div className="px-3 py-2">
+                                        <p className="text-sm text-white font-medium">{user?.name}</p>
+                                        <p className="text-xs text-gray-400">{user?.email}</p>
+                                    </div>
+                                    <Link
+                                        to="/my-profile"
+                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        My Profile
+                                    </Link>
+                                    <Link
+                                        to="/my-certificates"
+                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        My Certificates
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                                    >
+                                        Sign Out
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="border-t border-gray-700 my-2"></div>
+                                    <Link
+                                        to="/login"
+                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        Sign In
+                                    </Link>
+                                    <Link
+                                        to="/signup"
+                                        className="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:opacity-90"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        Join Community
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </motion.div>
                 )}
