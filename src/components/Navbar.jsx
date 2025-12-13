@@ -25,7 +25,8 @@ const Navbar = () => {
         { name: 'Our Family', path: '/team' },
         { name: 'Events', path: '/events' },
         { name: 'Courses', path: '/courses' },
-        { name: 'Our Socials', path: '/socials' },
+        { name: 'Our Socials', path: '/our-socials' },
+        { name: 'Become Contributor', path: '/become-contributor' },
     ];
 
     const handleLogout = () => {
@@ -94,6 +95,14 @@ const Navbar = () => {
                                                 >
                                                     <Award size={16} className="mr-3" />
                                                     My Certificates
+                                                </Link>
+                                                <Link
+                                                    to="/my-profile"
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                                                    onClick={() => setShowUserMenu(false)}
+                                                >
+                                                    <Award size={16} className="mr-3" />
+                                                    My Events
                                                 </Link>
                                                 <button
                                                     onClick={handleLogout}

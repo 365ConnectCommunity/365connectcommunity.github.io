@@ -43,7 +43,7 @@ const OurSocials = () => {
                     <div className="bg-gradient-to-r from-blue-500 to-purple-600 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8">
                         <Share2 className="text-white" size={48} />
                     </div>
-                    <h1 className="text-5xl font-black mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                    <h1 className="text-5xl font-black mb-4 text-white drop-shadow-lg">
                         Our Socials
                     </h1>
                     <p className="text-xl text-gray-400">

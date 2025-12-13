@@ -16,6 +16,7 @@ import MyCertificates from './pages/MyCertificates'
 import CommunityMembers from './pages/CommunityMembers'
 import Support from './pages/Support'
 import OurSocials from './pages/OurSocials'
+import BecomeContributor from './pages/BecomeContributor'
 
 function App() {
     return (
@@ -34,6 +35,7 @@ function App() {
                     <Route path="community-members" element={<CommunityMembers />} />
                     <Route path="support" element={<Support />} />
                     <Route path="our-socials" element={<OurSocials />} />
+                    <Route path="become-contributor" element={<BecomeContributor />} />
                     <Route path="my-profile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
                     <Route path="my-certificates" element={<ProtectedRoute><MyCertificates /></ProtectedRoute>} />
                 </Route>

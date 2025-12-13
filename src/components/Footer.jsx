@@ -37,14 +37,30 @@ const Footer = () => {
         return 'hover:bg-purple-500/20 hover:text-purple-500';
     };
 
+    // Default socials if API fails
+    const defaultSocials = [
+        { name: 'LinkedIn', url: 'https://www.linkedin.com/company/365connect-community', icon: '💼' },
+        { name: 'Twitter', url: 'https://twitter.com/365connect', icon: '🐦' },
+        { name: 'YouTube', url: 'https://youtube.com', icon: '▶️' },
+        { name: 'GitHub', url: 'https://github.com/365connectcommunity', icon: '💻' }
+    ];
+
+    const displaySocials = socials.length > 0 ? socials : defaultSocials;
+
     return (
         <footer className="bg-[#0f1623] border-t border-white/5 pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                     <div className="col-span-1 md:col-span-1">
-                        <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-                            365Connect
-                        </span>
+                        <div className="flex items-center space-x-2 mb-4">
+                            {/* Logo Image */}
+                            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                                365
+                            </div>
+                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+                                365Connect
+                            </span>
+                        </div>
                         <p className="mt-4 text-gray-400 text-sm leading-relaxed">
                             Empowering the community with Microsoft D365 and Power Platform technologies. Learn, teach, and collaborate.
                         </p>
@@ -71,7 +87,7 @@ const Footer = () => {
                     <div>
                         <h4 className="text-white font-semibold mb-4">Connect</h4>
                         <div className="flex space-x-3">
-                            {socials.map((social, index) => (
+                            {displaySocials.map((social, index) => (
                                 <a
                                     key={index}
                                     href={social.url}

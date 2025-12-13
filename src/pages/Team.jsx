@@ -75,74 +75,67 @@ const Team = () => {
 
                 {/* Render Team Groups */}
                 {(() => {
-                    // Define role order and grouping
-                    const roleOrder = ['Founder', 'Co-Founder', 'Community Lead', 'Core Team', 'Contributor'];
+                    const groups = { Leadership: [], Contributors: [] };
 
-                    const groupedTeam = team.reduce((acc, member) => {
-                        // Normalize job title or default to 'Contributor'
-                        let role = member.jobtitle || 'Contributor';
-
-                        // Simple categorization logic if needed, otherwise use jobtitle directly
-                        // This matches simple job titles. Adjust if data is more complex.
-
-                        if (!acc[role]) acc[role] = [];
-                        acc[role].push(member);
-                        return acc;
-                    }, {});
-
-                    // Sort roles based on predefined order, put others at the end
-                    const sortedRoles = Object.keys(groupedTeam).sort((a, b) => {
-                        const indexA = roleOrder.indexOf(a);
-                        const indexB = roleOrder.indexOf(b);
-
-                        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-                        if (indexA !== -1) return -1;
-                        if (indexB !== -1) return 1;
-                        return a.localeCompare(b);
+                    team.forEach(member => {
+                        const role = (member.jobtitle || '').toLowerCase();
+                        if (role.includes('contributor')) {
+                            groups.Contributors.push(member);
+                        } else {
+                            groups.Leadership.push(member);
+                        }
                     });
 
-                    if (sortedRoles.length === 0 && !loading && !error) {
+                    const groupKeys = ['Leadership', 'Contributors'];
+
+                    // Check if empty
+                    if (team.length === 0 && !loading && !error) {
                         return <div className="text-center text-gray-400 text-xl">No team members found</div>;
                     }
 
-                    return sortedRoles.map(role => (
-                        <div key={role} className="mb-16">
-                            <h2 className="text-3xl font-bold text-white mb-8 border-b border-gray-700 pb-2">{role}</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {groupedTeam[role].map((member, index) => (
-                                    <motion.div
-                                        key={member.contactid || index}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: index * 0.1 }}
-                                        className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all border border-gray-700"
-                                    >
-                                        <img
-                                            src={getContributorImage(member)}
-                                            alt={member.fullname}
-                                            className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 object-cover"
-                                        />
-                                        <h3 className="text-xl font-bold text-white text-center">{member.fullname || 'Team Member'}</h3>
-                                        {member.jobtitle && (
-                                            <p className="text-blue-400 text-center mb-2 font-medium">{member.jobtitle}</p>
-                                        )}
-                                        {member.emailaddress1 && (
-                                            <p className="text-sm text-gray-400 text-center">{member.emailaddress1}</p>
-                                        )}
+                    return groupKeys.map(groupName => {
+                        const members = groups[groupName];
+                        if (members.length === 0) return null;
 
-                                        <div className="flex justify-center space-x-3 mt-4">
-                                            {member.linkedin && (
-                                                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-500 transition-colors">
-                                                    <i className="fab fa-linkedin text-xl"></i>
-                                                </a>
+                        return (
+                            <div key={groupName} className="mb-16">
+                                <h2 className="text-3xl font-bold text-white mb-8 border-b border-gray-700 pb-2">{groupName}</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    {members.map((member, index) => (
+                                        <motion.div
+                                            key={member.contactid || index}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: index * 0.1 }}
+                                            className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all border border-gray-700"
+                                        >
+                                            <img
+                                                src={getContributorImage(member)}
+                                                alt={member.fullname}
+                                                className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 object-cover"
+                                            />
+                                            <h3 className="text-xl font-bold text-white text-center">{member.fullname || 'Team Member'}</h3>
+                                            {member.jobtitle && (
+                                                <p className="text-blue-400 text-center mb-2 font-medium">{member.jobtitle}</p>
                                             )}
-                                            {/* Add other socials if available in data */}
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                            {member.emailaddress1 && (
+                                                <p className="text-sm text-gray-400 text-center">{member.emailaddress1}</p>
+                                            )}
+
+                                            <div className="flex justify-center space-x-3 mt-4">
+                                                {member.linkedin && (
+                                                    <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-500 transition-colors">
+                                                        <i className="fab fa-linkedin text-xl"></i>
+                                                    </a>
+                                                )}
+                                                {/* Add other socials if available in data */}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ));
+                        );
+                    });
                 })()}
             </div>
         </div>
