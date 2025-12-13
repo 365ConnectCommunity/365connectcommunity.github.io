@@ -59,7 +59,7 @@ const Footer = () => {
                                 alt="365 Connect"
                                 className="h-10 rounded-full"
                             />
-                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+                            <span className="text-2xl font-bold text-white">
                                 365Connect
                             </span>
                         </div>
