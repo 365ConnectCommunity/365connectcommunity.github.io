@@ -97,7 +97,7 @@ const Navbar = () => {
                                                     My Certificates
                                                 </Link>
                                                 <Link
-                                                    to="/my-profile"
+                                                    to="/my-events"
                                                     className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
                                                     onClick={() => setShowUserMenu(false)}
                                                 >

@@ -98,17 +98,43 @@ const MyCertificates = () => {
                                         </p>
                                     )}
 
-                                    {cert.certificateurl && (
-                                        <a
-                                            href={cert.certificateurl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center justify-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
-                                        >
-                                            <Download size={16} className="mr-2" />
-                                            Download
-                                        </a>
-                                    )}
+                                    <div className="space-y-2 mb-6">
+                                        <p className="text-gray-300 text-sm">
+                                            <span className="font-bold text-blue-400">Recipient:</span> {cert.recipientname || user?.name || 'User'}
+                                        </p>
+                                        <p className="text-gray-300 text-sm">
+                                            <span className="font-bold text-blue-400">Type:</span> {cert.certificatetype || 'Completion'}
+                                        </p>
+                                        {cert.eventdate && (
+                                            <p className="text-gray-300 text-sm">
+                                                <span className="font-bold text-blue-400">Event Date:</span> {cert.eventdate}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="flex flex-col space-y-3">
+                                        {cert.verificationlink && (
+                                            <a
+                                                href={cert.verificationlink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                                            >
+                                                Verify Certificate
+                                            </a>
+                                        )}
+                                        {cert.downloadlink && (
+                                            <a
+                                                href={cert.downloadlink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center justify-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors font-medium"
+                                            >
+                                                <Download size={16} className="mr-2" />
+                                                Download Certificate
+                                            </a>
+                                        )}
+                                    </div>
                                 </motion.div>
                             ))}
                         </div>

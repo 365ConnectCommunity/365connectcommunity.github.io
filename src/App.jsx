@@ -13,6 +13,7 @@ import LoginVerify from './pages/LoginVerify'
 import Blog from './pages/Blog'
 import MyProfile from './pages/MyProfile'
 import MyCertificates from './pages/MyCertificates'
+import MyEvents from './pages/MyEvents'
 import CommunityMembers from './pages/CommunityMembers'
 import Support from './pages/Support'
 import OurSocials from './pages/OurSocials'
@@ -38,6 +39,7 @@ function App() {
                     <Route path="become-contributor" element={<BecomeContributor />} />
                     <Route path="my-profile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
                     <Route path="my-certificates" element={<ProtectedRoute><MyCertificates /></ProtectedRoute>} />
+                    <Route path="my-events" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
                 </Route>
             </Routes>
         </AuthProvider>

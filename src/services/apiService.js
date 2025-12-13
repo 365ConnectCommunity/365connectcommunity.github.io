@@ -268,7 +268,14 @@ export const certificatesAPI = {
                 description: cert.sa_description || cert.description,
                 issueddate: cert.sa_issueddate || cert.issueddate,
                 certificateurl: cert.sa_certificateurl || cert.certificateurl,
-                image: cert.sa_image || cert.image
+                image: cert.sa_image || cert.image,
+                // New fields for legacy compatibility
+                verificationlink: cert.sa_verificationlink,
+                downloadlink: cert.sa_downloadlink,
+                eventname: cert.sa_eventname,
+                certificatetype: cert.sa_certificatetype,
+                recipientname: cert.sa_recipientname,
+                eventdate: cert.sa_eventdate
             }));
         } else {
             return [];
