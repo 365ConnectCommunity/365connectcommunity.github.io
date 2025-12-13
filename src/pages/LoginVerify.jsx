@@ -31,9 +31,11 @@ const LoginVerify = () => {
 
         setSendingCode(true);
         setError(''); // Clear any previous errors
+        setCodeSent(false); // Reset code sent state
         try {
             await authAPI.sendVerificationCode(tempUser.email);
             setCodeSent(true);
+            setError(''); // Ensure error is cleared on success
         } catch (err) {
             setError('Failed to send verification code. Please try again.');
             setCodeSent(false);

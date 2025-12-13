@@ -23,6 +23,28 @@ const Team = () => {
         }
     };
 
+    // Helper function to get contributor image path
+    const getContributorImage = (member) => {
+        const contributorImages = {
+            'Aqeel Khalid': '/contributors/Aqeel Khalid.jpg',
+            'Ashir Mumtaz': '/contributors/Ashir Mumtaz.png',
+            'Shaheer Ahmad': '/contributors/Shaheer Ahmad.png',
+            'Yawer Iqbal': '/contributors/Yawer Iqbal.jpg'
+        };
+
+        // Try to find local contributor image by full name
+        const localImage = contributorImages[member.fullname];
+        if (localImage) return localImage;
+
+        // Fallback to API entityimage if available
+        if (member.entityimage) {
+            return `data:image/png;base64,${member.entityimage}`;
+        }
+
+        // Final fallback to default avatar
+        return '/assets/images/icons8-account-64.png';
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black py-20 flex items-center justify-center">
@@ -60,13 +82,11 @@ const Team = () => {
                             transition={{ delay: index * 0.1 }}
                             className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all"
                         >
-                            {member.entityimage && (
-                                <img
-                                    src={`data:image/png;base64,${member.entityimage}`}
-                                    alt={member.fullname}
-                                    className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 object-cover"
-                                />
-                            )}
+                            <img
+                                src={getContributorImage(member)}
+                                alt={member.fullname}
+                                className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 object-cover"
+                            />
                             <h3 className="text-xl font-bold text-white text-center">{member.fullname || 'Team Member'}</h3>
                             {member.jobtitle && (
                                 <p className="text-gray-400 text-center mb-2">{member.jobtitle}</p>
