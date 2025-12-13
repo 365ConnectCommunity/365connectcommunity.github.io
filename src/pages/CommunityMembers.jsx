@@ -40,7 +40,7 @@ const CommunityMembers = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-center mb-16"
                 >
-                    <h1 className="text-5xl font-black mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                    <h1 className="text-5xl font-black mb-4 text-white">
                         Community Members
                     </h1>
                     <p className="text-xl text-gray-400 max-w-2xl mx-auto">

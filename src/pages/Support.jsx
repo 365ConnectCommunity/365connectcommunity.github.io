@@ -52,7 +52,7 @@ const Support = () => {
                     <div className="bg-gradient-to-r from-blue-500 to-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                         <MessageCircle className="text-white" size={40} />
                     </div>
-                    <h1 className="text-5xl font-black mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                    <h1 className="text-5xl font-black mb-4 text-white">
                         Get Support
                     </h1>
                     <p className="text-xl text-gray-400">
@@ -68,8 +68,8 @@ const Support = () => {
                 >
                     {status.message && (
                         <div className={`mb-6 px-4 py-3 rounded-lg ${status.type === 'success'
-                                ? 'bg-green-500/10 border border-green-500 text-green-500'
-                                : 'bg-red-500/10 border border-red-500 text-red-500'
+                            ? 'bg-green-500/10 border border-green-500 text-green-500'
+                            : 'bg-red-500/10 border border-red-500 text-red-500'
                             }`}>
                             {status.message}
                         </div>
