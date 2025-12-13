@@ -29,7 +29,7 @@ const Navbar = () => {
         { name: 'Courses', path: '/courses' },
         { name: 'Tools', path: '/tools' },
         { name: 'Blog', path: '/blog' },
-        { name: 'Join', path: '/become-contributor' },
+        { name: 'Become Contributor', path: '/become-contributor' },
     ];
 
     const handleLogout = () => {
