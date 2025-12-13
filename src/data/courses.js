@@ -1,403 +1,344 @@
+import { BookOpen, Award, CheckCircle, Clock, BarChart } from 'lucide-react';
+
 export const courses = [
     {
         id: 'power-platform-basics',
-        title: 'Ultimate Power Platform Masterclass: From Zero to Hero',
-        description: 'The definitive guide for non-coders. Master Power Apps, Automate, Dataverse, and Copilot. Start your tech career here.',
-        duration: '8 Weeks',
-        level: 'Beginner (Non-IT Friendly)',
-        image: '/assets/images/power-platform-course.jpg', // Ensure this image exists, or uses a placeholder
+        title: 'Ultimate Power Platform Masterclass: Solution Architect Edition',
+        description: 'The correct way to learn Power Platform. Master Canvas Apps, Dataverse, and Power Automate with a strict focus on Solutions, ALM, and Best Practices. No messy default environments!',
+        duration: '15 Hours',
+        level: 'Zero to Architect',
+        image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
         modules: [
             {
                 id: 'm1',
-                title: 'Module 1: The Digital Revolution & Low-Code',
+                title: 'Module 1: The Golden Rules (Start Here)',
                 lessons: [
                     {
                         id: 'l1-1',
-                        title: 'Welcome: You Don\'t Need to Be a Coder',
-                        content: `**Welcome to your new career path!**
-If you think "app development" requires a computer science degree and staring at green text on a black screen, think again.
+                        title: 'Why Most Tutorials Are Wrong',
+                        content: `**The Problem:**
+Most tutorials tell you to go to \`make.powerapps.com\` and clicking "Create App".
+🛑 **STOP!** This is the wrong way.
 
-**What is Low-Code?**
-Imagine building a LEGO set. You don't manufacture the plastic bricks; you just snap them together to build a castle.
-* **Traditional Coding:** Manufacturing the bricks (C#, Java, Python).
-* **Low-Code:** Snapping the bricks together (Power Platform).
+**The Solution-First Approach:**
+In the real world (and in this course), we **ALWAYS** build inside a **Solution**.
 
-Microsoft Power Platform allows **you** (yes, you!) to build professional apps, automate boring emails, and analyze data just by dragging and dropping.
+**Why?**
+1.  **Portability:** You can't verify or deploy an App easily if it's not in a Solution.
+2.  **Dependencies:** Solutions track what your app uses (Tables, Flows, Variables).
+3.  **ALM (Application Lifecycle Management):** Moving from Dev -> Test -> Prod is impossible without Solutions.
 
-**Who is this for?**
-* **The "Accidental Developer":** You used Excel so much you broke it.
-* **The Career Switcher:** You want a high-paying tech job without 4 years of college.
-* **The Business Pro:** You know your business better than IT does.
-
-[Watch: What is Low Code?](https://www.youtube.com/watch?v=48K6vH5i_O4)`,
+**Your Goal:**
+By the end of this module, you will never create an "Orphaned" app again.`,
                         type: 'text'
                     },
                     {
                         id: 'l1-2',
-                        title: 'The "Power" Family Explained',
-                        content: `The Power Platform isn't one thing; it's a team of superheroes. Here is your roster:
+                        title: 'Environments & Publishers',
+                        content: `Before we build, we setup our "Virtual Office".
 
-1.  **Power Apps (The Builder):**
-    *   *Analogy:* Like PowerPoint, but for apps.
-    *   *Usage:* Build a "Leave Request" app for your phone.
+**1. Environments:**
+Think of an Environment as a separate "room" in your office.
+*   **Personal Productivity (Default):** The messy breakroom. Don't build critical apps here.
+*   **Developer (Dev):** Your private workshop. **Build here.**
+*   **Production (Prod):** The showroom. Validated working apps.
 
-2.  **Power Automate (The Robot):**
-    *   *Analogy:* A digital assistant that never sleeps.
-    *   *Usage:* "When I get an email from my Boss, text me immediately."
+**2. Publishers:**
+Who built this? You did.
+*   The "Publisher" defines the "prefix" of your database columns.
+*   *Bad:* \`new_firstname\` (Generic, confusing)
+*   *Good:* \`dev_firstname\` (Specific to your publisher)
 
-3.  **Power BI (The Vizualizer):**
-    *   *Analogy:* Excel charts on steroids.
-    *   *Usage:* Show a live dashboard of sales this month.
+**Exercise:**
+1.  Go to the Power Platform Admin Center.
+2.  Check if you have a "Developer" environment. If not, create one (it's free!).`,
+                        type: 'text'
+                    },
+                    {
+                        id: 'l1-3',
+                        title: 'Creating Your First Solution',
+                        content: `**Step-by-Step Exercise:**
 
-4.  **Power Pages (The Website):**
-    *   *Analogy:* Wix or Squarespace, but connected to your business data.
-    *   *Usage:* A portal for customers to submit support tickets.
+1.  Go to **make.powerapps.com**.
+2.  **Switch Environment** (Top Right) to your "Developer" environment.
+3.  Click **Solutions** on the left sidebar.
+4.  Click **New Solution**.
+    *   **Display Name:** "Power Platform Bootcamp"
+    *   **Name:** "PowerPlatformBootcamp" (Auto-filled)
+    *   **Publisher:** Click "+ New Publisher".
+        *   **Display Name:** "Shaheer Dev"
+        *   **Name:** "shaheerdev"
+        *   **Prefix:** \`sd\` (This is important!)
+        *   *Save and Select this publisher.*
+    *   **Version:** 1.0.0.0
+5.  Click **Create**.
 
-5.  **Copilot Studio (The Brain):**
-    *   *Analogy:* A smart chatbot (like ChatGPT) for your company.
-    *   *Usage:* An HR bot that answers "How many holidays do I have left?"
-
-**Key Term:**
-*   **SaaS (Software as a Service):** You rent the software over the internet (like Netflix). Power Platform is SaaS.`,
+**Congratulations!** 
+You have now created a container for all your future work. All your tables will now start with \`sd_\` (e.g., \`sd_ClientName\`).`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm2',
-                title: 'Module 2: Data - The Lifeblood of Apps',
+                title: 'Module 2: Dataverse (The Backbone)',
                 lessons: [
                     {
                         id: 'l2-1',
-                        title: 'Why Excel is NOT a Database',
-                        content: `We all love Excel. But running a business on spreadsheets is dangerous.
-*   **The Problem:** What if two people edit the file at once? What if you accidentally delete a row? Security?
-*   **The Solution:** A Relational Database.
+                        title: 'Why Dataverse over SharePoint?',
+                        content: `Many beginners start with SharePoint lists. Here is why you should minimize that.
 
-**Enter: Microsoft Dataverse**
-Dataverse is a smart, secure database in the cloud. It doesn't just store text; it understands relationships.
-*   *Example:* You have a "Customers" table and an "Orders" table. Dataverse knows that "Order #5" belongs to "John Doe".
+**SharePoint is for Documents.**
+**Dataverse is for Data.**
 
-**Why use Dataverse?**
-1.  **Security:** You can say "Sales people can see data, but only Managers can delete it."
-2.  **Logic:** You can set rules like "Price cannot be negative."
-3.  **Capacity:** It holds millions of records easily.
-
-[Detailed: What is Dataverse?](https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-platform-intro)`,
+**Dataverse Benefits:**
+1.  **Relational:** Real relationships (1:N, N:N) like SQL.
+2.  **Security:** Row-level security (Manager sees all, Employee sees own).
+3.  **Logic:** Business Rules and Logic run at the *Database* level (Backend), not just the App level (Frontend).
+4.  **Solutions:** Dataverse tables live inside your Solution perfectly.`,
                         type: 'text'
                     },
                     {
                         id: 'l2-2',
-                        title: 'Tables, Columns, and Rows',
-                        content: `Let's learn the lingo.
+                        title: 'Creating Tables in a Solution',
+                        content: `**Exercise: The "Device Quest" App**
+We will build an app to track IT Equipment.
 
-1.  **Table (Entity):**
-    *   Think of this as a *Sheet* or *Tab* in Excel.
-    *   *Example:* "Contacts", "Products".
+1.  Open your **"Power Platform Bootcamp"** Solution.
+2.  Click **New > Table > Table (Advanced)**.
+    *   **Display Name:** "Device Request"
+    *   **Plural Name:** "Device Requests"
+    *   *Notice the Name:* It will be \`sd_devicerequest\`. (See the prefix?)
+    *   Enable **"Attachments"** and **"Audit changes"**.
+3.  Click **Save**.
 
-2.  **Column (Field):**
-    *   The specific data you want to capture.
-    *   *Types:* Text, Number, Date, Choice (Dropdown), Yes/No.
-    *   *Pro Tip:* Always choose the right data type! Don't store dates as text.
+**Adding Columns:**
+1.  **Price:** Data Type = Currency.
+2.  **Device Type:** Data Type = Choice (Laptop, Monitor, Phone).
+3.  **Requested Date:** Data Type = Date Only.
+4.  **Approver:** Data Type = Lookup (User).
+    *   *Note:* Lookups create a relationship between your table and the User table!
 
-3.  **Row (Record):**
-    *   One single entry. All the info for *one* customer.
-
-**Exercise:**
-Go to [make.powerapps.com](https://make.powerapps.com) > Tables > New Table.
-Create a table called "Pet Inventory".
-Add columns: "Pet Name" (Text), "Age" (Number), "Type" (Choice: Dog, Cat, Bird).`,
+**Key Takeaway:**
+We are building the *Data Model* first. Good architects prioritize data structure over UI.`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm3',
-                title: 'Module 3: Building Your First App (Canvas)',
+                title: 'Module 3: Canvas Apps (Solution Aware)',
                 lessons: [
                     {
                         id: 'l3-1',
-                        title: 'The Canvas Studio Tour',
-                        content: `Welcome to the **Power Apps Studio**. It looks a lot like PowerPoint and Excel had a baby.
+                        title: 'Creating an App Inside a Solution',
+                        content: `**The Wrong Way:** Home > Create > Blank App.
+**The Right Way:** Solution > New > App > Canvas App.
 
-**The Interface:**
-*   **Left Bar (Tree View):** This is your map. It lists every Screen, Button, and Label in your app.
-*   **Center (Canvas):** This is your phone/tablet screen. Drag controls here.
-*   **Right Bar (Properties):** Change colors, fonts, sizes, and borders here.
-*   **Top Bar (Formula Bar):** The magic happens here. This is where you write logic.
+**Exercise:**
+1.  Inside your **"Power Platform Bootcamp"** solution, click **New > App > Canvas App**.
+2.  **Name:** "Device Ordering App".
+3.  **Format:** Tablet.
+4.  Click **Create**.
 
-**Controls:**
-*   **Label:** Reads text (Read-only).
-*   **Text Input:** User types here.
-*   **Button:** User clicks this to do something.
-*   **Gallery:** Shows a list of items.
-*   **Form:** View or Edit a full record.
+**Connecting Data:**
+1.  In the Studio, click the **Data** icon (Cylinder).
+2.  Click **Add Data**.
+3.  Search for "Device Requests" (The table you created in Module 2).
+4.  Add it.
 
-[Visual Guide to Studio](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/get-started-test-drive)`,
+*Notice:* The app automatically knows about your table because they are in the same environment and solution context.`,
                         type: 'text'
                     },
                     {
                         id: 'l3-2',
-                        title: 'Hello World & Variables',
-                        content: `Let's make an app that welcomes you.
+                        title: 'Modern Controls & Responsiveness',
+                        content: `**Modern Controls:**
+Microsoft is updating the UI. Enable "Modern Controls" in Settings.
+Use **Text Input (Modern)** and **Button (Modern)** for a sleeker look.
 
-**Step 1:** Insert a **Text Input**.
-*   Name it \`txtUser\`.
-*   Remove the "Default" text.
-*   Set "HintText" to "Enter your name".
+**Containers (The Layout System):**
+Do not drag and drop randomly! Use **Containers**.
+1.  **Horizontal Container:** Stacks items left-to-right.
+2.  **Vertical Container:** Stacks items top-to-bottom.
 
-**Step 2:** Insert a **Label**.
-*   Set the **Text** property to:
-    \`"Hello, " & txtUser.Text & "! Welcome to 365Connect."\`
-
-**What just happened?**
-*   **&**: This joins strings together (Concatenation).
-*   **txtUser.Text**: This reads live what the user types.
-
-**Variables (The Memory):**
-Sometimes you want the app to "remember" something.
-*   \`Set(varColor, Red)\` -> Creates a global variable named \`varColor\`.
-*   Set a button's \`Fill\` property to \`varColor\`.
-*   Now you can change the whole app's color with one click!`,
-                        type: 'text'
-                    },
-                    {
-                        id: 'l3-3',
-                        title: 'Navigation function',
-                        content: `Apps have multiple screens.
-**Step 1:** Click "New Screen" > "Blank".
-**Step 2:** On Screen1, add a button "Go to Screen 2".
-**Step 3:** OnSelect property: \`Navigate(Screen2, ScreenTransition.Cover)\`
-
-**Transitions:**
-*   Cover
-*   Fade
-*   UnCover
-*   None
-
-**Pro Tip:** Always name your screens meaningfully (e.g., \`scrHome\`, \`scrDetails\`) instead of Screen1, Screen2.`,
+**Exercise:**
+1.  Add a **Vertical Container** to the screen. Set Width/Height to \`Parent.Width\` / \`Parent.Height\`.
+2.  Inside it, add a **Label** ("Header").
+3.  Add a **Gallery** connected to \`'Device Requests'\`.
+4.  Set the Gallery to "Flexible Height".`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm4',
-                title: 'Module 4: Automating Your Life (Power Automate)',
+                title: 'Module 4: Power Automate (Logic)',
                 lessons: [
                     {
                         id: 'l4-1',
-                        title: 'Triggers and Actions',
-                        content: `Power Automate is built on a simple concept: **When X happens, Do Y.**
+                        title: 'Cloud Flows in Solutions',
+                        content: `**Exercise:** Send an email when a request is created.
 
-**1. The Trigger (The "When"):**
-*   "When an email arrives"
-*   "When a new tweet is posted"
-*   "Every Monday at 9 AM" (Scheduled)
-*   "When I click a button" (Instant)
+1.  **Inside your Solution**, click **New > Automation > Cloud Flow > Automated**.
+2.  **Trigger:** "When a row is added, modified or deleted" (Dataverse).
+    *   *Do NOT use the generic "SharePoint" triggers if possible.*
+3.  **Change Type:** Added.
+4.  **Table:** Device Requests.
+5.  **Scope:** Organization (Runs for everyone).
 
-**2. The Action (The "Do"):**
-*   "Send an email"
-*   "Create a file in OneDrive"
-*   "Post to Teams"
-*   "Add a row to Excel"
-
-**Exercise:**
-Create a flow that saves your email attachments to OneDrive automatically. Never lose a file again!`,
+**Connection References (Crucial):**
+When you add an "Outlook - Send Email" action, the Solution creates a **Connection Reference**.
+*   This is a "Placeholder".
+*   In Dev, it points to *your* email.
+*   In Prod, it can point to a *Service Account*.
+*   **Benefit:** You don't have to edit the code when moving to Prod!`,
                         type: 'text'
                     },
                     {
                         id: 'l4-2',
-                        title: 'Approvals (The Killer Feature)',
-                        content: `The #1 reason companies use Power Automate is **Approvals**.
+                        title: 'Environment Variables',
+                        content: `**Scenario:**
+You want to send an email to the "IT Manager".
+In Dev, that's \`you@demo.com\`.
+In Prod, that's \`admin@company.com\`.
 
-**Scenario:** You request a vacation.
-*   **Old Way:** Email boss. Boss forgets. You email again. Boss replies "Ok". You forward to HR. HR loses email.
-*   **New Way:**
-    1.  You fill a Power App form.
-    2.  Flow triggers "Start an Approval".
-    3.  Boss gets a notification on Phone/Teams: "Approve or Reject?".
-    4.  Boss clicks "Approve".
-    5.  Flow automatically emails HR and updates your calendar.
+**Don't hardcode the email!**
+Use **Environment Variables**.
 
-This saves HOURS of chasing people.`,
+1.  In your Solution, click **New > More > Environment Variable**.
+2.  **Name:** \`sd_ITManagerEmail\`.
+3.  **Default Value:** \`you@demo.com\`.
+4.  **Current Value:** (Leave empty).
+
+**In the Flow:**
+Use the dynamic value \`EnvironmentVariable(sd_ITManagerEmail)\`.
+When you import to Prod, it will ask you "What is the IT Manager Email for Prod?".`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm5',
-                title: 'Module 5: Real-World Projects',
+                title: 'Module 5: Deployment (ALM)',
                 lessons: [
                     {
                         id: 'l5-1',
-                        title: 'Project 1: The Expense Tracker',
-                        content: `**Scenario:**
-Employees need to upload receipts and get manager approval.
+                        title: 'Exporting Your Solution',
+                        content: `You built it. Now ship it.
 
-**The Solution:**
-1.  **Data:** Create a Dataverse table 'Expenses' (Columns: Amount, Date, Category, Receipt Image status).
-2.  **App:** Create a Canvas App.
-    *   **Screen 1:** Gallery showing my past expenses.
-    *   **Screen 2:** Form to add new expense. Use 'Add Picture' control for receipt.
-3.  **Automation:**
-    *   Trigger: When a row is added to 'Expenses'.
-    *   Action: Start an Approval with the user's manager.
-    *   Condition: If Approved -> Update Status to 'Paid'. If Rejected -> Email user.
+**1. Publish All Customizations:**
+Ensures every tiny change is saved. (Solution > Publish All).
 
-**Key Learning:**
-This combines all three pillars: Apps (UI), Data (Storage), and Automate (Logic).`,
+**2. Run Solution Checker:**
+Microsoft's AI scans your solution for performance bugs. Fix them!
+
+**3. Export:**
+*   **Managed:** For Production. (Sealed).
+*   **Unmanaged:** For backup or other Dev environments.
+
+**Exercise:**
+Export your "Power Platform Bootcamp" solution as **Managed**.
+You will get a zip file: \`PowerPlatformBootcamp_1_0_0_0_managed.zip\`.`,
                         type: 'text'
                     },
                     {
                         id: 'l5-2',
-                        title: 'Project 2: Event Registration',
-                        content: `**Scenario:**
-We are hosting a workshop and need people to sign up.
+                        title: 'Importing to Production',
+                        content: `**Exercise (Simulation):**
 
-**The Solution:**
-1.  **Power Page:** Create a public-facing website.
-    *   Add a simple form connected to Dataverse table 'Registrations'.
-2.  **Power Automate:**
-    *   Trigger: When new row in 'Registrations'.
-    *   Action: Send an email "Ticket Confirmation" with a QR code.
-3.  **Power BI:**
-    *   Create a dashboard showing "Total Registrations by Country".
+1.  Switch to your "Default" environment (or a Test environment).
+2.  Go to **Solutions > Import Solution**.
+3.  Upload your zip file.
+4.  **Connection References:** usage will ask "Which Outlook account should I use?". Select one.
+5.  **Environment Variables:** It will ask "What is the IT Manager Email?". Enter the real one.
 
-**Pro Tip:**
-Use **Power Pages** for external users (people outside your company). Use **Canvas Apps** for internal employees.`,
+**Magic:**
+Your app, flow, and tables are deployed instantly. No rewriting code!`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm6',
-                title: 'Module 6: Career & Certification',
+                title: 'Module 6: Advanced Power Fx',
                 lessons: [
                     {
                         id: 'l6-1',
-                        title: 'The PL-900 Exam',
-                        content: `**Microsoft Certified: Power Platform Fundamentals**
-This is the "Gold Standard" entry-level exam.
+                        title: 'Patch & ForAll',
+                        content: `**Patch:**
+\`Patch(Table, Record, Update)\`
+Precise saving.
+Example: \`Patch('Device Requests', Defaults('Device Requests'), {Title: "MacBook", Price: 2000})\`
 
-**What is tested?**
-*   Describe business value of Power Platform (20-25%)
-*   Identify Core Components (10-15%)
-*   Demonstrate capabilities of Power BI (10-15%)
-*   Demonstrate capabilities of Power Apps (20-25%)
-*   Demonstrate capabilities of Power Automate (10-15%)
-
-**How to study?**
-1.  Take this course!
-2.  Use clear *Microsoft Learn* paths.
-3.  Practice creating apps (Hands-on is better than reading).
-
-[Official Exam Page](https://learn.microsoft.com/en-us/credentials/certifications/exams/pl-900/)`,
+**ForAll:**
+Looping through data.
+Example: "Create a request for every item in my cart."
+\`ForAll(colCart, Patch('Device Requests', ...))\``,
                         type: 'text'
                     },
                     {
                         id: 'l6-2',
-                        title: 'Next Steps: PL-100, PL-200, PL-400',
-                        content: `After PL-900, where do you go?
+                        title: 'Filter vs Search vs LookUp',
+                        content: `**Filter:** Returns a TABLE (Multiple rows).
+\`Filter('Device Requests', Price > 1000)\`
 
-1.  **PL-100 (App Maker):** "I build apps for my team." Focuses heavily on Canvas Apps.
-2.  **PL-200 (Functional Consultant):** "I implement solutions for clients." Focuses on Dataverse, Model-Driven Apps, and Solution Architecture.
-3.  **PL-400 (Developer):** "I write code." Focuses on JavaScript, C# Plugins, and Azure integration.
-4.  **PL-600 (Solution Architect):** "I design the whole system." Top tier.
+**LookUp:** Returns a RECORD (Single row).
+\`LookUp('Device Requests', ID = 123)\`
 
-**Career Advice:**
-*   Build a portfolio. Screenshots of apps you built matter more than a CV.
-*   Join the *365Connect Community* (You are already here!).
-*   Share your learning on LinkedIn.`,
+**Search:** Finds text anywhere.
+\`Search('Device Requests', "Laptop", "Title", "Description")\`
+
+**Delegation Warning:**
+Can Dataverse do this query? Or does the app have to download all data?
+*   Dataverse supports Filter/Search well.
+*   SharePoint is bad at Search.
+*   This is why we use Dataverse!`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm7',
-                title: 'Module 7: Advanced Logic (Power Fx)',
+                title: 'Module 7: Real World Projects',
                 lessons: [
                     {
                         id: 'l7-1',
-                        title: 'Variables vs Collections',
-                        content: `**Variables:**
-Store a single value (e.g., User Name, Current Color).
-*   Correct: \`Set(varName, "John")\`
-*   Correct: \`UpdateContext({locVisible: true})\` (Screen specific)
+                        title: 'Project 1: Expense Tracker',
+                        content: `**Goal:** Snap receipts and auto-extract info using AI Builder.
 
-**Collections:**
-Store a table of data (e.g., A shopping cart).
-*   Correct: \`Collect(colCart, {Item: "Apple", Price: 1.00})\`
-*   Correct: \`ClearCollect(colCart, ...)\` -> Wipes and reloads.
-
-**Pro Tip:**
-Use Collections to cache data locally so your app runs fast offline!`,
-                        type: 'text'
+**Architecture:**
+1.  **Solution:** "Expense Solution"
+2.  **Table:** \`sd_Expense\` (Image Column)
+3.  **AI Model:** Receipt Processing (Prebuilt).
+4.  **Flow:** When Image Uploaded -> Extract Data -> Update Row.`,
+                        type: 'text/project'
                     },
                     {
                         id: 'l7-2',
-                        title: 'The "Patch" Function',
-                        content: `**SubmitForm** is easy, but **Patch** is powerful.
-
-**Scenario:** You want to save data without a Form control.
-**Syntax:**
-\`Patch(DataSource, RecordToUpdate, {Column: Value})\`
-
-*   **Create New:** \`Patch(Orders, Defaults(Orders), {Item: "Book"})\`
-*   **Update Existing:** \`Patch(Orders, ThisItem, {Status: "Shipped"})\`
-
-**Why use it?**
-It allows currently strict control over *exactly* what gets saved and when.`,
-                        type: 'text'
+                        title: 'Project 2: Onboarding Portal',
+                        content: `**Goal:** A portal for new hires to request access.
+**Tech:** Power Pages (External facing) + Dataverse.
+*   We won't build this fully today, but know that **Power Pages** sits on top of the SAME Dataverse tables you built in the Solution.`,
+                        type: 'text/project'
                     }
                 ]
             },
             {
                 id: 'm8',
-                title: 'Module 8: Governance & Security',
+                title: 'Module 8: Certification Path',
                 lessons: [
                     {
                         id: 'l8-1',
-                        title: 'Environments',
-                        content: `**What is an Environment?**
-Think of it as a "Container" for your apps and data.
-*   **Dev Environment:** Where you build and break things.
-*   **Test (QA):** Where users test.
-*   **Prod (Production):** Real user data. **Do not touch directly!**
+                        title: 'PL-900 to PL-600',
+                        content: `**PL-900 (Fundamentals):** You know this now.
+**PL-100 (App Maker):** Retired soon, ignore.
+**PL-200 (Functional Consultant):** The "Dataverse & Solutions" exam. **Take this next.**
+**PL-400 (Developer):** Coding (C#, TypeScript, PCF Controls).
+**PL-600 (Architect):** Governance, Security, ALM.
 
-**Best Practice:**
-NEVER build in the Default environment. Creating a dedicated Developer Environment is free!`,
-                        type: 'text'
-                    },
-                    {
-                        id: 'l8-2',
-                        title: 'Solutions (ALM)',
-                        content: `**Application Lifecycle Management (ALM)**
-How do you move an app from Dev -> Test -> Prod?
-**Answer: Solutions.**
-
-*   **Solution:** A zip file containing your Apps, Flows, and Tables.
-*   **Managed Solution:** "Sealed". Installed in Prod. Cannot be edited.
-*   **Unmanaged Solution:** "Open". Exists in Dev. Editable.
-
-**The Golden Rule:**
-ALWAYS create your components inside a Solution. Never start from "make.powerapps.com > Create App". Start from "Solutions > New Solution".`,
-                        type: 'text'
-                    },
-                    {
-                        id: 'l8-3',
-                        title: 'Security Roles',
-                        content: `Who can see what?
-Dataverse uses a robust security model.
-
-1.  **Business Units:** Like your company departments (Sales, HR).
-2.  **Security Roles:** Define permissions (Read, Write, Delete).
-    *   *System Admin:* God mode.
-    *   *Basic User:* Can see their own records.
-3.  **Teams:** Group users together (e.g., "Owning Team").
-
-**Scenario:**
-"Managers" can see all rows. "Sales Reps" can only see their own rows.
-You configure this in the **Security Role** editor.`,
+**Next Step:**
+Book your PL-900 exam. You are ready.`,
                         type: 'text'
                     }
                 ]
