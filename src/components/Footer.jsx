@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Linkedin, Youtube, Mail, Github, Twitter, Globe } from 'lucide-react';
 import { supportAPI } from '../services/apiService';
+import logoNew from '../assets/images/logo-final.png';
 
 const Footer = () => {
     const [socials, setSocials] = useState([]);
@@ -52,11 +53,12 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                     <div className="col-span-1 md:col-span-1">
-                        <div className="flex items-center space-x-2 mb-4">
-                            {/* Logo Image */}
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                                365
-                            </div>
+                        <div className="flex items-center space-x-3 mb-4">
+                            <img
+                                src={logoNew}
+                                alt="365 Connect"
+                                className="h-10 mix-blend-multiply bg-white rounded-full p-0.5"
+                            />
                             <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                                 365Connect
                             </span>

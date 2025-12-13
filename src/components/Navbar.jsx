@@ -4,6 +4,7 @@ import { Menu, X, User, LogOut, Award, UserCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { getUserImage } from '../services/authService';
+import logoNew from '../assets/images/logo-final.png';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -39,11 +40,18 @@ const Navbar = () => {
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-primary/80 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
-                    <Link to="/" className="flex items-center space-x-1">
-                        <span className="text-2xl font-black text-secondary">3</span>
-                        <span className="text-2xl font-black text-accent">6</span>
-                        <span className="text-2xl font-black text-blue">5</span>
-                        <span className="text-2xl font-black text-white">Connect</span>
+                    <Link to="/" className="flex items-center space-x-3">
+                        <img
+                            src={logoNew}
+                            alt="365 Connect"
+                            className="h-12 mix-blend-multiply bg-white rounded-full p-0.5"
+                        />
+                        <div className="flex">
+                            <span className="text-2xl font-black text-secondary">3</span>
+                            <span className="text-2xl font-black text-accent">6</span>
+                            <span className="text-2xl font-black text-blue">5</span>
+                            <span className="text-2xl font-black text-white">Connect</span>
+                        </div>
                     </Link>
 
                     <div className="hidden md:flex items-center space-x-8">
