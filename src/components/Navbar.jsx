@@ -23,11 +23,13 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
-        { name: 'Our Family', path: '/team' },
+        { name: 'Team', path: '/team' },
+        { name: 'Members', path: '/community-members' },
         { name: 'Events', path: '/events' },
         { name: 'Courses', path: '/courses' },
-        { name: 'Our Socials', path: '/our-socials' },
-        { name: 'Become Contributor', path: '/become-contributor' },
+        { name: 'Tools', path: '/tools' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'Join', path: '/become-contributor' },
     ];
 
     const handleLogout = () => {

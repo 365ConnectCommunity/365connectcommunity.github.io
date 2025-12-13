@@ -51,31 +51,39 @@ const CommunityMembers = () => {
                 {error && <div className="text-center text-red-500 mb-8">{error}</div>}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {members.map((member, index) => (
-                        <motion.div
-                            key={member.contactid || index}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.05 }}
-                            className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 text-center hover:shadow-2xl hover:shadow-purple-500/10 transition-all"
-                        >
-                            {member.entityimage ? (
-                                <img
-                                    src={`data:image/png;base64,${member.entityimage}`}
-                                    alt={member.fullname}
-                                    className="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-purple-500 object-cover"
-                                />
-                            ) : (
-                                <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                                    <Users className="text-white" size={40} />
-                                </div>
-                            )}
-                            <h3 className="text-lg font-bold text-white">{member.fullname || 'Member'}</h3>
-                            {member.emailaddress1 && (
-                                <p className="text-xs text-gray-500 mt-1">{member.emailaddress1}</p>
-                            )}
-                        </motion.div>
-                    ))}
+                    {members.map((member, index) => {
+                        // Safe mapping incase API returns raw sa_ fields
+                        const image = member.entityimage || member.sa_imageurl || member.sa_entityimage;
+                        const name = member.fullname || member.sa_fullname || (member.sa_firstname ? `${member.sa_firstname} ${member.sa_lastname}` : 'Community Member');
+                        const email = member.emailaddress1 || member.sa_email || '';
+
+                        return (
+                            <motion.div
+                                key={member.contactid || member.sa_contactid || index}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: index * 0.05 }}
+                                className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 text-center hover:shadow-2xl hover:shadow-purple-500/10 transition-all"
+                            >
+
+                                {image ? (
+                                    <img
+                                        src={`data:image/png;base64,${image}`}
+                                        alt={name}
+                                        className="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-purple-500 object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                        <Users className="text-white" size={40} />
+                                    </div>
+                                )}
+                                <h3 className="text-lg font-bold text-white">{name}</h3>
+                                {email && (
+                                    <p className="text-xs text-gray-500 mt-1">{email}</p>
+                                )}
+                            </motion.div>
+                        );
+                    })}
                 </div>
 
                 {members.length === 0 && !loading && !error && (

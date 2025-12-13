@@ -20,6 +20,7 @@ import CommunityMembers from './pages/CommunityMembers'
 import Support from './pages/Support'
 import OurSocials from './pages/OurSocials'
 import BecomeContributor from './pages/BecomeContributor'
+import Tools from './pages/Tools'
 
 function App() {
     return (
@@ -39,6 +40,7 @@ function App() {
                     <Route path="support" element={<Support />} />
                     <Route path="our-socials" element={<OurSocials />} />
                     <Route path="become-contributor" element={<BecomeContributor />} />
+                    <Route path="tools" element={<Tools />} />
                     <Route path="my-profile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
                     <Route path="my-certificates" element={<ProtectedRoute><MyCertificates /></ProtectedRoute>} />
                     <Route path="my-events" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
