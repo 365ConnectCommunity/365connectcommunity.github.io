@@ -182,7 +182,22 @@ export const eventsAPI = {
         });
 
         if (response.status === 200) {
-            return await response.json();
+            const data = await response.json();
+            // Transform property names to match React component expectations
+            return data.map(event => ({
+                eventid: event.sa_eventid,
+                name: event.sa_name,
+                description: event.sa_description,
+                startdate: event.sa_start,
+                enddate: event.sa_end,
+                duration: event.sa_duration,
+                location: event.sa_location || '',
+                eventimage: event.sa_eventimage,
+                registrationopen: event.sa_registrationopen,
+                statuscode: event.statuscode,
+                host: event["_sa_host_value@OData.Community.Display.V1.FormattedValue"] || '',
+                eventtype: event["sa_eventtype@OData.Community.Display.V1.FormattedValue"] || ''
+            }));
         } else {
             return [];
         }
@@ -280,10 +295,22 @@ export const supportAPI = {
     },
 
     getSocials: async () => {
-        return await apiCall(API_ENDPOINTS.GET_SOCIALS, {
+        const response = await fetch(API_ENDPOINTS.GET_SOCIALS, {
             method: 'GET',
             redirect: 'follow'
         });
+
+        if (response.status === 200) {
+            const data = await response.json();
+            // Transform sa_name -> name, sa_url -> url for React components
+            return data.map(item => ({
+                name: item.sa_name,
+                url: item.sa_url,
+                icon: item.sa_icon || '🌐'
+            }));
+        } else {
+            return [];
+        }
     }
 };
 
