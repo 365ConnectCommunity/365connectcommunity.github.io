@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { courses } from '../data/courses';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, Clock, BarChart } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Courses = () => {
     const { user } = useAuth();
@@ -32,6 +33,10 @@ const Courses = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black py-20">
+            <SEO
+                title="Courses"
+                description="Master Microsoft Power Platform with our free, comprehensive courses. Learn Power Apps, Automate, and Dataverse."
+            />
             <div className="container mx-auto px-4 max-w-6xl">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

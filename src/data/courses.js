@@ -1,175 +1,225 @@
 export const courses = [
     {
         id: 'power-platform-basics',
-        title: 'Getting Started with Power Platform & Canvas Apps',
-        description: 'A comprehensive, hands-on masterclass for beginners. Learn Power Apps, Automate, Dataverse, and more. Based on PL-900 Fundamentals.',
-        duration: '6 Weeks',
-        level: 'Beginner',
-        image: '/assets/images/power-platform-course.jpg',
+        title: 'Ultimate Power Platform Masterclass: From Zero to Hero',
+        description: 'The definitive guide for non-coders. Master Power Apps, Automate, Dataverse, and Copilot. Start your tech career here.',
+        duration: '8 Weeks',
+        level: 'Beginner (Non-IT Friendly)',
+        image: '/assets/images/power-platform-course.jpg', // Ensure this image exists, or uses a placeholder
         modules: [
             {
                 id: 'm1',
-                title: 'Module 1: Introduction to Power Platform',
+                title: 'Module 1: The Digital Revolution & Low-Code',
                 lessons: [
                     {
                         id: 'l1-1',
-                        title: 'What is the Power Platform?',
-                        content: `**Microsoft Power Platform** is a suite of low-code tools that empowers you to analyze data, build solutions, automate processes, and create virtual agents. It's designed to democratize app development, allowing "Citizen Developers" to solve business problems without writing traditional code.
+                        title: 'Welcome: You Don\'t Need to Be a Coder',
+                        content: `**Welcome to your new career path!**
+If you think "app development" requires a computer science degree and staring at green text on a black screen, think again.
 
-The "Power" family includes:
-* **Power Apps**: Build custom applications for web and mobile.
-* **Power Automate**: Automate workflows between apps and services.
-* **Power BI**: Visualize data with interactive dashboards.
-* **Power Pages**: Create secure, external-facing business websites.
-* **Copilot Studio (Virtual Agents)**: Build intelligent AI chatbots.
+**What is Low-Code?**
+Imagine building a LEGO set. You don't manufacture the plastic bricks; you just snap them together to build a castle.
+* **Traditional Coding:** Manufacturing the bricks (C#, Java, Python).
+* **Low-Code:** Snapping the bricks together (Power Platform).
 
-**Why learn this?**
-Organizations worldwide are digitizing proceses. Power Platform skills are in high demand for roles like App Maker, Functional Consultant, and Solution Architect.
+Microsoft Power Platform allows **you** (yes, you!) to build professional apps, automate boring emails, and analyze data just by dragging and dropping.
 
-[Explore the Official Overview](https://learn.microsoft.com/en-us/power-platform/guidance/adoption/methodology)`,
+**Who is this for?**
+* **The "Accidental Developer":** You used Excel so much you broke it.
+* **The Career Switcher:** You want a high-paying tech job without 4 years of college.
+* **The Business Pro:** You know your business better than IT does.
+
+[Watch: What is Low Code?](https://www.youtube.com/watch?v=48K6vH5i_O4)`,
                         type: 'text'
                     },
                     {
                         id: 'l1-2',
-                        title: 'Dataverse & Connectors',
-                        content: `The heart of the Power Platform is data connectivity.
+                        title: 'The "Power" Family Explained',
+                        content: `The Power Platform isn't one thing; it's a team of superheroes. Here is your roster:
 
-**Connectors**
-Connectors act as bridges between your app and external services. There are over **1,000+ connectors** available (e.g., SharePoint, SQL Server, Salesforce, Twitter/X, Outlook).
-* **Standard Connectors**: Included in standard licenses (SharePoint, Excel).
-* **Premium Connectors**: Require paid licenses (SQL, Dataverse).
+1.  **Power Apps (The Builder):**
+    *   *Analogy:* Like PowerPoint, but for apps.
+    *   *Usage:* Build a "Leave Request" app for your phone.
 
-**Microsoft Dataverse**
-Dataverse is a cloud-based smart database secureley storing data used by business applications. It's more than just tables; it includes security, logic, and validation built-in.
-* Standardized schema (Common Data Model).
-* Role-based security.
-* Integrated with Dynamics 365.
+2.  **Power Automate (The Robot):**
+    *   *Analogy:* A digital assistant that never sleeps.
+    *   *Usage:* "When I get an email from my Boss, text me immediately."
 
-[Learn about Connectors](https://learn.microsoft.com/en-us/connectors/)
-[What is Dataverse?](https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-platform-intro)`,
+3.  **Power BI (The Vizualizer):**
+    *   *Analogy:* Excel charts on steroids.
+    *   *Usage:* Show a live dashboard of sales this month.
+
+4.  **Power Pages (The Website):**
+    *   *Analogy:* Wix or Squarespace, but connected to your business data.
+    *   *Usage:* A portal for customers to submit support tickets.
+
+5.  **Copilot Studio (The Brain):**
+    *   *Analogy:* A smart chatbot (like ChatGPT) for your company.
+    *   *Usage:* An HR bot that answers "How many holidays do I have left?"
+
+**Key Term:**
+*   **SaaS (Software as a Service):** You rent the software over the internet (like Netflix). Power Platform is SaaS.`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm2',
-                title: 'Module 2: Building Canvas Apps',
+                title: 'Module 2: Data - The Lifeblood of Apps',
                 lessons: [
                     {
                         id: 'l2-1',
-                        title: 'Canvas Apps vs Model-Driven Apps',
-                        content: `**Canvas Apps**
-* **Design-first approach**: You start with a blank canvas and design the UI pixel-by-pixel.
-* **Flexibility**: Connect to 200+ data sources.
-* **Best for**: Task-based mobile apps (e.g., Inspection app, Leave Request).
+                        title: 'Why Excel is NOT a Database',
+                        content: `We all love Excel. But running a business on spreadsheets is dangerous.
+*   **The Problem:** What if two people edit the file at once? What if you accidentally delete a row? Security?
+*   **The Solution:** A Relational Database.
 
-**Model-Driven Apps**
-* **Data-first approach**: You define the data model (in Dataverse), and the UI is generated automatically.
-* **Structure**: Component-focused (Views, Forms, Dashboards).
-* **Best for**: Complex back-office processes (e.g., Customer Relationship Management).
+**Enter: Microsoft Dataverse**
+Dataverse is a smart, secure database in the cloud. It doesn't just store text; it understands relationships.
+*   *Example:* You have a "Customers" table and an "Orders" table. Dataverse knows that "Order #5" belongs to "John Doe".
 
-In this course, we focus on **Canvas Apps**.`,
+**Why use Dataverse?**
+1.  **Security:** You can say "Sales people can see data, but only Managers can delete it."
+2.  **Logic:** You can set rules like "Price cannot be negative."
+3.  **Capacity:** It holds millions of records easily.
+
+[Detailed: What is Dataverse?](https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-platform-intro)`,
                         type: 'text'
                     },
                     {
                         id: 'l2-2',
-                        title: 'The Power Apps Studio',
-                        content: `To build an app, go to [make.powerapps.com](https://make.powerapps.com).
+                        title: 'Tables, Columns, and Rows',
+                        content: `Let's learn the lingo.
 
-**Key Areas:**
-1. **Tree View** (Left): Shows your screens and controls hierarchy.
-2. **Canvas** (Center): Your visual workspace.
-3. **Properties** (Right): Configure color, size, text, and settings.
-4. **Formula Bar** (Top): Write Power Fx logic (similar to Excel).
+1.  **Table (Entity):**
+    *   Think of this as a *Sheet* or *Tab* in Excel.
+    *   *Example:* "Contacts", "Products".
+
+2.  **Column (Field):**
+    *   The specific data you want to capture.
+    *   *Types:* Text, Number, Date, Choice (Dropdown), Yes/No.
+    *   *Pro Tip:* Always choose the right data type! Don't store dates as text.
+
+3.  **Row (Record):**
+    *   One single entry. All the info for *one* customer.
 
 **Exercise:**
-1. Create a "Blank Canvas App".
-2. Add a **Text Input** control.
-3. Add a **Label**.
-4. Set the Label's \`Text\` property to: \`"Hello, " & TextInput1.Text\`
-5. Type in the input and watch the label update instantly!`,
-                        type: 'text'
-                    },
-                    {
-                        id: 'l2-3',
-                        title: 'Mastering Power Fx',
-                        content: `**Power Fx** is the low-code language used in Canvas Apps. It is declarative and works like Excel formulas-recalculating instantly.
-
-**Essential Formulas:**
-* \`Navigate(Screen2, Fade)\`: Go to another screen.
-* \`Back()\`: Return to previous screen.
-* \`Set(varUser, User().FullName)\`: creating a global variable.
-* \`UpdateContext({ locShowPopup: true })\`: creating a local screen variable.
-* \`Notify("Success!", Success)\`: Show a banner message.
-* \`Filter(Employees, Department = "IT")\`: Query data.
-
-[Power Fx Reference Guide](https://learn.microsoft.com/en-us/power-platform/power-fx/overview)`,
+Go to [make.powerapps.com](https://make.powerapps.com) > Tables > New Table.
+Create a table called "Pet Inventory".
+Add columns: "Pet Name" (Text), "Age" (Number), "Type" (Choice: Dog, Cat, Bird).`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm3',
-                title: 'Module 3: UI & UX Design',
+                title: 'Module 3: Building Your First App (Canvas)',
                 lessons: [
                     {
                         id: 'l3-1',
-                        title: 'Screens and Navigation',
-                        content: `A good app needs easy navigation.
-* Use a **Home Screen** as a landing page.
-* Use **Components** for reusable headers/footers.
+                        title: 'The Canvas Studio Tour',
+                        content: `Welcome to the **Power Apps Studio**. It looks a lot like PowerPoint and Excel had a baby.
 
-**Creating a Menu:**
-1. Add a **Container** to the left side.
-2. Add buttons inside for "Home", "Tasks", "Profile".
-3. On the specific button \`OnSelect\`, use \`Navigate()\`.`,
+**The Interface:**
+*   **Left Bar (Tree View):** This is your map. It lists every Screen, Button, and Label in your app.
+*   **Center (Canvas):** This is your phone/tablet screen. Drag controls here.
+*   **Right Bar (Properties):** Change colors, fonts, sizes, and borders here.
+*   **Top Bar (Formula Bar):** The magic happens here. This is where you write logic.
+
+**Controls:**
+*   **Label:** Reads text (Read-only).
+*   **Text Input:** User types here.
+*   **Button:** User clicks this to do something.
+*   **Gallery:** Shows a list of items.
+*   **Form:** View or Edit a full record.
+
+[Visual Guide to Studio](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/get-started-test-drive)`,
                         type: 'text'
                     },
                     {
                         id: 'l3-2',
-                        title: 'Galleries and Collections',
-                        content: `**Galleries** are the primary way to list data.
-* **Vertical Gallery**: Standard list.
-* **Horizontal Gallery**: Product carousels.
+                        title: 'Hello World & Variables',
+                        content: `Let's make an app that welcomes you.
 
-**Collections** allow you to store data temporarily in the app memory.
-* Create: \`ClearCollect(colCart, {Item: "Apple", Price: 1.00})\`
-* Use collection as the \`Items\` source of a gallery.
+**Step 1:** Insert a **Text Input**.
+*   Name it \`txtUser\`.
+*   Remove the "Default" text.
+*   Set "HintText" to "Enter your name".
 
-[Working with Galleries](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-gallery)`,
+**Step 2:** Insert a **Label**.
+*   Set the **Text** property to:
+    \`"Hello, " & txtUser.Text & "! Welcome to 365Connect."\`
+
+**What just happened?**
+*   **&**: This joins strings together (Concatenation).
+*   **txtUser.Text**: This reads live what the user types.
+
+**Variables (The Memory):**
+Sometimes you want the app to "remember" something.
+*   \`Set(varColor, Red)\` -> Creates a global variable named \`varColor\`.
+*   Set a button's \`Fill\` property to \`varColor\`.
+*   Now you can change the whole app's color with one click!`,
+                        type: 'text'
+                    },
+                    {
+                        id: 'l3-3',
+                        title: 'Navigation function',
+                        content: `Apps have multiple screens.
+**Step 1:** Click "New Screen" > "Blank".
+**Step 2:** On Screen1, add a button "Go to Screen 2".
+**Step 3:** OnSelect property: \`Navigate(Screen2, ScreenTransition.Cover)\`
+
+**Transitions:**
+*   Cover
+*   Fade
+*   UnCover
+*   None
+
+**Pro Tip:** Always name your screens meaningfully (e.g., \`scrHome\`, \`scrDetails\`) instead of Screen1, Screen2.`,
                         type: 'text'
                     }
                 ]
             },
             {
                 id: 'm4',
-                title: 'Module 4: Power Automate & Integration',
+                title: 'Module 4: Automating Your Life (Power Automate)',
                 lessons: [
                     {
                         id: 'l4-1',
-                        title: 'Introduction to Cloud Flows',
-                        content: `**Power Automate** lets you create workflows.
-A flow consists of:
-1. **Trigger**: What starts the flow? (e.g., "When a button is clicked", "When an email arrives").
-2. **Actions**: What happens next? (e.g., "Send an email", "Update a row").
+                        title: 'Triggers and Actions',
+                        content: `Power Automate is built on a simple concept: **When X happens, Do Y.**
 
-**Types of Flows:**
-* **Instant**: Triggered manually (e.g. from a Power App button).
-* **Automated**: Triggered by an event (e.g. new SharePoint item).
-* **Scheduled**: Runs on a timer (e.g. every morning at 8 AM).`,
+**1. The Trigger (The "When"):**
+*   "When an email arrives"
+*   "When a new tweet is posted"
+*   "Every Monday at 9 AM" (Scheduled)
+*   "When I click a button" (Instant)
+
+**2. The Action (The "Do"):**
+*   "Send an email"
+*   "Create a file in OneDrive"
+*   "Post to Teams"
+*   "Add a row to Excel"
+
+**Exercise:**
+Create a flow that saves your email attachments to OneDrive automatically. Never lose a file again!`,
                         type: 'text'
                     },
                     {
                         id: 'l4-2',
-                        title: 'Connecting Apps to Flows',
-                        content: `You can trigger a flow directly from your Canvas App.
-1. In Power Apps, go to the "Power Automate" pane.
-2. "Add Flow".
-3. On a button's \`OnSelect\` property, write: \`'MyFlowName'.Run(User().Email)\`
+                        title: 'Approvals (The Killer Feature)',
+                        content: `The #1 reason companies use Power Automate is **Approvals**.
 
-This is powerful for heavy logic like sending complex emails, generating PDFs, or calling APIs.
+**Scenario:** You request a vacation.
+*   **Old Way:** Email boss. Boss forgets. You email again. Boss replies "Ok". You forward to HR. HR loses email.
+*   **New Way:**
+    1.  You fill a Power App form.
+    2.  Flow triggers "Start an Approval".
+    3.  Boss gets a notification on Phone/Teams: "Approve or Reject?".
+    4.  Boss clicks "Approve".
+    5.  Flow automatically emails HR and updates your calendar.
 
-[Get Started with Power Automate](https://learn.microsoft.com/en-us/power-automate/getting-started)`,
+This saves HOURS of chasing people.`,
                         type: 'text'
                     }
                 ]

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { courses } from '../data/courses';
 import { useAuth } from '../context/AuthContext';
+import SEO from '../components/SEO';
 import { CheckCircle, PlayCircle, Lock, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
 
 const CourseViewer = () => {
@@ -64,10 +65,15 @@ const CourseViewer = () => {
         // Auto-advance logic could go here
     };
 
-    if (!course || !activeLesson) return <div className="text-white text-center py-20">Loading course...</div>;
+    if (!course) return <div>Course not found</div>;
+    if (!activeLesson) return <div>Lesson not found</div>;
 
     return (
-        <div className="flex h-screen bg-gray-900 pt-20">
+        <div className="flex bg-gray-900 min-h-screen pt-20">
+            <SEO
+                title={`${activeLesson.title} - ${course.title}`}
+                description={`Learn ${activeLesson.title} as part of the ${course.title} on 365Connect.`}
+            />
             {/* Sidebar */}
             <div className={`fixed inset-y-0 left-0 z-30 w-80 bg-gray-800 border-r border-gray-700 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 pt-20 md:pt-0`}>
                 <div className="p-4 border-b border-gray-700 flex justify-between items-center">

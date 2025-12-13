@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Users, Calendar, BookOpen, Youtube, Linkedin, Github, MessageCircle, Sparkles, Heart, Code } from 'lucide-react';
 import Hero from '../components/Hero';
 
+import SEO from '../components/SEO';
+
 const Home = () => {
     // We'll embed the channel's latest uploads section
     const channelId = 'UC9vIK0Y5uwV8GCvN5wD3Kmg'; // 365Connect Community channel ID
@@ -41,6 +43,10 @@ const Home = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black">
+            <SEO
+                title="Home"
+                description="Join 365Connect - The ultimate community for Microsoft Power Platform and Dynamics 365 enthusiasts. Learn, share, and grow together."
+            />
             <Hero />
 
             {/* Community Stats */}
