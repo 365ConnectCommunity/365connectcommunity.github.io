@@ -44,7 +44,7 @@ const Navbar = () => {
                         <img
                             src={logoNew}
                             alt="365 Connect"
-                            className="h-12 mix-blend-multiply bg-white rounded-full p-0.5"
+                            className="h-12 rounded-full"
                         />
                         <div className="flex">
                             <span className="text-2xl font-black text-secondary">3</span>

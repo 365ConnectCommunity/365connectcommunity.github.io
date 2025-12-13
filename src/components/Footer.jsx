@@ -57,7 +57,7 @@ const Footer = () => {
                             <img
                                 src={logoNew}
                                 alt="365 Connect"
-                                className="h-10 mix-blend-multiply bg-white rounded-full p-0.5"
+                                className="h-10 rounded-full"
                             />
                             <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                                 365Connect
