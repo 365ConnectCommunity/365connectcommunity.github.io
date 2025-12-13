@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import Team from './pages/Team'
 import Events from './pages/Events'
 import Courses from './pages/Courses'
+import CourseViewer from './pages/CourseViewer'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import LoginVerify from './pages/LoginVerify'
@@ -40,6 +41,8 @@ function App() {
                     <Route path="my-profile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
                     <Route path="my-certificates" element={<ProtectedRoute><MyCertificates /></ProtectedRoute>} />
                     <Route path="my-events" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
+                    <Route path="courses" element={<Courses />} />
+                    <Route path="course/:courseId" element={<ProtectedRoute><CourseViewer /></ProtectedRoute>} />
                 </Route>
             </Routes>
         </AuthProvider>
