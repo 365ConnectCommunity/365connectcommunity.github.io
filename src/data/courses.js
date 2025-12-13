@@ -311,6 +311,96 @@ This is the "Gold Standard" entry-level exam.
                         type: 'text'
                     }
                 ]
+            },
+            {
+                id: 'm7',
+                title: 'Module 7: Advanced Logic (Power Fx)',
+                lessons: [
+                    {
+                        id: 'l7-1',
+                        title: 'Variables vs Collections',
+                        content: `**Variables:**
+Store a single value (e.g., User Name, Current Color).
+*   Correct: \`Set(varName, "John")\`
+*   Correct: \`UpdateContext({locVisible: true})\` (Screen specific)
+
+**Collections:**
+Store a table of data (e.g., A shopping cart).
+*   Correct: \`Collect(colCart, {Item: "Apple", Price: 1.00})\`
+*   Correct: \`ClearCollect(colCart, ...)\` -> Wipes and reloads.
+
+**Pro Tip:**
+Use Collections to cache data locally so your app runs fast offline!`,
+                        type: 'text'
+                    },
+                    {
+                        id: 'l7-2',
+                        title: 'The "Patch" Function',
+                        content: `**SubmitForm** is easy, but **Patch** is powerful.
+
+**Scenario:** You want to save data without a Form control.
+**Syntax:**
+\`Patch(DataSource, RecordToUpdate, {Column: Value})\`
+
+*   **Create New:** \`Patch(Orders, Defaults(Orders), {Item: "Book"})\`
+*   **Update Existing:** \`Patch(Orders, ThisItem, {Status: "Shipped"})\`
+
+**Why use it?**
+It allows currently strict control over *exactly* what gets saved and when.`,
+                        type: 'text'
+                    }
+                ]
+            },
+            {
+                id: 'm8',
+                title: 'Module 8: Governance & Security',
+                lessons: [
+                    {
+                        id: 'l8-1',
+                        title: 'Environments',
+                        content: `**What is an Environment?**
+Think of it as a "Container" for your apps and data.
+*   **Dev Environment:** Where you build and break things.
+*   **Test (QA):** Where users test.
+*   **Prod (Production):** Real user data. **Do not touch directly!**
+
+**Best Practice:**
+NEVER build in the Default environment. Creating a dedicated Developer Environment is free!`,
+                        type: 'text'
+                    },
+                    {
+                        id: 'l8-2',
+                        title: 'Solutions (ALM)',
+                        content: `**Application Lifecycle Management (ALM)**
+How do you move an app from Dev -> Test -> Prod?
+**Answer: Solutions.**
+
+*   **Solution:** A zip file containing your Apps, Flows, and Tables.
+*   **Managed Solution:** "Sealed". Installed in Prod. Cannot be edited.
+*   **Unmanaged Solution:** "Open". Exists in Dev. Editable.
+
+**The Golden Rule:**
+ALWAYS create your components inside a Solution. Never start from "make.powerapps.com > Create App". Start from "Solutions > New Solution".`,
+                        type: 'text'
+                    },
+                    {
+                        id: 'l8-3',
+                        title: 'Security Roles',
+                        content: `Who can see what?
+Dataverse uses a robust security model.
+
+1.  **Business Units:** Like your company departments (Sales, HR).
+2.  **Security Roles:** Define permissions (Read, Write, Delete).
+    *   *System Admin:* God mode.
+    *   *Basic User:* Can see their own records.
+3.  **Teams:** Group users together (e.g., "Owning Team").
+
+**Scenario:**
+"Managers" can see all rows. "Sales Reps" can only see their own rows.
+You configure this in the **Security Role** editor.`,
+                        type: 'text'
+                    }
+                ]
             }
         ]
     }

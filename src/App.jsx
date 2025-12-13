@@ -15,6 +15,7 @@ import Blog from './pages/Blog'
 import MyProfile from './pages/MyProfile'
 import MyCertificates from './pages/MyCertificates'
 import MyEvents from './pages/MyEvents'
+import MyCourses from './pages/MyCourses'
 import CommunityMembers from './pages/CommunityMembers'
 import Support from './pages/Support'
 import OurSocials from './pages/OurSocials'
@@ -41,6 +42,7 @@ function App() {
                     <Route path="my-profile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
                     <Route path="my-certificates" element={<ProtectedRoute><MyCertificates /></ProtectedRoute>} />
                     <Route path="my-events" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
+                    <Route path="my-courses" element={<ProtectedRoute><MyCourses /></ProtectedRoute>} />
                     <Route path="courses" element={<Courses />} />
                     <Route path="course/:courseId" element={<ProtectedRoute><CourseViewer /></ProtectedRoute>} />
                 </Route>

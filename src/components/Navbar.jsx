@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, User, LogOut, Award, UserCircle } from 'lucide-react';
+import { Menu, X, User, LogOut, Award, UserCircle, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { getUserImage } from '../services/authService';
@@ -95,6 +95,14 @@ const Navbar = () => {
                                                 >
                                                     <UserCircle size={16} className="mr-3" />
                                                     My Profile
+                                                </Link>
+                                                <Link
+                                                    to="/my-courses"
+                                                    className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                                                    onClick={() => setShowUserMenu(false)}
+                                                >
+                                                    <BookOpen size={16} className="mr-3" />
+                                                    My Courses
                                                 </Link>
                                                 <Link
                                                     to="/my-certificates"

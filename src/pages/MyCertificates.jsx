@@ -37,9 +37,8 @@ const MyCertificates = () => {
 
     const loadEnrolledCourses = () => {
         if (!user?.email) return;
-        const enrolled = courses.filter(course =>
-            localStorage.getItem(`enrolled_${user.email}_${course.id}`) === 'true'
-        );
+        const enrolledIds = JSON.parse(localStorage.getItem(`enrolled_${user.email}`) || '[]');
+        const enrolled = courses.filter(course => enrolledIds.includes(course.id));
         setEnrolledCourses(enrolled);
     };
 
