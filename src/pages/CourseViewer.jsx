@@ -65,6 +65,24 @@ const CourseViewer = () => {
         // Auto-advance logic could go here
     };
 
+    // Navigation Helpers
+    const allLessons = course ? course.modules.flatMap(m => m.lessons) : [];
+    const currentLessonIndex = allLessons.findIndex(l => l.id === activeLesson?.id);
+    const prevLesson = currentLessonIndex > 0 ? allLessons[currentLessonIndex - 1] : null;
+    const nextLesson = currentLessonIndex < allLessons.length - 1 ? allLessons[currentLessonIndex + 1] : null;
+
+    const goToPrevLesson = () => {
+        if (prevLesson) {
+            handleLessonSelect(prevLesson);
+        }
+    };
+
+    const goToNextLesson = () => {
+        if (nextLesson) {
+            handleLessonSelect(nextLesson);
+        }
+    };
+
     if (!course) return <div>Course not found</div>;
     if (!activeLesson) return <div>Lesson not found</div>;
 
@@ -190,7 +208,11 @@ const CourseViewer = () => {
                         </div>
 
                         <div className="flex justify-between items-center border-t border-gray-700 pt-8">
-                            <button className="text-gray-400 hover:text-white flex items-center disabled:opacity-50" disabled>
+                            <button
+                                onClick={goToPrevLesson}
+                                disabled={!prevLesson}
+                                className={`text-gray-400 flex items-center ${!prevLesson ? 'opacity-50 cursor-not-allowed' : 'hover:text-white'}`}
+                            >
                                 <ChevronLeft size={20} className="mr-2" />
                                 Previous Lesson
                             </button>
@@ -209,7 +231,11 @@ const CourseViewer = () => {
                                 )}
                             </button>
 
-                            <button className="text-gray-400 hover:text-white flex items-center disabled:opacity-50" disabled>
+                            <button
+                                onClick={goToNextLesson}
+                                disabled={!nextLesson}
+                                className={`text-gray-400 flex items-center ${!nextLesson ? 'opacity-50 cursor-not-allowed' : 'hover:text-white'}`}
+                            >
                                 Next Lesson
                                 <ChevronRight size={20} className="ml-2" />
                             </button>
