@@ -61,7 +61,7 @@ const Team = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-center mb-16"
                 >
-                    <h1 className="text-5xl font-black mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                    <h1 className="text-5xl font-black mb-4 text-white drop-shadow-lg">
                         Our Team
                     </h1>
                     <p className="text-xl text-gray-400 max-w-2xl mx-auto">
@@ -73,34 +73,77 @@ const Team = () => {
                     <div className="text-center text-red-500 mb-8">{error}</div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {team.map((member, index) => (
-                        <motion.div
-                            key={member.contactid || index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all"
-                        >
-                            <img
-                                src={getContributorImage(member)}
-                                alt={member.fullname}
-                                className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 object-cover"
-                            />
-                            <h3 className="text-xl font-bold text-white text-center">{member.fullname || 'Team Member'}</h3>
-                            {member.jobtitle && (
-                                <p className="text-gray-400 text-center mb-2">{member.jobtitle}</p>
-                            )}
-                            {member.emailaddress1 && (
-                                <p className="text-sm text-gray-500 text-center">{member.emailaddress1}</p>
-                            )}
-                        </motion.div>
-                    ))}
-                </div>
+                {/* Render Team Groups */}
+                {(() => {
+                    // Define role order and grouping
+                    const roleOrder = ['Founder', 'Co-Founder', 'Community Lead', 'Core Team', 'Contributor'];
 
-                {team.length === 0 && !loading && !error && (
-                    <div className="text-center text-gray-400 text-xl">No team members found</div>
-                )}
+                    const groupedTeam = team.reduce((acc, member) => {
+                        // Normalize job title or default to 'Contributor'
+                        let role = member.jobtitle || 'Contributor';
+
+                        // Simple categorization logic if needed, otherwise use jobtitle directly
+                        // This matches simple job titles. Adjust if data is more complex.
+
+                        if (!acc[role]) acc[role] = [];
+                        acc[role].push(member);
+                        return acc;
+                    }, {});
+
+                    // Sort roles based on predefined order, put others at the end
+                    const sortedRoles = Object.keys(groupedTeam).sort((a, b) => {
+                        const indexA = roleOrder.indexOf(a);
+                        const indexB = roleOrder.indexOf(b);
+
+                        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+                        if (indexA !== -1) return -1;
+                        if (indexB !== -1) return 1;
+                        return a.localeCompare(b);
+                    });
+
+                    if (sortedRoles.length === 0 && !loading && !error) {
+                        return <div className="text-center text-gray-400 text-xl">No team members found</div>;
+                    }
+
+                    return sortedRoles.map(role => (
+                        <div key={role} className="mb-16">
+                            <h2 className="text-3xl font-bold text-white mb-8 border-b border-gray-700 pb-2">{role}</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {groupedTeam[role].map((member, index) => (
+                                    <motion.div
+                                        key={member.contactid || index}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all border border-gray-700"
+                                    >
+                                        <img
+                                            src={getContributorImage(member)}
+                                            alt={member.fullname}
+                                            className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 object-cover"
+                                        />
+                                        <h3 className="text-xl font-bold text-white text-center">{member.fullname || 'Team Member'}</h3>
+                                        {member.jobtitle && (
+                                            <p className="text-blue-400 text-center mb-2 font-medium">{member.jobtitle}</p>
+                                        )}
+                                        {member.emailaddress1 && (
+                                            <p className="text-sm text-gray-400 text-center">{member.emailaddress1}</p>
+                                        )}
+
+                                        <div className="flex justify-center space-x-3 mt-4">
+                                            {member.linkedin && (
+                                                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-500 transition-colors">
+                                                    <i className="fab fa-linkedin text-xl"></i>
+                                                </a>
+                                            )}
+                                            {/* Add other socials if available in data */}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                    ));
+                })()}
             </div>
         </div>
     );

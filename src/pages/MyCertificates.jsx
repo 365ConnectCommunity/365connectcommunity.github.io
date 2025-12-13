@@ -47,7 +47,7 @@ const MyCertificates = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    <h1 className="text-5xl font-black mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent text-center mb-12">
+                    <h1 className="text-5xl font-black mb-12 text-white drop-shadow-lg text-center">
                         My Certificates
                     </h1>
 

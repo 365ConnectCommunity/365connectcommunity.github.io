@@ -127,16 +127,30 @@ export const authAPI = {
  * User Profile APIs
  */
 export const userAPI = {
-    // Get user profile
-    getProfile: async (email) => {
+    // Get user registered events
+    getMyEvents: async (email) => {
         const headers = new Headers();
         headers.append('email', email);
 
-        return await apiCall(API_ENDPOINTS.GET_PROFILE, {
+        const response = await fetch(API_ENDPOINTS.GET_PROFILE, {
             method: 'GET',
             headers,
             redirect: 'follow'
         });
+
+        if (response.status === 200) {
+            const data = await response.json();
+            return data.map(event => ({
+                eventid: event.sa_eventid || event._sa_event_value,
+                name: event["_sa_event_value@OData.Community.Display.V1.FormattedValue"] || event.sa_name,
+                createdon: event["createdon@OData.Community.Display.V1.FormattedValue"] || event.createdon,
+                attendee: event["_sa_attendee_value@OData.Community.Display.V1.FormattedValue"],
+                status: event["statuscode@OData.Community.Display.V1.FormattedValue"],
+                statuscode: event.statuscode
+            }));
+        } else {
+            return [];
+        }
     },
 
     // Update profile
@@ -245,7 +259,17 @@ export const certificatesAPI = {
         });
 
         if (response.status === 200) {
-            return await response.json();
+            const data = await response.json();
+            // Map keys to be consistent
+            return data.map(cert => ({
+                certificateid: cert.sa_certificateid || cert.certificateid,
+                name: cert.sa_name || cert.certificatename || cert.name,
+                certificatename: cert.sa_name || cert.certificatename || cert.name,
+                description: cert.sa_description || cert.description,
+                issueddate: cert.sa_issueddate || cert.issueddate,
+                certificateurl: cert.sa_certificateurl || cert.certificateurl,
+                image: cert.sa_image || cert.image
+            }));
         } else {
             return [];
         }

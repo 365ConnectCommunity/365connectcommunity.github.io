@@ -25,6 +25,7 @@ const Navbar = () => {
         { name: 'Our Family', path: '/team' },
         { name: 'Events', path: '/events' },
         { name: 'Courses', path: '/courses' },
+        { name: 'Our Socials', path: '/socials' },
     ];
 
     const handleLogout = () => {

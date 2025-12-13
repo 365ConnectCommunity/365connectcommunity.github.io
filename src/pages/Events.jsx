@@ -202,7 +202,7 @@ const Events = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-16"
                 >
-                    <h1 className="text-5xl font-black mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent text-center mb-12">
+                    <h1 className="text-5xl font-black mb-12 text-white drop-shadow-lg text-center">
                         Upcoming Events
                     </h1>
 
@@ -226,7 +226,7 @@ const Events = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                 >
-                    <h2 className="text-4xl font-black mb-8 bg-gradient-to-r from-purple-400 to-blue-600 bg-clip-text text-transparent text-center">
+                    <h2 className="text-4xl font-black mb-8 text-white drop-shadow-lg text-center">
                         Past Events
                     </h2>
 

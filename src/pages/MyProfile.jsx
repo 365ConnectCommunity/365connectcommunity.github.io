@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { userAPI } from '../services/apiService';
+import { userAPI, eventsAPI } from '../services/apiService';
 import { User, Mail, Phone, Trash2, Save } from 'lucide-react';
 
 const MyProfile = () => {
@@ -15,6 +15,28 @@ const MyProfile = () => {
         email: user?.email || '',
         phone: ''
     });
+
+    // My Events State
+    const [myEvents, setMyEvents] = useState([]);
+    const [myEventsLoading, setMyEventsLoading] = useState(true);
+
+    useEffect(() => {
+        loadMyEvents();
+    }, []);
+
+    const loadMyEvents = async () => {
+        if (!user?.email) return;
+        try {
+            const events = await userAPI.getMyEvents(user.email);
+            setMyEvents(events);
+        } catch (err) {
+            console.error('Failed to load events', err);
+        } finally {
+            setMyEventsLoading(false);
+        }
+    };
+
+
 
     const handleChange = (e) => {
         setFormData({
@@ -64,7 +86,7 @@ const MyProfile = () => {
                     className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 shadow-2xl"
                 >
                     <div className="flex items-center justify-between mb-8">
-                        <h1 className="text-4xl font-black bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                        <h1 className="text-4xl font-black text-white drop-shadow-lg">
                             My Profile
                         </h1>
                         {!editing && (
@@ -79,8 +101,8 @@ const MyProfile = () => {
 
                     {message.text && (
                         <div className={`mb-6 px-4 py-3 rounded-lg ${message.type === 'success'
-                                ? 'bg-green-500/10 border border-green-500 text-green-500'
-                                : 'bg-red-500/10 border border-red-500 text-red-500'
+                            ? 'bg-green-500/10 border border-green-500 text-green-500'
+                            : 'bg-red-500/10 border border-red-500 text-red-500'
                             }`}>
                             {message.text}
                         </div>
