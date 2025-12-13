@@ -263,7 +263,21 @@ export const communityAPI = {
         });
 
         if (response.status === 200) {
-            return await response.json();
+            const data = await response.json();
+            // Transform property names for React components
+            return data.map(member => ({
+                contactid: member.sa_contactid,
+                fullname: `${member.sa_firstname || ''} ${member.sa_lastname || ''}`.trim(),
+                firstname: member.sa_firstname,
+                lastname: member.sa_lastname,
+                jobtitle: member.sa_designation,
+                emailaddress1: member.sa_email || member.emailaddress1,
+                entityimage: member.sa_imageurl || member.entityimage,
+                designation: member.sa_designation,
+                facebook: member.sa_facebook,
+                linkedin: member.sa_linkedin,
+                instagram: member.sa_instagram
+            }));
         } else {
             return [];
         }

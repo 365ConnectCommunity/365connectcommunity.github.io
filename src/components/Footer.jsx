@@ -1,7 +1,42 @@
-import React from 'react';
-import { Linkedin, Youtube, Mail, Github, Twitter } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Linkedin, Youtube, Mail, Github, Twitter, Globe } from 'lucide-react';
+import { supportAPI } from '../services/apiService';
 
 const Footer = () => {
+    const [socials, setSocials] = useState([]);
+
+    useEffect(() => {
+        loadSocials();
+    }, []);
+
+    const loadSocials = async () => {
+        try {
+            const data = await supportAPI.getSocials();
+            setSocials(data.slice(0, 4)); // Limit to 4 icons for footer
+        } catch (err) {
+            console.error('Failed to load socials', err);
+        }
+    };
+
+    const getIcon = (name) => {
+        const lowerName = name?.toLowerCase() || '';
+        if (lowerName.includes('linkedin')) return <Linkedin size={18} />;
+        if (lowerName.includes('youtube')) return <Youtube size={18} />;
+        if (lowerName.includes('github')) return <Github size={18} />;
+        if (lowerName.includes('twitter') || lowerName.includes('x')) return <Twitter size={18} />;
+        if (lowerName.includes('mail')) return <Mail size={18} />;
+        return <Globe size={18} />;
+    };
+
+    const getHoverColor = (name) => {
+        const lowerName = name?.toLowerCase() || '';
+        if (lowerName.includes('linkedin')) return 'hover:bg-blue/20 hover:text-blue';
+        if (lowerName.includes('youtube')) return 'hover:bg-red-500/20 hover:text-red-500';
+        if (lowerName.includes('github')) return 'hover:bg-gray-500/20 hover:text-white';
+        if (lowerName.includes('twitter') || lowerName.includes('x')) return 'hover:bg-sky-500/20 hover:text-sky-500';
+        return 'hover:bg-purple-500/20 hover:text-purple-500';
+    };
+
     return (
         <footer className="bg-[#0f1623] border-t border-white/5 pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-4">
@@ -18,27 +53,36 @@ const Footer = () => {
                     <div>
                         <h4 className="text-white font-semibold mb-4">Quick Links</h4>
                         <ul className="space-y-2 text-sm text-gray-400">
-                            <li><a href="#family" className="hover:text-blue transition-colors">Our Family</a></li>
-                            <li><a href="#resources" className="hover:text-blue transition-colors">Resources</a></li>
-                            <li><a href="#contact" className="hover:text-blue transition-colors">Contact Us</a></li>
+                            <li><a href="/team" className="hover:text-blue transition-colors">Our Family</a></li>
+                            <li><a href="/events" className="hover:text-blue transition-colors">Resources</a></li>
+                            <li><a href="/support" className="hover:text-blue transition-colors">Contact Us</a></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="text-white font-semibold mb-4">Resources</h4>
                         <ul className="space-y-2 text-sm text-gray-400">
-                            <li><a href="#" className="hover:text-blue transition-colors">Events</a></li>
-                            <li><a href="#" className="hover:text-blue transition-colors">Courses</a></li>
-                            <li><a href="#" className="hover:text-blue transition-colors">Blogs</a></li>
+                            <li><a href="/events" className="hover:text-blue transition-colors">Events</a></li>
+                            <li><a href="/courses" className="hover:text-blue transition-colors">Courses</a></li>
+                            <li><a href="/blog" className="hover:text-blue transition-colors">Blogs</a></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="text-white font-semibold mb-4">Connect</h4>
                         <div className="flex space-x-3">
-                            <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-blue/20 hover:text-blue transition-all"><Linkedin size={18} /></a>
-                            <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-500 transition-all"><Youtube size={18} /></a>
-                            <a href="#" className="p-2 rounded-full bg-white/5 hover:bg-gray-500/20 hover:text-white transition-all"><Github size={18} /></a>
+                            {socials.map((social, index) => (
+                                <a
+                                    key={index}
+                                    href={social.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`p-2 rounded-full bg-white/5 transition-all ${getHoverColor(social.name)}`}
+                                    title={social.name}
+                                >
+                                    {getIcon(social.name)}
+                                </a>
+                            ))}
                         </div>
                     </div>
                 </div>
