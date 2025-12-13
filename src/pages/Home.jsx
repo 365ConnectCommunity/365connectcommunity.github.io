@@ -163,10 +163,11 @@ const Home = () => {
                             <div className="aspect-video">
                                 <iframe
                                     className="w-full h-full"
-                                    src={`https://www.youtube.com/embed?listType=user_uploads&list=UU9vIK0Y5uwV8GCvN5wD3Kmg`}
-                                    title="Latest Videos from 365Connect Community"
+                                    src="https://www.youtube.com/embed/iy8knAr4coo?si=XQBYd6-tqJK27RSt&controls=0"
+                                    title="YouTube video player"
                                     frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerPolicy="strict-origin-when-cross-origin"
                                     allowFullScreen
                                 />
                             </div>

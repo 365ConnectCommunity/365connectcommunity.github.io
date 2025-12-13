@@ -154,10 +154,11 @@ const CourseViewer = () => {
                                 const trimmedLine = line.trim();
                                 if (!trimmedLine) return <div key={idx} className="h-4"></div>;
 
-                                if (trimmedLine.startsWith('*') || trimmedLine.startsWith('- ') || /^\d+\./.test(trimmedLine)) {
+                                // Stricter bullet detection: requires space after *, -, or digit.
+                                if (trimmedLine.match(/^(\*|-|\d+\.)\s/)) {
                                     return (
                                         <li key={idx} className="ml-4 list-disc text-gray-300 mb-2 pl-2">
-                                            {processText(trimmedLine.replace(/^[\*\-\d\.]+\s?/, ''))}
+                                            {processText(trimmedLine.replace(/^[\*\-\d\.]+\s/, ''))}
                                         </li>
                                     );
                                 }
