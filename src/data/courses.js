@@ -223,6 +223,94 @@ This saves HOURS of chasing people.`,
                         type: 'text'
                     }
                 ]
+            },
+            {
+                id: 'm5',
+                title: 'Module 5: Real-World Projects',
+                lessons: [
+                    {
+                        id: 'l5-1',
+                        title: 'Project 1: The Expense Tracker',
+                        content: `**Scenario:**
+Employees need to upload receipts and get manager approval.
+
+**The Solution:**
+1.  **Data:** Create a Dataverse table 'Expenses' (Columns: Amount, Date, Category, Receipt Image status).
+2.  **App:** Create a Canvas App.
+    *   **Screen 1:** Gallery showing my past expenses.
+    *   **Screen 2:** Form to add new expense. Use 'Add Picture' control for receipt.
+3.  **Automation:**
+    *   Trigger: When a row is added to 'Expenses'.
+    *   Action: Start an Approval with the user's manager.
+    *   Condition: If Approved -> Update Status to 'Paid'. If Rejected -> Email user.
+
+**Key Learning:**
+This combines all three pillars: Apps (UI), Data (Storage), and Automate (Logic).`,
+                        type: 'text'
+                    },
+                    {
+                        id: 'l5-2',
+                        title: 'Project 2: Event Registration',
+                        content: `**Scenario:**
+We are hosting a workshop and need people to sign up.
+
+**The Solution:**
+1.  **Power Page:** Create a public-facing website.
+    *   Add a simple form connected to Dataverse table 'Registrations'.
+2.  **Power Automate:**
+    *   Trigger: When new row in 'Registrations'.
+    *   Action: Send an email "Ticket Confirmation" with a QR code.
+3.  **Power BI:**
+    *   Create a dashboard showing "Total Registrations by Country".
+
+**Pro Tip:**
+Use **Power Pages** for external users (people outside your company). Use **Canvas Apps** for internal employees.`,
+                        type: 'text'
+                    }
+                ]
+            },
+            {
+                id: 'm6',
+                title: 'Module 6: Career & Certification',
+                lessons: [
+                    {
+                        id: 'l6-1',
+                        title: 'The PL-900 Exam',
+                        content: `**Microsoft Certified: Power Platform Fundamentals**
+This is the "Gold Standard" entry-level exam.
+
+**What is tested?**
+*   Describe business value of Power Platform (20-25%)
+*   Identify Core Components (10-15%)
+*   Demonstrate capabilities of Power BI (10-15%)
+*   Demonstrate capabilities of Power Apps (20-25%)
+*   Demonstrate capabilities of Power Automate (10-15%)
+
+**How to study?**
+1.  Take this course!
+2.  Use clear *Microsoft Learn* paths.
+3.  Practice creating apps (Hands-on is better than reading).
+
+[Official Exam Page](https://learn.microsoft.com/en-us/credentials/certifications/exams/pl-900/)`,
+                        type: 'text'
+                    },
+                    {
+                        id: 'l6-2',
+                        title: 'Next Steps: PL-100, PL-200, PL-400',
+                        content: `After PL-900, where do you go?
+
+1.  **PL-100 (App Maker):** "I build apps for my team." Focuses heavily on Canvas Apps.
+2.  **PL-200 (Functional Consultant):** "I implement solutions for clients." Focuses on Dataverse, Model-Driven Apps, and Solution Architecture.
+3.  **PL-400 (Developer):** "I write code." Focuses on JavaScript, C# Plugins, and Azure integration.
+4.  **PL-600 (Solution Architect):** "I design the whole system." Top tier.
+
+**Career Advice:**
+*   Build a portfolio. Screenshots of apps you built matter more than a CV.
+*   Join the *365Connect Community* (You are already here!).
+*   Share your learning on LinkedIn.`,
+                        type: 'text'
+                    }
+                ]
             }
         ]
     }

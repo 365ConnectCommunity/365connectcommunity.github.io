@@ -132,28 +132,40 @@ const CourseViewer = () => {
                             {activeLesson.content.split('\n').map((line, idx) => {
                                 // Basic Markdown Parsing
                                 const processText = (text) => {
-                                    // Bold: **text**
-                                    const parts = text.split(/(\*\*.*?\*\*)/g);
-                                    return parts.map((part, i) => {
-                                        if (part.startsWith('**') && part.endsWith('**')) {
-                                            return <strong key={i} className="text-white">{part.slice(2, -2)}</strong>;
+                                    // 1. Split by Bold: **text**
+                                    const boldParts = text.split(/(\*\*.*?\*\*)/g);
+
+                                    return boldParts.map((boldPart, i) => {
+                                        if (boldPart.startsWith('**') && boldPart.endsWith('**')) {
+                                            return <strong key={`b-${i}`} className="text-white font-bold">{boldPart.slice(2, -2)}</strong>;
                                         }
-                                        // Links: [text](url) - (Simple regex for basic links)
-                                        const linkParts = part.split(/(\[.*?\]\(.*?\))/g);
-                                        if (linkParts.length > 1) {
-                                            return linkParts.map((linkPart, j) => {
-                                                const linkMatch = linkPart.match(/\[(.*?)\]\((.*?)\)/);
-                                                if (linkMatch) {
-                                                    return (
-                                                        <a key={`${i}-${j}`} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">
-                                                            {linkMatch[1]}
-                                                        </a>
-                                                    );
-                                                }
-                                                return linkPart;
-                                            });
-                                        }
-                                        return part;
+
+                                        // 2. Split by Italics: *text* (only in non-bold parts)
+                                        // We use a regex that looks for *content* but we must be careful not to match empty strings
+                                        const italicParts = boldPart.split(/(\*[^*\n]+\*)/g); // Simple split by *...*
+
+                                        return italicParts.map((italicPart, j) => {
+                                            if (italicPart.startsWith('*') && italicPart.endsWith('*') && italicPart.length > 2) {
+                                                return <em key={`i-${i}-${j}`} className="italic text-gray-300">{italicPart.slice(1, -1)}</em>;
+                                            }
+
+                                            // 3. Split by Links: [text](url)
+                                            const linkParts = italicPart.split(/(\[.*?\]\(.*?\))/g);
+                                            if (linkParts.length > 1) {
+                                                return linkParts.map((linkPart, k) => {
+                                                    const linkMatch = linkPart.match(/\[(.*?)\]\((.*?)\)/);
+                                                    if (linkMatch) {
+                                                        return (
+                                                            <a key={`l-${i}-${j}-${k}`} href={linkMatch[2]} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">
+                                                                {linkMatch[1]}
+                                                            </a>
+                                                        );
+                                                    }
+                                                    return linkPart;
+                                                });
+                                            }
+                                            return italicPart;
+                                        });
                                     });
                                 };
 
