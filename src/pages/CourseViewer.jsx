@@ -83,15 +83,98 @@ const CourseViewer = () => {
         }
     };
 
+    // Check for course completion
+    const totalLessons = allLessons.length;
+    const progressPercentage = totalLessons > 0 ? Math.round((completedLessons.length / totalLessons) * 100) : 0;
+    const isCourseCompleted = totalLessons > 0 && completedLessons.length === totalLessons;
+
+    // LinkedIn Share
+    const shareToLinkedIn = () => {
+        const url = encodeURIComponent(window.location.href);
+        const title = encodeURIComponent(`I just completed the ${course.title} on 365Connect Community!`);
+        window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${title} ${url}`, '_blank');
+    };
+
+    // "Download" Certificate (Simulated by generic alert or new window for now)
+    const downloadCertificate = () => {
+        // In a real app, this would generate a PDF.
+        // For now, we'll open a print-friendly certificate window.
+        const certWindow = window.open('', '_blank');
+        certWindow.document.write(`
+            <html>
+                <head>
+                    <title>Certificate of Completion</title>
+                    <style>
+                        body { font-family: 'Arial', sans-serif; text-align: center; padding: 50px; background: #f0f2f5; }
+                        .cert { border: 10px solid #3b82f6; padding: 40px; background: white; max-width: 800px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+                        h1 { color: #1e3a8a; font-size: 48px; margin-bottom: 10px; }
+                        p { font-size: 24px; color: #4b5563; }
+                        .name { font-size: 32px; font-weight: bold; color: #111827; margin: 20px 0; border-bottom: 2px solid #e5e7eb; display: inline-block; padding-bottom: 10px; }
+                        .course { font-size: 28px; color: #3b82f6; font-weight: bold; margin: 20px 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class="cert">
+                        <h1>Certificate of Completion</h1>
+                        <p>This certifies that</p>
+                        <div class="name">${user.firstName} ${user.lastName}</div>
+                        <p>has successfully completed the course</p>
+                        <div class="course">${course.title}</div>
+                        <p>on ${new Date().toLocaleDateString()}</p>
+                    </div>
+                    <script>window.print();</script>
+                </body>
+            </html>
+        `);
+    };
+
     if (!course) return <div>Course not found</div>;
     if (!activeLesson) return <div>Lesson not found</div>;
 
+    if (isCourseCompleted && activeLesson.id === allLessons[allLessons.length - 1].id && completedLessons.includes(activeLesson.id)) {
+        // If we are on the last lesson and it is completed, show the completion screen as an overlay or replace content?
+        // Let's replace the Main Content area with a celebration view if the user chooses to "View Certificate"
+        // or just show it below the lesson content.
+        // Actually, let's just show an overlay if they just finished.
+    }
+
     return (
-        <div className="flex bg-gray-900 min-h-screen pt-20">
+        <div className="flex bg-gray-900 min-h-screen pt-20 relative">
             <SEO
                 title={`${activeLesson.title} - ${course.title}`}
                 description={`Learn ${activeLesson.title} as part of the ${course.title} on 365Connect.`}
             />
+
+            {/* Completion Overlay (Only visible when finishing the last lesson?) 
+                Actually, let's make it a dedicated "Lesson" view or simpler: 
+                If complete, show a banner. 
+            */}
+
+            {isCourseCompleted && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl border border-blue-500/30 max-w-lg w-full text-center shadow-2xl relative overflow-hidden">
+                        {/* Fireworks Effect (CSS-based particles could be added here, simplified for now) */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-pulse"></div>
+
+                        <CheckCircle size={80} className="mx-auto text-green-500 mb-6 animate-bounce" />
+                        <h2 className="text-4xl font-black text-white mb-2">Congratulations!</h2>
+                        <p className="text-gray-300 mb-8 text-lg">You have successfully completed <strong>{course.title}</strong>.</p>
+
+                        <div className="space-y-4">
+                            <button onClick={downloadCertificate} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2">
+                                <CheckCircle size={20} /> Download Certificate
+                            </button>
+                            <button onClick={shareToLinkedIn} className="w-full py-4 bg-[#0077b5] hover:bg-[#006396] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2">
+                                <span>In</span> Share on LinkedIn
+                            </button>
+                            <button onClick={() => navigate('/courses')} className="text-gray-400 hover:text-white text-sm mt-4">
+                                Back to Courses
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Sidebar */}
             <div className={`fixed inset-y-0 left-0 z-30 w-80 bg-gray-800 border-r border-gray-700 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 pt-20 md:pt-0`}>
                 <div className="p-4 border-b border-gray-700 flex justify-between items-center">
@@ -100,6 +183,11 @@ const CourseViewer = () => {
                         <X size={24} />
                     </button>
                 </div>
+                {/* Progress Bar in Sidebar */}
+                <div className="h-2 bg-gray-700 w-full">
+                    <div className="h-full bg-green-500 transition-all duration-500" style={{ width: `${progressPercentage}%` }}></div>
+                </div>
+
                 <div className="overflow-y-auto h-full pb-20">
                     {course.modules.map(module => (
                         <div key={module.id} className="mb-2">
@@ -233,11 +321,13 @@ const CourseViewer = () => {
 
                             <button
                                 onClick={goToNextLesson}
-                                disabled={!nextLesson}
-                                className={`text-gray-400 flex items-center ${!nextLesson ? 'opacity-50 cursor-not-allowed' : 'hover:text-white'}`}
+                                disabled={!nextLesson || !completedLessons.includes(activeLesson.id)}
+                                className={`flex items-center ${(!nextLesson || !completedLessons.includes(activeLesson.id)) ? 'text-gray-600 cursor-not-allowed' : 'text-white hover:text-blue-400'}`}
+                                title={!completedLessons.includes(activeLesson.id) ? "Complete this lesson first" : ""}
                             >
                                 Next Lesson
-                                <ChevronRight size={20} className="ml-2" />
+                                {(!completedLessons.includes(activeLesson.id) && nextLesson) && <Lock size={16} className="ml-2" />}
+                                {completedLessons.includes(activeLesson.id) && <ChevronRight size={20} className="ml-2" />}
                             </button>
                         </div>
                     </div>
