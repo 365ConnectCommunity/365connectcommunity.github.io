@@ -98,7 +98,7 @@ const Navbar = () => {
                                                 <p className="text-xs text-gray-400 truncate">{user?.email}</p>
                                             </div>
                                             <div className="py-2">
-                                                {(user?.email === 'mianshaheerahmed@gmail.com' || user?.role === 'admin') && (
+                                                {(user?.email === 'mianshaheerahmed@gmail.com' || user?.role === 'admin' || user?.role === 'contributor') && (
                                                     <Link
                                                         to="/admin"
                                                         className="flex items-center px-4 py-2 text-sm text-orange-400 hover:bg-gray-700 hover:text-orange-300 transition-colors bg-orange-500/10 mb-1"
@@ -199,7 +199,7 @@ const Navbar = () => {
                                         <p className="text-sm text-white font-medium">{user?.name}</p>
                                         <p className="text-xs text-gray-400">{user?.email}</p>
                                     </div>
-                                    {(user?.email === 'mianshaheerahmed@gmail.com' || user?.role === 'admin') && (
+                                    {(user?.email === 'mianshaheerahmed@gmail.com' || user?.role === 'admin' || user?.role === 'contributor') && (
                                         <Link
                                             to="/admin"
                                             className="block px-3 py-2 rounded-md text-base font-medium text-orange-400 hover:text-orange-300"

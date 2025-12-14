@@ -52,10 +52,21 @@ const CommunityMembers = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {members.map((member, index) => {
-                        // Safe mapping incase API returns raw sa_ fields
-                        const image = member.entityimage || member.sa_imageurl || member.sa_entityimage;
-                        const name = member.fullname || member.sa_fullname || (member.sa_firstname ? `${member.sa_firstname} ${member.sa_lastname}` : 'Community Member');
-                        const email = member.emailaddress1 || member.sa_email || '';
+                        // Safe mapping incase API returns raw sa_ fields or new migrated fields
+                        const image = member.entityimage || member.sa_imageurl || member.sa_entityimage || member.imageurl;
+
+                        let name = 'Community Member';
+                        if (member.firstname && member.lastname) {
+                            name = `${member.firstname} ${member.lastname}`;
+                        } else if (member.fullname) {
+                            name = member.fullname;
+                        } else if (member.sa_fullname) {
+                            name = member.sa_fullname;
+                        } else if (member.sa_firstname) {
+                            name = `${member.sa_firstname} ${member.sa_lastname}`;
+                        }
+
+                        const email = member.email || member.emailaddress1 || member.sa_email || '';
 
                         return (
                             <motion.div

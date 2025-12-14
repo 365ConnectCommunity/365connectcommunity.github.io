@@ -23,6 +23,7 @@ import Support from './pages/Support'
 import OurSocials from './pages/OurSocials'
 import BecomeContributor from './pages/BecomeContributor'
 import Tools from './pages/Tools'
+import EventRegistration from './pages/EventRegistration'
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -53,6 +54,7 @@ function App() {
                     <Route path="support" element={<Support />} />
                     <Route path="our-socials" element={<OurSocials />} />
                     <Route path="become-contributor" element={<BecomeContributor />} />
+                    <Route path="register" element={<ProtectedRoute><EventRegistration /></ProtectedRoute>} />
                     <Route path="tools" element={<Tools />} />
                     <Route path="my-profile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
                     <Route path="my-certificates" element={<ProtectedRoute><MyCertificates /></ProtectedRoute>} />

@@ -29,7 +29,8 @@ const Team = () => {
             'Aqeel Khalid': '/contributors/Aqeel Khalid.jpg',
             'Ashir Mumtaz': '/contributors/Ashir Mumtaz.png',
             'Shaheer Ahmad': '/contributors/Shaheer Ahmad.png',
-            'Yawer Iqbal': '/contributors/Yawer Iqbal.jpg'
+            'Yawer Iqbal': '/contributors/Yawer Iqbal.jpg',
+            '365Connect Community (Admin)': '/src/assets/images/logo-final.png'
         };
 
         // Try to find local contributor image by full name

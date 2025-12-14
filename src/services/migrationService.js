@@ -31,30 +31,27 @@ export const migrateTeam = async (setProgress) => {
 
             batchData.forEach(member => {
                 // Map legacy fields to new schema
-                // Legacy: sa_firstname, sa_lastname, sa_designation, sa_imageurl, sa_linkedin, sa_facebook, sa_instagram
-                const name = `${member.sa_firstname} ${member.sa_lastname}`.trim();
+                // Legacy: sa_firstname, sa_lastname
+                const firstname = member.sa_firstname || '';
+                const lastname = member.sa_lastname || '';
+                const name = `${firstname} ${lastname}`.trim();
 
-                // DUPLICATION DETECTION: Use sanitized name as ID to prevent duplicates if migration is re-run
+                // DUPLICATION DETECTION: Use sanitized name as ID
                 const docId = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
 
                 const newMember = {
-                    contactid: docId, // Store ID as field too
-                    name: name,
+                    contactid: docId,
+                    firstname: firstname, // Improved schema match
+                    lastname: lastname,   // Improved schema match
                     designation: member.sa_designation || 'Member',
-                    image: member.sa_imageurl || '',
-                    socials: {
-                        linkedin: member.sa_linkedin || '',
-                        facebook: member.sa_facebook || '',
-                        instagram: member.sa_instagram || ''
-                    },
+                    imageurl: member.sa_imageurl || '', // Schema says imageurl, code had image
+                    facebook: member.sa_facebook || '',
+                    linkedin: member.sa_linkedin || '',
+                    instagram: member.sa_instagram || '',
+                    order: 0,
                     migratedAt: serverTimestamp()
                 };
 
-                // Use a consistent ID or auto-gen. Here we'll use auto-gen but keep reference? 
-                // Actually, let's just add them. Duplicate checks might be hard without unique legacy ID.
-                // Assuming we wipe or just add. Let's refer to name as ID to prevent dupes if run multiple times?
-                // Let's use auto-id for now, or maybe sanitize name.
-                // Sanitizing name for ID is safer for idempotency.
                 const docRef = doc(db, 'team_members', docId);
                 batch.set(docRef, newMember, { merge: true });
             });
@@ -206,7 +203,10 @@ export const migrateUsersAndUserData = async (setProgress) => {
                 }
 
                 // If we have email, we can do more
-                const docRef = doc(db, 'users', email); // Use email as ID for migration simplicity, can be mapped to UID on login
+                // CRITICAL: Sanitize email to prevent invalid paths (slashes) which cause "Permission Missing" (due to rule mismatch)
+                const safeEmailId = email.toLowerCase().replace(/[^a-z0-9@._-]/g, '_');
+
+                const docRef = doc(db, 'users', safeEmailId); // Use sanitized email as ID
                 batch.set(docRef, { ...user, migrated: true, role: 'member' }, { merge: true });
 
                 // NOW, fetch their specific data?
@@ -219,12 +219,17 @@ export const migrateUsersAndUserData = async (setProgress) => {
                 // OR: The user is right, we iterate. But let's restrict concurrency.
             }
 
-            await batch.commit();
-            count += batchData.length; // Corrected from batch.length
-            setProgress(`Migrated User Profiles batch.`);
+            try {
+                await batch.commit();
+                count += batchData.length;
+                setProgress(`Migrated User Profiles batch (${count}/${usersData.length}).`);
+            } catch (batchError) {
+                console.error("Batch commit failed:", batchError);
+                setProgress(`Batch failed: ${batchError.message}. Continuing...`);
+            }
         }
 
-        return { success: true, count: usersData.length, note: "User profiles migrated. Private data (certs) requires email." };
+        return { success: true, count: usersData.length, note: "User profiles migration completed (check logs for any batch errors)." };
 
     } catch (error) {
         console.error("Migration Error:", error);

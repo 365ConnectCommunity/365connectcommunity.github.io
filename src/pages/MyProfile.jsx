@@ -110,9 +110,15 @@ const MyProfile = () => {
 
                     <div className="flex items-center mb-8">
                         <img
-                            src={`data:image/png;base64,${user?.image}` || '/assets/images/icons8-account-64.png'}
+                            src={
+                                user?.image?.startsWith('http')
+                                    ? user.image
+                                    : user?.image
+                                        ? `data:image/png;base64,${user.image}`
+                                        : '/assets/images/icons8-account-64.png'
+                            }
                             alt="Profile"
-                            className="w-24 h-24 rounded-full border-4 border-orange-500 mr-6"
+                            className="w-24 h-24 rounded-full border-4 border-orange-500 mr-6 object-cover"
                         />
                         <div>
                             <h2 className="text-2xl font-bold text-white">{user?.name}</h2>
