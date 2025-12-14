@@ -291,6 +291,7 @@ export const eventsAPI = {
                 eventid: eventId,
                 email: email,
                 name: name,
+                uid: auth.currentUser ? auth.currentUser.uid : null, // Add UID for new schema
                 registrationDate: Timestamp.now(),
                 status: 'Confirmed'
             });
