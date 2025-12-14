@@ -24,7 +24,7 @@ const Tools = () => {
                         Tools & Components
                     </h1>
 
-                    <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-bold mb-8">
+                    <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-100 to-purple-100 font-bold mb-8">
                         Everything will be FREE. Always.
                     </p>
 
@@ -32,21 +32,21 @@ const Tools = () => {
                         <div className="bg-gray-800/50 backdrop-blur border border-gray-700 p-6 rounded-2xl flex flex-col items-center">
                             <Box className="text-blue-400 mb-4" size={40} />
                             <h3 className="text-xl font-bold text-white mb-2">PCF Controls</h3>
-                            <p className="text-gray-400 text-sm">Custom controls to enhance your UX.</p>
+                            <p className="text-gray-300 text-sm">Custom controls to enhance your UX.</p>
                         </div>
                         <div className="bg-gray-800/50 backdrop-blur border border-gray-700 p-6 rounded-2xl flex flex-col items-center">
                             <Database className="text-purple-400 mb-4" size={40} />
                             <h3 className="text-xl font-bold text-white mb-2">Sample Apps</h3>
-                            <p className="text-gray-400 text-sm">Reverse engineer our best templates.</p>
+                            <p className="text-gray-300 text-sm">Reverse engineer our best templates.</p>
                         </div>
                         <div className="bg-gray-800/50 backdrop-blur border border-gray-700 p-6 rounded-2xl flex flex-col items-center">
                             <Code className="text-green-400 mb-4" size={40} />
                             <h3 className="text-xl font-bold text-white mb-2">Code Snippets</h3>
-                            <p className="text-gray-400 text-sm">Ready-to-use JS & Power Fx.</p>
+                            <p className="text-gray-300 text-sm">Ready-to-use JS & Power Fx.</p>
                         </div>
                     </div>
 
-                    <p className="mt-16 text-gray-500 uppercase tracking-widest font-semibold text-sm">
+                    <p className="mt-16 text-gray-400 uppercase tracking-widest font-semibold text-sm">
                         Coming Soon
                     </p>
                 </motion.div>
