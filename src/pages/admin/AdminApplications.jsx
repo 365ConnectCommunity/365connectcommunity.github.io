@@ -34,16 +34,30 @@ const AdminApplications = () => {
             }
 
             // 3. Add to Team Members collection (Optional, but requested "manually approve team members")
-            // We can add them as a team member entry
-            await setDoc(doc(collection(db, 'team_members')), {
-                firstname: app.name.split(' ')[0],
-                lastname: app.name.split(' ').slice(1).join(' '),
-                designation: 'Contributor',
-                imageurl: '',
-                linkedin: app.portfolio,
-                email: app.email,
-                order: 99
-            });
+            // We use the User UID as the Team Member ID for consistency and "unique id instead of name"
+            if (app.uid) {
+                await setDoc(doc(db, 'team_members', app.uid), {
+                    firstname: app.name.split(' ')[0],
+                    lastname: app.name.split(' ').slice(1).join(' '),
+                    designation: 'Contributor',
+                    imageurl: '',
+                    linkedin: app.portfolio,
+                    email: app.email,
+                    order: 99
+                });
+            } else {
+                // Fallback if no UID (legacy/error case), use email-based ID
+                const emailId = app.email.replace(/[^a-zA-Z0-9]/g, '_');
+                await setDoc(doc(db, 'team_members', emailId), {
+                    firstname: app.name.split(' ')[0],
+                    lastname: app.name.split(' ').slice(1).join(' '),
+                    designation: 'Contributor',
+                    imageurl: '',
+                    linkedin: app.portfolio,
+                    email: app.email,
+                    order: 99
+                });
+            }
 
             fetchApplications();
         } catch (error) {

@@ -19,7 +19,7 @@ const AdminEvents = () => {
         registrationopen: true,
         eventtype: 'Webinar',
         duration: '',
-        host: user?.name || ''
+        host: user?.email || ''
     });
 
     const isSuperAdmin = user?.email === 'mianshaheerahmed@gmail.com' || user?.role === 'admin';
@@ -35,11 +35,11 @@ const AdminEvents = () => {
             let allEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
             // RBAC Filter: If not super admin, only show events created by this user
-            // We check if 'creatorUid' matches, or 'host' matches name as fallback
+            // We check if 'creatorUid' matches, or 'host' matches email as fallback
             if (!isSuperAdmin) {
                 allEvents = allEvents.filter(ev =>
                     (ev.creatorUid && ev.creatorUid === user.uid) ||
-                    (ev.host && ev.host === user.name)
+                    (ev.host && ev.host === user.email)
                 );
             }
 
@@ -62,7 +62,7 @@ const AdminEvents = () => {
                 registrationopen: event.registrationopen,
                 eventtype: event.eventtype || 'Webinar',
                 duration: event.duration || '',
-                host: event.host || user?.name
+                host: event.host || user?.email
             });
         } else {
             setCurrentEvent(null);
@@ -76,7 +76,7 @@ const AdminEvents = () => {
                 registrationopen: true,
                 eventtype: 'Webinar',
                 duration: '',
-                host: user?.name || ''
+                host: user?.email || ''
             });
         }
         setIsModalOpen(true);
