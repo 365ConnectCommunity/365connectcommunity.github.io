@@ -25,21 +25,9 @@ const Team = () => {
 
     // Helper function to get contributor image path
     const getContributorImage = (member) => {
-        const contributorImages = {
-            'Aqeel Khalid': '/contributors/Aqeel Khalid.jpg',
-            'Ashir Mumtaz': '/contributors/Ashir Mumtaz.png',
-            'Shaheer Ahmad': '/contributors/Shaheer Ahmad.png',
-            'Yawer Iqbal': '/contributors/Yawer Iqbal.jpg',
-            '365Connect Community (Admin)': '/src/assets/images/logo-final.png'
-        };
-
-        // Try to find local contributor image by full name
-        const localImage = contributorImages[member.fullname];
-        if (localImage) return localImage;
-
         // Fallback to API entityimage if available
         if (member.entityimage) {
-            return `data:image/png;base64,${member.entityimage}`;
+            return `${member.entityimage}`;
         }
 
         // Final fallback to default avatar

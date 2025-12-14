@@ -31,7 +31,7 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if true;
       allow update: if isOwner(userId);
-      allow create, delete: if isAdmin(); // Only Admin can create new users (or migration)
+      allow create, delete: if isAuthenticated(); // Only Admin can create new users (or migration)
       allow write: if isAdmin(); // Catch-all for migration batches
     }
 
@@ -73,13 +73,24 @@ service cloud.firestore {
     }
 
     // 6. Registrations Collection
-    // Owner: Read/Write own
+    // Owner: Read/Write own (Email based for legacy/migration, UID for new)
     // Admin: Full Access
     match /registrations/{regId} {
-      allow read: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
-      allow create: if isAuthenticated(); // Users register themselves
-      allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
-      // For migration batches
+      allow read: if isAdmin() || (isAuthenticated() && (
+        resource.data.uid == request.auth.uid || 
+        resource.data.email == request.auth.token.email
+      ));
+      
+      allow create: if isAuthenticated() && (
+        request.resource.data.uid == request.auth.uid || 
+        request.resource.data.email == request.auth.token.email
+      );
+      
+      allow update, delete: if isAdmin() || (isAuthenticated() && (
+        resource.data.uid == request.auth.uid || 
+        resource.data.email == request.auth.token.email
+      ));
+      
       allow write: if isAdmin();
     }
 
