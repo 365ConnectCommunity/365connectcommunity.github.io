@@ -103,7 +103,7 @@ const Events = () => {
                         >
                             View Details
                         </button>
-                        {!isPast && isAuthenticated && event.registrationopen && (
+                        {!isPast && event.registrationopen && (
                             <button
                                 onClick={() => window.location.href = `/register?event=${event.eventid}`}
                                 className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors font-medium"
@@ -187,7 +187,7 @@ const Events = () => {
                     </div>
                 </div>
 
-                {isAuthenticated && event.registrationopen && (
+                {!isPast && event.registrationopen && (
                     <button
                         onClick={() => window.location.href = `/register?event=${event.eventid}`}
                         className="w-full px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors font-bold"

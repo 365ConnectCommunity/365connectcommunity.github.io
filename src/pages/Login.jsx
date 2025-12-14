@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { authAPI } from '../services/apiService';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -10,6 +10,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
     const { login } = useAuth(); // Assuming useAuth exposes a login method to set state
 
     const handleSubmit = async (e) => {
@@ -34,7 +35,8 @@ const Login = () => {
             // but if we need manual trigger:
             if (login) login(user);
 
-            navigate('/my-profile');
+            const from = location.state?.from?.pathname ? `${location.state.from.pathname}${location.state.from.search}` : '/my-profile';
+            navigate(from, { replace: true });
         } catch (err) {
             console.error(err);
             setError('Invalid email or password.');
@@ -49,7 +51,8 @@ const Login = () => {
         try {
             const user = await authAPI.loginWithGoogle();
             if (login) login(user);
-            navigate('/my-profile');
+            const from = location.state?.from?.pathname ? `${location.state.from.pathname}${location.state.from.search}` : '/my-profile';
+            navigate(from, { replace: true });
         } catch (err) {
             console.error(err);
             setError('Google Sign In failed. Please try again.');
