@@ -3,41 +3,7 @@ import { motion } from 'framer-motion';
 import { Database, Users, Calendar, Award, Share2, CheckCircle, AlertCircle, Loader, FileText } from 'lucide-react';
 import { migrateTeam, migrateEvents, migrateUsersAndUserData, migrateSocials, migrateCertificates, migrateRegistrations } from '../../services/migrationService';
 
-const MigrationCard = ({ title, icon: Icon, onMigrate, status, progress }) => (
-    <motion.div
-        whileHover={{ y: -5 }}
-        className="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg"
-    >
-        <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-                <div className="p-3 bg-blue-500/10 rounded-lg">
-                    <Icon className="w-6 h-6 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-bold text-white">{title}</h3>
-            </div>
-            {status === 'completed' && <CheckCircle className="w-6 h-6 text-green-500" />}
-            {status === 'error' && <AlertCircle className="w-6 h-6 text-red-500" />}
-            {status === 'loading' && <Loader className="w-6 h-6 text-blue-500 animate-spin" />}
-        </div>
 
-        <div className="mb-4 h-16 overflow-y-auto">
-            <p className="text-gray-400 text-sm">{progress || 'Ready to migrate'}</p>
-        </div>
-
-        <button
-            onClick={onMigrate}
-            disabled={status === 'loading' || status === 'completed'}
-            className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-300 ${status === 'completed'
-                ? 'bg-green-500/20 text-green-400 cursor-default'
-                : status === 'loading'
-                    ? 'bg-gray-700 text-gray-400 cursor-wait'
-                    : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-blue-500/25'
-                }`}
-        >
-            {status === 'completed' ? 'Migration Complete' : status === 'loading' ? 'Migrating...' : 'Start Migration'}
-        </button>
-    </motion.div>
-);
 
 import { db } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext';
@@ -95,54 +61,61 @@ const AdminMigration = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <MigrationCard
-                    title="Users & Profiles"
-                    icon={Users}
-                    status={status.users}
-                    progress={progress.users}
-                    onMigrate={() => handleMigration('users', migrateUsersAndUserData)}
-                />
-
-                <MigrationCard
-                    title="Events"
-                    icon={Calendar}
-                    status={status.events}
-                    progress={progress.events}
-                    onMigrate={() => handleMigration('events', migrateEvents)}
-                />
-
-                <MigrationCard
-                    title="Team Members"
-                    icon={Users}
-                    status={status.team}
-                    progress={progress.team}
-                    onMigrate={() => handleMigration('team', migrateTeam)}
-                />
-
-                <MigrationCard
-                    title="Social Links"
-                    icon={Share2}
-                    status={status.socials}
-                    progress={progress.socials}
-                    onMigrate={() => handleMigration('socials', migrateSocials)}
-                />
-
-                <MigrationCard
-                    title="Certificates"
-                    icon={Award}
-                    status={status.certs}
-                    progress={progress.certs}
-                    onMigrate={() => handleMigration('certs', migrateCertificates)}
-                />
-
-                <MigrationCard
-                    title="Registrations"
-                    icon={FileText}
-                    status={status.regs}
-                    progress={progress.regs}
-                    onMigrate={() => handleMigration('regs', migrateRegistrations)}
-                />
+            <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+                <table className="w-full text-left border-collapse">
+                    <thead>
+                        <tr className="bg-gray-700/50 border-b border-gray-700">
+                            <th className="px-6 py-4 font-bold text-gray-300 uppercase text-xs tracking-wider">Migration Task</th>
+                            <th className="px-6 py-4 font-bold text-gray-300 uppercase text-xs tracking-wider">Status</th>
+                            <th className="px-6 py-4 font-bold text-gray-300 uppercase text-xs tracking-wider">Progress</th>
+                            <th className="px-6 py-4 font-bold text-gray-300 uppercase text-xs tracking-wider text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-700">
+                        {[
+                            { id: 'users', title: 'Users & Profiles', icon: Users, fn: migrateUsersAndUserData },
+                            { id: 'events', title: 'Events', icon: Calendar, fn: migrateEvents },
+                            { id: 'team', title: 'Team Members', icon: Users, fn: migrateTeam },
+                            { id: 'socials', title: 'Social Links', icon: Share2, fn: migrateSocials },
+                            { id: 'certs', title: 'Certificates', icon: Award, fn: migrateCertificates },
+                            { id: 'regs', title: 'Registrations', icon: FileText, fn: migrateRegistrations }
+                        ].map((item) => (
+                            <tr key={item.id} className="hover:bg-gray-750 transition-colors">
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-blue-500/10 rounded-lg">
+                                            <item.icon className="w-5 h-5 text-blue-400" />
+                                        </div>
+                                        <span className="font-semibold text-white">{item.title}</span>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center gap-2">
+                                        {status[item.id] === 'completed' && <><CheckCircle className="w-4 h-4 text-green-500" /> <span className="text-green-500 text-sm">Completed</span></>}
+                                        {status[item.id] === 'error' && <><AlertCircle className="w-4 h-4 text-red-500" /> <span className="text-red-500 text-sm">Failed</span></>}
+                                        {status[item.id] === 'loading' && <><Loader className="w-4 h-4 text-blue-500 animate-spin" /> <span className="text-blue-500 text-sm">Running...</span></>}
+                                        {status[item.id] === 'idle' && <span className="text-gray-500 text-sm">Idle</span>}
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <span className="text-gray-400 text-sm font-mono">{progress[item.id] || '-'}</span>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    <button
+                                        onClick={() => handleMigration(item.id, item.fn)}
+                                        disabled={status[item.id] === 'loading'}
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${status[item.id] === 'loading'
+                                            ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                                            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20'
+                                            }`}
+                                    >
+                                        {status[item.id] === 'loading' ? 'Processing...' : status[item.id] === 'completed' ? 'Re-Run' : 'Run'}
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
             <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6 mt-8">

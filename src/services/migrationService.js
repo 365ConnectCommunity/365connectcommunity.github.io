@@ -90,15 +90,29 @@ export const migrateEvents = async (setProgress) => {
 
             batchData.forEach(event => {
                 // Legacy fields: sa_name, sa_description, sa_eventimage, sa_start, sa_duration, _sa_host_value@OData.Community.Display.V1.FormattedValue, sa_eventid
+                // Legacy date format: "10/9/2023 8:00 AM" or similar
+                let startTimestamp = serverTimestamp();
+                if (event["sa_start@OData.Community.Display.V1.FormattedValue"] || event.sa_start) {
+                    const dateStr = event["sa_start@OData.Community.Display.V1.FormattedValue"] || event.sa_start;
+                    const dateObj = new Date(dateStr);
+                    if (!isNaN(dateObj)) {
+                        startTimestamp = Timestamp.fromDate(dateObj);
+                    }
+                }
+
                 const newEvent = {
-                    title: event.sa_name,
+                    name: event.sa_name, // Changed from title to name
                     description: event.sa_eventdescription || event.sa_description || '',
-                    image: event.sa_eventimage || '',
-                    date: event["sa_start@OData.Community.Display.V1.FormattedValue"] || event.sa_start || '', // Keep original string format if unsure, or date object
+                    eventimage: event.sa_eventimage || '', // Changed from image to eventimage
+                    startdate: startTimestamp, // Changed from date to startdate (Timestamp)
+                    enddate: startTimestamp, // Fallback for enddate
                     duration: event.sa_duration || '',
-                    location: event.sa_location || 'Online', // Default to Online if missing
+                    location: event.sa_location || 'Online',
                     host: event["_sa_host_value@OData.Community.Display.V1.FormattedValue"] || '365 Connect Community',
                     legacyId: event.sa_eventid,
+                    eventtype: 'Webinar', // Default type
+                    registrationopen: false, // Default closed for legacy/past
+                    statuscode: 1, // Active
                     migratedAt: serverTimestamp()
                 };
 
@@ -170,11 +184,24 @@ export const migrateUsersAndUserData = async (setProgress) => {
                 const email = user.email || user.sa_email || user.emailaddress1; // flexible check
 
                 if (!email) {
-                    // If no email, we can only migrate basic profile presence
-                    // Using name as ID might be risky but better than nothing for a directory
-                    const docId = user.fullname ? user.fullname.toLowerCase().replace(/\s+/g, '_') : 'unknown_' + Math.random();
+                    // Normalize ID: Remove all non-alphanumeric chars
+                    const safeName = user.fullname ? user.fullname.toLowerCase().replace(/[^a-z0-9]/g, '_') : 'unknown_' + Math.random().toString(36).substring(7);
+                    const docId = `legacy_${safeName}`;
                     const docRef = doc(db, 'users', docId);
-                    batch.set(docRef, { ...user, migrated: true, role: 'member' }, { merge: true });
+
+                    // Split name
+                    const names = user.fullname ? user.fullname.split(' ') : ['Unknown'];
+                    const firstName = names[0];
+                    const lastName = names.length > 1 ? names.slice(1).join(' ') : '';
+
+                    batch.set(docRef, {
+                        contactid: user.contactid || '', // Keep legacy ID
+                        firstname: firstName,
+                        lastname: lastName,
+                        role: 'member',
+                        migrated: true,
+                        migratedAt: serverTimestamp()
+                    }, { merge: true });
                     continue;
                 }
 
@@ -193,11 +220,11 @@ export const migrateUsersAndUserData = async (setProgress) => {
             }
 
             await batch.commit();
-            count += batch.length; // Approximate
+            count += batchData.length; // Corrected from batch.length
             setProgress(`Migrated User Profiles batch.`);
         }
 
-        return { success: true, count: usersData.length, note: "User profiles migrated. Private data (certs) requires email access." };
+        return { success: true, count: usersData.length, note: "User profiles migrated. Private data (certs) requires email." };
 
     } catch (error) {
         console.error("Migration Error:", error);
@@ -234,25 +261,33 @@ export const migrateCertificates = async (setProgress) => {
     try {
         setProgress('Fetching users to iterate...');
         const usersSnap = await getDocs(collection(db, 'users'));
-        const users = usersSnap.docs.map(d => d.data()).filter(u => u.email || u.sa_email);
+        const users = usersSnap.docs.map(d => d.data());
 
-        if (users.length === 0) {
-            throw new Error("No users with emails found in 'users' collection. Please migrate users first.");
+        // Only process users WITH emails
+        const validUsers = users.filter(u => u.email || u.sa_email);
+        const skippedCount = users.length - validUsers.length;
+
+        if (validUsers.length === 0) {
+            console.warn("No users with emails found. Skipping certificate migration.");
+            return { success: true, count: 0, note: "No users with emails to fetch certs for." };
         }
 
-        setProgress(`Found ${users.length} potential users. Starting sequential fetch...`);
+        setProgress(`Found ${validUsers.length} users with emails (Skipped ${skippedCount} legacy profiles). Starting sequential fetch...`);
         let totalCerts = 0;
         let processedUsers = 0;
 
         // Process sequentially to be nice to the API
         // For larger datasets, we'd use a queue with limited concurrency (e.g., p-limit)
-        for (const user of users) {
+        for (const user of validUsers) {
             const email = user.email || user.sa_email;
             try {
                 const response = await fetch(CERTS_URL, {
                     headers: { 'email': email }
                 });
-                if (!response.ok) continue;
+                if (!response.ok) {
+                    console.warn(`Failed to fetch certs for ${email}: ${response.status} ${response.statusText}`);
+                    continue;
+                }
 
                 const certs = await response.json();
                 if (!Array.isArray(certs) || certs.length === 0) continue;
