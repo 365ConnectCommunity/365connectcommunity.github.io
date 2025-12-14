@@ -22,7 +22,7 @@ const Hero = () => {
                     </div>
                     <h1 className="text-5xl md:text-8xl font-black tracking-tight mb-8 leading-tight">
                         <span className="block text-white mb-2">Building</span>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500">
                             Power Users
                         </span>
                     </h1>
