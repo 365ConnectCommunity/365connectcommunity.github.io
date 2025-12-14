@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, FileText, User, Mail, Globe, Briefcase } from 'lucide-react';
 import { db } from '../services/firebase';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, Timestamp, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 
 const BecomeContributor = () => {
@@ -42,6 +42,28 @@ const BecomeContributor = () => {
     });
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [hasPendingApp, setHasPendingApp] = useState(false);
+
+    React.useEffect(() => {
+        const checkPending = async () => {
+            if (user) {
+                try {
+                    const q = query(
+                        collection(db, 'contributor_applications'),
+                        where('uid', '==', user.uid),
+                        where('status', '==', 'pending')
+                    );
+                    const snapshot = await getDocs(q);
+                    if (!snapshot.empty) {
+                        setHasPendingApp(true);
+                    }
+                } catch (error) {
+                    console.error("Error checking pending apps:", error);
+                }
+            }
+        };
+        checkPending();
+    }, [user]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -61,6 +83,34 @@ const BecomeContributor = () => {
             setSubmitting(false);
         }
     };
+
+    if (hasPendingApp) {
+        return (
+            <div className="min-h-screen pt-20 flex items-center justify-center bg-gray-900 px-4">
+                <div className="bg-gray-800 p-8 rounded-2xl max-w-lg w-full text-center border border-yellow-500/30">
+                    <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <FileText className="text-yellow-500" size={32} />
+                    </div>
+                    <h2 className="text-3xl font-bold text-white mb-4">Application Pending</h2>
+                    <p className="text-gray-300 mb-6">
+                        You have already submitted an application which is pending approval.
+                    </p>
+                    <div className="bg-gray-900/50 p-4 rounded-lg mb-6 border border-gray-700">
+                        <p className="text-sm text-gray-400 mb-2">In case of delayed response, reach out to a community leader:</p>
+                        <a href="mailto:mianshaheerahmed@gmail.com" className="text-blue-400 font-medium hover:underline flex items-center justify-center gap-2">
+                            <Mail size={16} /> mianshaheerahmed@gmail.com
+                        </a>
+                    </div>
+                    <button
+                        onClick={() => window.location.href = '/'}
+                        className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                    >
+                        Return Home
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     if (submitted) {
         return (
