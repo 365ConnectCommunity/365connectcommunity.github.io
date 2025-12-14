@@ -1,135 +1,181 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Code, Share2, Mic, Settings } from 'lucide-react';
+import { Send, FileText, User, Mail, Globe, Briefcase } from 'lucide-react';
+import { db } from '../services/firebase';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { useAuth } from '../context/AuthContext';
 
 const BecomeContributor = () => {
-    const steps = [
-        {
-            title: 'Submit a Community Blog (Beta)',
-            description: "If you have valuable insights, tips, or knowledge related to D365 and Power Platform, you can contribute by writing a community blog.",
-            instructions: [
-                { text: 'Fill out the Community Blog Submission Form with your blog post details.', link: '#' },
-                { text: 'Our team will review your submission, and once approved, it will be published on our Community Blog.', link: '/blog' }
-            ],
-            icon: <BookOpen className="text-blue-400" size={32} />
-        },
-        {
-            title: 'Submit a Sample Solution',
-            description: "Contribute to our GitHub repository with sample solutions or improvements.",
-            instructions: [
-                { text: 'View Detailed Steps here: How to Submit a Sample', link: 'https://github.com/365ConnectCommunity/sample-solutions/wiki/How-to-submit-a-Power-App-sample' }
-            ],
-            icon: <Code className="text-purple-400" size={32} />
-        },
-        {
-            title: 'Share Content and Events (Coming Soon)',
-            description: "Help us by sharing valuable content and information about events related to D365 and Power Platform.",
-            instructions: [
-                { text: 'Share relevant content, articles, or resources on your social media profiles or within our community.', link: null },
-                { text: 'Announce and promote D365 and Power Platform events, webinars, or meetups.', link: null }
-            ],
-            icon: <Share2 className="text-green-400" size={32} />
-        },
-        {
-            title: 'Speak at an Event',
-            description: "If you have expertise in these technologies, consider becoming a speaker at one of our community events.",
-            instructions: [
-                { text: 'Submit your topic proposal and speaker details to our event organizers.', link: '/team' },
-                { text: 'If selected, prepare and deliver your presentation to our community.', link: null }
-            ],
-            icon: <Mic className="text-red-400" size={32} />
-        },
-        {
-            title: 'Update Our Website (Beta)',
-            description: "If you notice any bugs or have suggestions for improving our website, you can contribute by forking our repository and submitting a pull request.",
-            instructions: [
-                { text: "Fork our website's GitHub repository.", link: '#' },
-                { text: 'Create a new branch for your changes.', link: null },
-                { text: 'Make the necessary updates or fixes.', link: null },
-                { text: 'Submit a pull request to merge your changes into our website.', link: null }
-            ],
-            icon: <Settings className="text-orange-400" size={32} />
+    const { user } = useAuth();
+    const [formData, setFormData] = useState({
+        name: user?.name || '',
+        email: user?.email || '',
+        reason: '',
+        portfolio: ''
+    });
+    const [submitting, setSubmitting] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        try {
+            await addDoc(collection(db, 'contributor_applications'), {
+                uid: user?.uid || null,
+                ...formData,
+                status: 'pending',
+                createdAt: Timestamp.now()
+            });
+            setSubmitted(true);
+        } catch (error) {
+            console.error("Error submitting application:", error);
+            alert("Failed to submit application. Please try again.");
+        } finally {
+            setSubmitting(false);
         }
-    ];
+    };
+
+    if (submitted) {
+        return (
+            <div className="min-h-screen pt-20 flex items-center justify-center bg-gray-900 px-4">
+                <div className="bg-gray-800 p-8 rounded-2xl max-w-lg w-full text-center border border-green-500/30">
+                    <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Send className="text-green-500" size={32} />
+                    </div>
+                    <h2 className="text-3xl font-bold text-white mb-4">Application Submitted!</h2>
+                    <p className="text-gray-300 mb-6">
+                        Thank you for your interest in becoming a contributor. Our team will review your application and get back to you soon via email.
+                    </p>
+                    <button
+                        onClick={() => window.location.href = '/'}
+                        className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                    >
+                        Return Home
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black py-20">
-            <div className="container mx-auto px-4 max-w-4xl">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-16"
-                >
-                    <h1 className="text-5xl font-black mb-4 text-white drop-shadow-lg">
+        <div className="min-h-screen pt-20 pb-12 bg-gray-900 text-white">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-12">
+                    <h1 className="text-4xl md:text-5xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
                         Become a Contributor
                     </h1>
-                    <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-6"></div>
                     <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                        Welcome to the 365Connect Community! We're excited that you want to help us promote and advance Microsoft D365 and Power Platform technologies.
+                        Share your knowledge, host events, and help build the community.
                     </p>
-                </motion.div>
-
-                <div className="space-y-8">
-                    {steps.map((step, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="bg-gray-800 rounded-2xl p-8 border border-gray-700 hover:border-blue-500 transition-all shadow-lg group"
-                        >
-                            <div className="flex items-start gap-6">
-                                <div className="p-4 bg-gray-900 rounded-xl border border-gray-700 group-hover:border-blue-500/50 transition-colors">
-                                    {step.icon}
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 text-blue-400 font-bold text-sm border border-blue-500/20">
-                                            {index + 1}
-                                        </span>
-                                        <h3 className="text-2xl font-bold text-white">{step.title}</h3>
-                                    </div>
-                                    <p className="text-gray-400 mb-6 ml-11">{step.description}</p>
-
-                                    <div className="space-y-3 ml-11">
-                                        {step.instructions.map((instruction, i) => (
-                                            <div key={i} className="flex items-start gap-3">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-gray-500 mt-2.5"></div>
-                                                <p className="text-gray-300">
-                                                    {instruction.link ? (
-                                                        <a
-                                                            href={instruction.link}
-                                                            target={instruction.link.startsWith('http') ? '_blank' : '_self'}
-                                                            rel={instruction.link.startsWith('http') ? 'noopener noreferrer' : ''}
-                                                            className="text-blue-400 hover:text-blue-300 transition-colors underline decoration-blue-400/30 hover:decoration-blue-300"
-                                                        >
-                                                            {instruction.text}
-                                                        </a>
-                                                    ) : (
-                                                        instruction.text
-                                                    )}
-                                                </p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
                 </div>
 
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="text-center mt-16 p-8 bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-2xl border border-blue-500/20"
-                >
-                    <p className="text-lg text-gray-300">
-                        Together, we can make the 365Connect Community a vibrant hub for D365 and Power Platform enthusiasts.
-                        <br />
-                        <span className="font-bold text-white mt-2 block">Get started today and help us grow!</span>
-                    </p>
-                </motion.div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                    {/* Info Column */}
+                    <div className="space-y-8">
+                        <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                            <h3 className="text-xl font-bold mb-4 flex items-center">
+                                <Briefcase className="mr-3 text-orange-500" />
+                                What you can do
+                            </h3>
+                            <ul className="space-y-3 text-gray-300">
+                                <li className="flex items-start">
+                                    <span className="mr-2 text-green-500">✓</span> Host webinars and workshops
+                                </li>
+                                <li className="flex items-start">
+                                    <span className="mr-2 text-green-500">✓</span> Publish courses and tutorials
+                                </li>
+                                <li className="flex items-start">
+                                    <span className="mr-2 text-green-500">✓</span> Mentor other community members
+                                </li>
+                                <li className="flex items-start">
+                                    <span className="mr-2 text-green-500">✓</span> Gain visibility in the network
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Form Column */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="bg-gray-800 p-8 rounded-2xl border border-gray-700 shadow-xl"
+                    >
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div>
+                                <label className="block text-gray-400 text-sm font-medium mb-1">Full Name</label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-3 text-gray-500" size={18} />
+                                    <input
+                                        required
+                                        type="text"
+                                        className="w-full bg-gray-900 border border-gray-700 rounded-lg py-2.5 pl-10 pr-4 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                        placeholder="John Doe"
+                                        value={formData.name}
+                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-400 text-sm font-medium mb-1">Email Address</label>
+                                <div className="relative">
+                                    <Mail className="absolute left-3 top-3 text-gray-500" size={18} />
+                                    <input
+                                        required
+                                        type="email"
+                                        className="w-full bg-gray-900 border border-gray-700 rounded-lg py-2.5 pl-10 pr-4 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                        placeholder="john@example.com"
+                                        value={formData.email}
+                                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-400 text-sm font-medium mb-1">Portfolio / LinkedIn URL</label>
+                                <div className="relative">
+                                    <Globe className="absolute left-3 top-3 text-gray-500" size={18} />
+                                    <input
+                                        required
+                                        type="url"
+                                        className="w-full bg-gray-900 border border-gray-700 rounded-lg py-2.5 pl-10 pr-4 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                        placeholder="https://linkedin.com/in/johndoe"
+                                        value={formData.portfolio}
+                                        onChange={e => setFormData({ ...formData, portfolio: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-400 text-sm font-medium mb-1">Why do you want to contribute?</label>
+                                <div className="relative">
+                                    <FileText className="absolute left-3 top-3 text-gray-500" size={18} />
+                                    <textarea
+                                        required
+                                        className="w-full bg-gray-900 border border-gray-700 rounded-lg py-2.5 pl-10 pr-4 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all min-h-[120px]"
+                                        placeholder="Tell us about your expertise and what you'd like to share..."
+                                        value={formData.reason}
+                                        onChange={e => setFormData({ ...formData, reason: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={submitting}
+                                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 rounded-lg hover:opacity-90 transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                            >
+                                {submitting ? (
+                                    <span className="animate-pulse">Submitting...</span>
+                                ) : (
+                                    <>
+                                        Submit Application <Send className="ml-2" size={18} />
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    </motion.div>
+                </div>
             </div>
         </div>
     );

@@ -31,6 +31,7 @@ import AdminEvents from './pages/admin/AdminEvents'
 import AdminTeam from './pages/admin/AdminTeam'
 import AdminCertificates from './pages/admin/AdminCertificates'
 import AdminRegistrations from './pages/admin/AdminRegistrations'
+import AdminApplications from './pages/admin/AdminApplications'
 
 function App() {
     return (
@@ -69,6 +70,7 @@ function App() {
                         <Route path="team" element={<AdminTeam />} />
                         <Route path="certificates" element={<AdminCertificates />} />
                         <Route path="registrations" element={<AdminRegistrations />} />
+                        <Route path="applications" element={<AdminApplications />} />
                     </Route>
                 </Route>
             </Routes>

@@ -4,22 +4,24 @@ import { useAuth } from '../../context/AuthContext';
 
 const AdminRoute = () => {
     const { user, loading } = useAuth();
-    const ADMIN_EMAIL = 'mianshaheerahmed@gmail.com';
 
     if (loading) {
-        return (
-            <div className="min-h-screen bg-black flex items-center justify-center">
-                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-orange-500"></div>
-            </div>
-        );
+        return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">Loading...</div>;
     }
 
-    // Check strict email or role 'admin'
-    if (!user || (user.email !== ADMIN_EMAIL && user.role !== 'admin')) {
-        return <Navigate to="/" replace />;
+    // Access Logic:
+    // 1. Super Admin Email always allowed
+    // 2. 'admin' role allowed
+    // 3. 'contributor' role allowed
+    const isSuperAdmin = user?.email === 'mianshaheerahmed@gmail.com';
+    const isRoleBasedAdmin = user?.role === 'admin';
+    const isContributor = user?.role === 'contributor';
+
+    if (isSuperAdmin || isRoleBasedAdmin || isContributor) {
+        return <Outlet />;
     }
 
-    return <Outlet />;
+    return <Navigate to="/" replace />;
 };
 
 export default AdminRoute;
