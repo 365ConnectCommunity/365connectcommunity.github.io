@@ -60,7 +60,7 @@ const Events = () => {
             <div className="flex flex-col md:flex-row gap-4">
                 {event.eventimage && (
                     <img
-                        src={`data:image/png;base64,${event.eventimage}`}
+                        src={event.eventimage.startsWith('http') ? event.eventimage : `data:image/png;base64,${event.eventimage}`}
                         alt={event.name}
                         className="w-full md:w-48 h-32 object-cover rounded-lg"
                     />
@@ -140,7 +140,7 @@ const Events = () => {
 
                 {event.eventimage && (
                     <img
-                        src={`data:image/png;base64,${event.eventimage}`}
+                        src={event.eventimage.startsWith('http') ? event.eventimage : `data:image/png;base64,${event.eventimage}`}
                         alt={event.name}
                         className="w-full h-64 object-cover rounded-lg mb-6"
                     />

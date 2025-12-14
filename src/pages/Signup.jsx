@@ -8,6 +8,7 @@ const Signup = () => {
         firstname: '',
         lastname: '',
         email: '',
+        password: '',
         phone: ''
     });
     const [loading, setLoading] = useState(false);
@@ -38,6 +39,10 @@ const Signup = () => {
             setError('Email is required');
             return;
         }
+        if (!formData.password || formData.password.length < 6) {
+            setError('Password is required (min 6 characters)');
+            return;
+        }
 
         setLoading(true);
 
@@ -46,13 +51,19 @@ const Signup = () => {
                 formData.firstname,
                 formData.lastname,
                 formData.email,
+                formData.password,
                 formData.phone
             );
 
             setSuccess(true);
             setError('');
         } catch (err) {
-            setError('Registration failed. Email may already be registered.');
+            console.error(err);
+            if (err.code === 'auth/email-already-in-use') {
+                setError('Email is already registered.');
+            } else {
+                setError('Registration failed. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -68,7 +79,7 @@ const Signup = () => {
                         className="max-w-md mx-auto bg-gray-800 rounded-lg shadow-2xl p-8"
                     >
                         <div className="bg-green-500/10 border border-green-500 text-green-500 px-4 py-3 rounded mb-4">
-                            You have been registered successfully! You can now login using your email.
+                            You have been registered successfully! You can now login.
                         </div>
                         <button
                             onClick={() => navigate('/login')}
@@ -148,6 +159,22 @@ const Signup = () => {
                                     onChange={handleChange}
                                     className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-orange-500"
                                     placeholder="your@email.com"
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="password" className="block text-gray-300 mb-2">
+                                    Password
+                                </label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-orange-500"
+                                    placeholder="Minimum 6 characters"
                                     disabled={loading}
                                 />
                             </div>

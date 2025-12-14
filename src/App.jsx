@@ -3,6 +3,8 @@ import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
+import AdminRoute from './components/admin/AdminRoute'
+import AdminLayout from './components/admin/AdminLayout'
 import Home from './pages/Home'
 import Team from './pages/Team'
 import Events from './pages/Events'
@@ -22,10 +24,19 @@ import OurSocials from './pages/OurSocials'
 import BecomeContributor from './pages/BecomeContributor'
 import Tools from './pages/Tools'
 
+// Admin Pages
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminUsers from './pages/admin/AdminUsers'
+import AdminEvents from './pages/admin/AdminEvents'
+import AdminTeam from './pages/admin/AdminTeam'
+import AdminCertificates from './pages/admin/AdminCertificates'
+import AdminRegistrations from './pages/admin/AdminRegistrations'
+
 function App() {
     return (
         <AuthProvider>
             <Routes>
+                {/* Public Website Routes */}
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="team" element={<Team />} />
@@ -47,6 +58,18 @@ function App() {
                     <Route path="my-courses" element={<ProtectedRoute><MyCourses /></ProtectedRoute>} />
                     <Route path="courses" element={<Courses />} />
                     <Route path="course/:courseId" element={<ProtectedRoute><CourseViewer /></ProtectedRoute>} />
+                </Route>
+
+                {/* Admin Portal Routes */}
+                <Route element={<AdminRoute />}>
+                    <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<AdminDashboard />} />
+                        <Route path="users" element={<AdminUsers />} />
+                        <Route path="events" element={<AdminEvents />} />
+                        <Route path="team" element={<AdminTeam />} />
+                        <Route path="certificates" element={<AdminCertificates />} />
+                        <Route path="registrations" element={<AdminRegistrations />} />
+                    </Route>
                 </Route>
             </Routes>
         </AuthProvider>

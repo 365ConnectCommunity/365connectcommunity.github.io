@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, User, LogOut, Award, UserCircle, BookOpen } from 'lucide-react';
+import { Menu, X, User, LogOut, Award, UserCircle, BookOpen, LayoutDashboard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { getUserImage } from '../services/authService';
 import logoNew from '../assets/images/logo-final.png';
 
 const Navbar = () => {
@@ -36,6 +35,15 @@ const Navbar = () => {
         logout();
         setShowUserMenu(false);
         navigate('/');
+    };
+
+    // Helper to get image safely
+    const getUserProfileImage = () => {
+        if (user && user.image) {
+            if (user.image.startsWith('http')) return user.image;
+            return `data:image/png;base64,${user.image}`;
+        }
+        return '/assets/images/icons8-account-64.png'; // Fallback
     };
 
     return (
@@ -71,7 +79,7 @@ const Navbar = () => {
                                     className="flex items-center space-x-2 focus:outline-none"
                                 >
                                     <img
-                                        src={getUserImage()}
+                                        src={getUserProfileImage()}
                                         alt="Profile"
                                         className="w-10 h-10 rounded-full border-2 border-orange-500 hover:border-orange-400 transition-all"
                                     />
@@ -90,6 +98,16 @@ const Navbar = () => {
                                                 <p className="text-xs text-gray-400 truncate">{user?.email}</p>
                                             </div>
                                             <div className="py-2">
+                                                {(user?.email === 'mianshaheerahmed@gmail.com' || user?.role === 'admin') && (
+                                                    <Link
+                                                        to="/admin"
+                                                        className="flex items-center px-4 py-2 text-sm text-orange-400 hover:bg-gray-700 hover:text-orange-300 transition-colors bg-orange-500/10 mb-1"
+                                                        onClick={() => setShowUserMenu(false)}
+                                                    >
+                                                        <LayoutDashboard size={16} className="mr-3" />
+                                                        Admin Portal
+                                                    </Link>
+                                                )}
                                                 <Link
                                                     to="/my-profile"
                                                     className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
@@ -181,6 +199,15 @@ const Navbar = () => {
                                         <p className="text-sm text-white font-medium">{user?.name}</p>
                                         <p className="text-xs text-gray-400">{user?.email}</p>
                                     </div>
+                                    {(user?.email === 'mianshaheerahmed@gmail.com' || user?.role === 'admin') && (
+                                        <Link
+                                            to="/admin"
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-orange-400 hover:text-orange-300"
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            Admin Portal
+                                        </Link>
+                                    )}
                                     <Link
                                         to="/my-profile"
                                         className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
