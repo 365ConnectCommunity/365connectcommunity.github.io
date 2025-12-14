@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { eventsAPI } from '../services/apiService';
 import { useAuth } from '../context/AuthContext';
-import { Calendar, MapPin, Users, Clock, Search, X } from 'lucide-react';
+import { Calendar, MapPin, Users, Clock, Search, X, Link as LinkIcon, Check } from 'lucide-react';
 
 const Events = () => {
     const [upcomingEvents, setUpcomingEvents] = useState([]);
@@ -11,6 +11,7 @@ const Events = () => {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [copiedId, setCopiedId] = useState(null);
     const { isAuthenticated } = useAuth();
 
     useEffect(() => {
@@ -110,6 +111,19 @@ const Events = () => {
                                 Register Now
                             </button>
                         )}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                const link = `${window.location.origin}/register?event=${event.eventid}`;
+                                navigator.clipboard.writeText(link);
+                                setCopiedId(event.eventid);
+                                setTimeout(() => setCopiedId(null), 2000);
+                            }}
+                            className="p-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                            title="Copy Invitation Link"
+                        >
+                            {copiedId === event.eventid ? <Check size={20} className="text-green-500" /> : <LinkIcon size={20} />}
+                        </button>
                     </div>
                 </div>
             </div>

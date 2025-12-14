@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../services/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
-import { Plus, Edit, Trash2, Calendar, MapPin, X, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, MapPin, X, Upload, Link as LinkIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const AdminEvents = () => {
@@ -137,6 +137,11 @@ const AdminEvents = () => {
                                 />
                             )}
                             <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => {
+                                    const link = `${window.location.origin}/register?event=${event.id}`;
+                                    navigator.clipboard.writeText(link);
+                                    alert('Invitation link copied!');
+                                }} className="p-2 bg-green-600 rounded-full text-white shadow-lg" title="Copy Link"><LinkIcon size={16} /></button>
                                 <button onClick={() => handleOpenModal(event)} className="p-2 bg-blue-600 rounded-full text-white shadow-lg"><Edit size={16} /></button>
                                 <button onClick={() => handleDelete(event.id)} className="p-2 bg-red-600 rounded-full text-white shadow-lg"><Trash2 size={16} /></button>
                             </div>
