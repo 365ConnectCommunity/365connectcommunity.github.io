@@ -91,7 +91,7 @@ const Home = () => {
                             <Sparkles className="text-yellow-400" size={24} />
                             <span className="text-yellow-400 font-bold">What We Offer</span>
                         </div>
-                        <h2 className="text-5xl font-black bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent mb-4">
+                        <h2 className="text-5xl font-black bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent mb-4  text-white">
                             Why Join 365Connect?
                         </h2>
                         <p className="text-xl text-gray-400 max-w-2xl mx-auto">
