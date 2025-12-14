@@ -301,6 +301,21 @@ export const eventsAPI = {
             console.error("Registration error:", error);
             throw error;
         }
+    },
+
+    checkRegistration: async (eventId, email) => {
+        try {
+            const q = query(
+                collection(db, 'registrations'),
+                where('eventid', '==', eventId),
+                where('email', '==', email)
+            );
+            const existing = await getDocs(q);
+            return !existing.empty;
+        } catch (error) {
+            console.error("Error checking registration:", error);
+            return false;
+        }
     }
 };
 

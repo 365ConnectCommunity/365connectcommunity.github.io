@@ -17,6 +17,7 @@ const EventRegistration = () => {
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
+    const [isRegistered, setIsRegistered] = useState(false);
 
     useEffect(() => {
         if (!eventId) {
@@ -25,7 +26,7 @@ const EventRegistration = () => {
             return;
         }
         loadEvent();
-    }, [eventId]);
+    }, [eventId, user]);
 
     const loadEvent = async () => {
         try {
@@ -34,6 +35,11 @@ const EventRegistration = () => {
                 setError('Event not found');
             } else {
                 setEvent(data);
+                // Check if already registered
+                if (user && user.email) {
+                    const registered = await eventsAPI.checkRegistration(eventId, user.email);
+                    setIsRegistered(registered);
+                }
             }
         } catch (err) {
             setError('Failed to load event details');
@@ -51,7 +57,11 @@ const EventRegistration = () => {
             // Register using API
             const result = await eventsAPI.registerForEvent(eventId, user.email, user.name);
             if (result.success) {
-                setSuccess(true);
+                if (result.message === 'Already registered') {
+                    setIsRegistered(true);
+                } else {
+                    setSuccess(true);
+                }
             }
         } catch (err) {
             console.error(err);
@@ -103,6 +113,40 @@ const EventRegistration = () => {
                         <button onClick={() => navigate('/events')} className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors">
                             Browse More Events
                         </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Already Registered State - Show this instead of form
+    if (isRegistered) {
+        return (
+            <div className="min-h-screen bg-gray-900 pt-20 pb-12 px-4">
+                <div className="max-w-4xl mx-auto">
+                    <button
+                        onClick={() => navigate('/events')}
+                        className="flex items-center text-gray-400 hover:text-white mb-8 transition-colors"
+                    >
+                        <ArrowLeft size={20} className="mr-2" /> Back to Events
+                    </button>
+
+                    <div className="bg-gray-800 p-8 rounded-2xl max-w-lg mx-auto text-center border border-blue-500/30">
+                        <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <CheckCircle className="text-blue-500" size={32} />
+                        </div>
+                        <h2 className="text-3xl font-bold text-white mb-4">You are registered!</h2>
+                        <p className="text-gray-300 mb-6">
+                            You are already registered for <strong>{event?.name}</strong>.
+                        </p>
+                        <div className="flex flex-col gap-3">
+                            <button onClick={() => navigate('/my-events')} className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                                View My Events
+                            </button>
+                            <button onClick={() => navigate('/events')} className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors">
+                                Browse Other Events
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
