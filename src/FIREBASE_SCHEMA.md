@@ -101,3 +101,17 @@ Stores form submissions from the Contact/Support page.
 | `message` | String | Message content |
 | `createdAt` | Timestamp | Time of submission |
 | `status` | String | "New", "Read", "Replied" |
+
+## 8. Contributor Applications Collection (`contributor_applications`)
+Stores applications from users who want to become contributors.
+
+| Field Name | Type | Description |
+|---|---|---|
+| `id` | String | Unique Application ID (Auto-generated) |
+| `uid` | String | User's UID |
+| `name` | String | Applicant's name |
+| `email` | String | Applicant's email |
+| `reason` | String | Reason for applying |
+| `portfolio` | String | Link to portfolio/profile |
+| `status` | String | 'pending', 'approved', 'rejected' |
+| `createdAt` | Timestamp | Application submission time |

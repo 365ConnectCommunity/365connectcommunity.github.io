@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Calendar, Award, UserPlus, FileText, ArrowLeft, Menu, X, Briefcase } from 'lucide-react';
+import { LayoutDashboard, Users, Calendar, Award, UserPlus, FileText, ArrowLeft, Menu, X, Briefcase, Database } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -15,6 +15,7 @@ const AdminLayout = () => {
     const menuItems = [
         { name: 'Dashboard', path: '/admin', icon: LayoutDashboard, allowContributor: true },
         { name: 'Users', path: '/admin/users', icon: Users, allowContributor: false }, // Restricted
+        { name: 'Migration', path: '/admin/migration', icon: Database, allowContributor: false, allowSuperAdmin: true }, // Super Admin Only
         { name: 'Events', path: '/admin/events', icon: Calendar, allowContributor: true },
         { name: 'Registrations', path: '/admin/registrations', icon: UserPlus, allowContributor: true },
         { name: 'Certificates', path: '/admin/certificates', icon: Award, allowContributor: true },
@@ -41,6 +42,8 @@ const AdminLayout = () => {
                             {menuItems.map((item) => {
                                 // RBAC check: if item not for contributor and user is contributor, hide it
                                 if (isContributor && !item.allowContributor) return null;
+                                // Super Admin check: if item requires super admin and user is not super admin, hide it
+                                if (item.allowSuperAdmin && !isSuperAdmin) return null;
 
                                 const isActive = location.pathname === item.path;
                                 return (

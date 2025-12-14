@@ -7,6 +7,18 @@ import { useAuth } from '../context/AuthContext';
 
 const BecomeContributor = () => {
     const { user } = useAuth();
+
+    if (!user) {
+        return (
+            <div className="min-h-screen pt-20 flex items-center justify-center bg-gray-900 px-4">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold text-white mb-4">Please Sign In</h2>
+                    <p className="text-gray-400 mb-6">You must be logged in to apply as a contributor.</p>
+                    <a href="/login" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Sign In</a>
+                </div>
+            </div>
+        );
+    }
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
