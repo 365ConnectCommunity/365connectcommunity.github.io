@@ -152,14 +152,14 @@ const AdminBlogs = () => {
                             <div className="flex-1">
                                 <div className="flex items-center gap-3 mb-2">
                                     <span className={`px-2 py-1 rounded text-xs uppercase font-bold ${blog.status === 'published' ? 'bg-green-500/20 text-green-400' :
-                                            blog.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                blog.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
-                                                    'bg-gray-500/20 text-gray-400'
+                                        blog.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
+                                            blog.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
+                                                'bg-gray-500/20 text-gray-400'
                                         }`}>
                                         {blog.status}
                                     </span>
                                     <span className="text-gray-500 text-sm">
-                                        {new Date(blog.createdAt.seconds * 1000).toLocaleDateString()}
+                                        {blog.createdAt?.seconds ? new Date(blog.createdAt.seconds * 1000).toLocaleDateString() : 'No Date'}
                                     </span>
                                     {isAdmin && (
                                         <span className="text-gray-500 text-sm">by {blog.authorName}</span>

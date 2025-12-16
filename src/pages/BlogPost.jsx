@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { blogsAPI } from '../services/apiService';
 import { Calendar, User, ArrowLeft, Tag } from 'lucide-react';
 import { motion } from 'framer-motion';
+import SEO from '../components/SEO';
 
 const BlogPost = () => {
     const { id } = useParams();
@@ -45,6 +46,12 @@ const BlogPost = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black py-20">
+            <SEO
+                title={blog.title}
+                description={blog.excerpt}
+                image={blog.image}
+                url={window.location.href}
+            />
             {/* Header Image */}
             {blog.image && (
                 <div className="w-full h-[400px] relative mb-12">

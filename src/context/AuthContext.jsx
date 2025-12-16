@@ -92,6 +92,7 @@ export const AuthProvider = ({ children }) => {
     const value = {
         user,
         isAuthenticated: !!user,
+        isAdmin: (user?.email?.toLowerCase() === 'mianshaheerahmed@gmail.com' || user?.role === 'admin'),
         login,
         logout,
         updateUser,
