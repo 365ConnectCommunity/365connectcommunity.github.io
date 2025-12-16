@@ -21,6 +21,7 @@ const AdminLayout = () => {
         { name: 'Users', path: '/admin/users', icon: Users, allowContributor: false }, // Restricted
         { name: 'Migration', path: '/admin/migration', icon: Database, allowContributor: false, allowSuperAdmin: true }, // Super Admin Only
         { name: 'Events', path: '/admin/events', icon: Calendar, allowContributor: true },
+        { name: 'Blogs', path: '/admin/blogs', icon: FileText, allowContributor: true },
         { name: 'Registrations', path: '/admin/registrations', icon: UserPlus, allowContributor: true },
         { name: 'Certificates', path: '/admin/certificates', icon: Award, allowContributor: true },
         { name: 'Team', path: '/admin/team', icon: Briefcase, allowContributor: false }, // Restricted

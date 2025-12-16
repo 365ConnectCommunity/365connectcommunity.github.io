@@ -118,5 +118,17 @@ service cloud.firestore {
     match /course_enrollments/{enrollmentId} {
       allow read, write: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid) || (isAuthenticated() && request.resource.data.uid == request.auth.uid);
     }
+
+    // 10. Blogs Collection
+    // Public: Read (if status == 'published')
+    // Authenticated: Create (contributors)
+    // Author: Read/Update (own)
+    // Admin: Full Access (Approve/Reject/Edit)
+    match /blogs/{blogId} {
+      allow read: if (resource.data.status == 'published') || isAdmin() || (isAuthenticated() && resource.data.authorId == request.auth.uid);
+      allow create: if isAuthenticated(); // Contributors & Admins
+      allow update: if isAdmin() || (isAuthenticated() && resource.data.authorId == request.auth.uid);
+      allow delete: if isAdmin() || (isAuthenticated() && resource.data.authorId == request.auth.uid);
+    }
   }
 }

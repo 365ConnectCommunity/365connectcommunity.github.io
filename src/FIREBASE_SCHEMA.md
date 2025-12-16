@@ -136,3 +136,21 @@ Tracks user progress within courses.
 | `courseId` | String | ID of the Course |
 | `completedLessons` | Array[String] | List of completed lesson IDs |
 | `lastUpdated` | Timestamp | Last progress update timestamp |
+
+## 11. Blogs Collection (`blogs`)
+Stores community blog posts.
+
+| Field Name | Type | Description |
+|---|---|---|
+| `id` | String | Unique Blog ID (Auto-generated) |
+| `title` | String | Blog Title |
+| `slug` | String | URL-friendly title |
+| `content` | String | Blog Content (HTML/Markdown) |
+| `excerpt` | String | Short summary |
+| `authorId` | String | User ID of the author |
+| `authorName` | String | Display name of the author |
+| `image` | String | Cover image URL |
+| `tags` | Array[String] | List of tags/categories |
+| `status` | String | 'draft', 'pending', 'published', 'rejected' |
+| `createdAt` | Timestamp | Creation date |
+| `publishedAt` | Timestamp | Publication date |

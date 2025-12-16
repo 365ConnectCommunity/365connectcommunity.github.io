@@ -14,6 +14,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import LoginVerify from './pages/LoginVerify'
 import Blog from './pages/Blog'
+import BlogPost from './pages/BlogPost'
 import MyProfile from './pages/MyProfile'
 import MyCertificates from './pages/MyCertificates'
 import MyEvents from './pages/MyEvents'
@@ -35,6 +36,7 @@ import AdminCertificates from './pages/admin/AdminCertificates'
 import AdminRegistrations from './pages/admin/AdminRegistrations'
 import AdminApplications from './pages/admin/AdminApplications';
 import AdminMigration from './pages/admin/AdminMigration';
+import AdminBlogs from './pages/admin/AdminBlogs';
 
 function App() {
     return (
@@ -51,6 +53,7 @@ function App() {
                     <Route path="signup" element={<Signup />} />
                     <Route path="login-verify" element={<LoginVerify />} />
                     <Route path="blog" element={<Blog />} />
+                    <Route path="blog/:id" element={<BlogPost />} />
                     <Route path="community-members" element={<CommunityMembers />} />
                     <Route path="support" element={<Support />} />
                     <Route path="our-socials" element={<OurSocials />} />
@@ -76,6 +79,7 @@ function App() {
                         <Route path="certificates" element={<AdminCertificates />} />
                         <Route path="registrations" element={<AdminRegistrations />} />
                         <Route path="applications" element={<AdminApplications />} />
+                        <Route path="blogs" element={<AdminBlogs />} />
                         <Route path="migration" element={<AdminMigration />} />
                     </Route>
                 </Route>

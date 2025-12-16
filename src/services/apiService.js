@@ -408,6 +408,82 @@ export const courseAPI = {
     }
 };
 
+export const blogsAPI = {
+    // Get all public published blogs
+    getPublishedBlogs: async () => {
+        try {
+            const q = query(collection(db, 'blogs'), where('status', '==', 'published'), orderBy('publishedAt', 'desc'));
+            const querySnapshot = await getDocs(q);
+            return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } catch (error) {
+            console.error("Error fetching blogs:", error);
+            return [];
+        }
+    },
+
+    // Get blogs by status (for admin) or author (for contributors)
+    getBlogs: async (authorId = null, status = null) => {
+        try {
+            let q = collection(db, 'blogs');
+            const constraints = [orderBy('createdAt', 'desc')];
+
+            if (authorId) constraints.push(where('authorId', '==', authorId));
+            if (status) constraints.push(where('status', '==', status));
+
+            q = query(q, ...constraints);
+            const querySnapshot = await getDocs(q);
+            return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } catch (error) {
+            console.error("Error fetching blogs:", error);
+            return [];
+        }
+    },
+
+    getBlogById: async (id) => {
+        try {
+            const docRef = doc(db, 'blogs', id);
+            const docSnap = await getDoc(docRef);
+            return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } : null;
+        } catch (error) {
+            console.error("Error fetching blog:", error);
+            return null;
+        }
+    },
+
+    createBlog: async (data) => {
+        try {
+            const docRef = await addDoc(collection(db, 'blogs'), {
+                ...data,
+                createdAt: Timestamp.now(),
+                status: 'pending' // Default to pending
+            });
+            return docRef.id;
+        } catch (error) {
+            console.error("Error creating blog:", error);
+            throw error;
+        }
+    },
+
+    updateBlog: async (id, data) => {
+        try {
+            const docRef = doc(db, 'blogs', id);
+            await updateDoc(docRef, { ...data, updatedAt: Timestamp.now() });
+        } catch (error) {
+            console.error("Error updating blog:", error);
+            throw error;
+        }
+    },
+
+    deleteBlog: async (id) => {
+        try {
+            await deleteDoc(doc(db, 'blogs', id));
+        } catch (error) {
+            console.error("Error deleting blog:", error);
+            throw error;
+        }
+    }
+};
+
 /**
  * Certificates API
  */

@@ -66,7 +66,38 @@ Expand the Admin Portal to support a "Contributor" role. Contributors can manage
         - Source: `https://prod-28.westeurope.logic.azure.com...` (Legacy `our-socials.html`)
         - Dest: `socials` collection (optional, or hardcode).
 
-## Verification
+#### [NEW] [AdminCertificates.jsx](file:///Users/shaheerahmad/Documents/GitHub/365connectcommunity.github.io/src/pages/admin/AdminCertificates.jsx)
+
+## Internal Blog System
+We are replacing the external Blogspot feed with an internal blogging platform.
+
+### Schema Changes
+- **New Collection**: `blogs`
+    - Fields: `id`, `title`, `slug`, `content`, `excerpt`, `authorId`, `authorName`, `tags`, `image`, `status` ('draft', 'pending', 'published', 'rejected'), `createdAt`, `publishedAt`.
+
+### API Changes
+- **`blogsAPI`**:
+    - `getBlogs(status)`: Fetch blogs by status (public vs admin vs draft).
+    - `getBlogBySlug(slug)`: Public view.
+    - `createBlog(data)`: Create new draft/pending blog.
+    - `updateBlog(id, data)`: Edit blog.
+    - `updateBlogStatus(id, status)`: Admin approval/rejection.
+    - `deleteBlog(id)`: Remove blog.
+
+### Admin UI
+- **`AdminBlogEditor.jsx`**: Form to write/edit blogs.
+- **`AdminBlogList.jsx`**:
+    - **Contributors**: View their own blogs, draft new ones.
+    - **Super Admin**: View all pending blogs, approve/reject them.
+
+### Public UI
+- **`Blog.jsx`**: Update to fetch from `blogs` collection instead of RSS.
+- **`BlogPost.jsx`**: New page to view full blog article.
+
+### Dependencies
+- None new, might use a simple Markdown editor or just textarea for MVP.
+
+## Verification Plan
 1. Apply as a contributor.
 2. Login as Super Admin, approve application.
 3. Login as new Contributor, verify limited access (No Users tab, only My Events).
