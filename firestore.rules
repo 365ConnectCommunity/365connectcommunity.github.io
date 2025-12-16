@@ -104,5 +104,19 @@ service cloud.firestore {
       allow update: if isAdmin(); // Only admin approves/rejects
       allow delete: if isAdmin();
     }
+
+    // 8. Course Progress Collection
+    // Authenticated: Read/Write own
+    // Admin: Full access
+    match /course_progress/{progressId} {
+      allow read, write: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid) || (isAuthenticated() && request.resource.data.uid == request.auth.uid);
+    }
+
+    // 9. Course Enrollments Collection
+    // Authenticated: Read/Write own
+    // Admin: Full access
+    match /course_enrollments/{enrollmentId} {
+      allow read, write: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid) || (isAuthenticated() && request.resource.data.uid == request.auth.uid);
+    }
   }
 }

@@ -320,6 +320,95 @@ export const eventsAPI = {
 };
 
 /**
+ * Course Progress APIs
+ */
+export const courseAPI = {
+    // Save or update course progress
+    saveProgress: async (userId, courseId, completedLessons) => {
+        try {
+            const progressId = `${userId}_${courseId}`;
+            const progressRef = doc(db, 'course_progress', progressId);
+
+            await setDoc(progressRef, {
+                uid: userId,
+                courseId: courseId,
+                completedLessons: completedLessons,
+                lastUpdated: Timestamp.now()
+            }, { merge: true });
+
+            return { success: true };
+        } catch (error) {
+            console.error("Error saving course progress:", error);
+            throw error;
+        }
+    },
+
+    // Get course progress
+    getProgress: async (userId, courseId) => {
+        try {
+            const progressId = `${userId}_${courseId}`;
+            const progressRef = doc(db, 'course_progress', progressId);
+            const docSnap = await getDoc(progressRef);
+
+            if (docSnap.exists()) {
+                return docSnap.data().completedLessons || [];
+            } else {
+                return [];
+            }
+        } catch (error) {
+            console.error("Error fetching course progress:", error);
+            return [];
+        }
+    },
+
+    // Get all progress for a user (for My Courses page)
+    getAllUserProgress: async (userId) => {
+        try {
+            const q = query(collection(db, 'course_progress'), where('uid', '==', userId));
+            const querySnapshot = await getDocs(q);
+            const progressMap = {};
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
+                progressMap[data.courseId] = data.completedLessons || [];
+            });
+            return progressMap;
+        } catch (error) {
+            console.error("Error fetching all user progress:", error);
+            return {};
+        }
+    },
+
+    // Enroll user in a course
+    enrollUser: async (userId, courseId) => {
+        try {
+            const enrollId = `${userId}_${courseId}`;
+            const enrollRef = doc(db, 'course_enrollments', enrollId);
+            await setDoc(enrollRef, {
+                uid: userId,
+                courseId: courseId,
+                enrolledAt: Timestamp.now()
+            });
+            return { success: true };
+        } catch (error) {
+            console.error("Error enrolling user:", error);
+            throw error;
+        }
+    },
+
+    // Get user enrollments
+    getUserEnrollments: async (userId) => {
+        try {
+            const q = query(collection(db, 'course_enrollments'), where('uid', '==', userId));
+            const querySnapshot = await getDocs(q);
+            return querySnapshot.docs.map(doc => doc.data().courseId);
+        } catch (error) {
+            console.error("Error fetching enrollments:", error);
+            return [];
+        }
+    }
+};
+
+/**
  * Certificates API
  */
 export const certificatesAPI = {
@@ -335,23 +424,50 @@ export const certificatesAPI = {
                 const data = doc.data();
                 return {
                     certificateid: doc.id,
-                    name: data.name,
-                    certificatename: data.name,
-                    description: data.description,
+                    ...data,
                     issueddate: data.issueddate ? data.issueddate.toDate().toISOString() : null,
-                    certificateurl: data.certificateurl,
-                    image: data.image,
-                    verificationlink: data.verificationlink,
-                    downloadlink: data.downloadlink,
-                    eventname: data.eventname,
-                    certificatetype: data.certificatetype,
-                    recipientname: data.recipientname,
                     eventdate: data.eventdate ? data.eventdate.toDate().toISOString() : null
                 };
             });
         } catch (error) {
             console.error("Error fetching certificates:", error);
             return [];
+        }
+    },
+
+    // Check if certificate exists for a user and course/event
+    checkCertificate: async (email, eventName) => {
+        try {
+            const q = query(
+                collection(db, 'certificates'),
+                where('email', '==', email),
+                where('eventname', '==', eventName)
+            );
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                return { exists: true, certificateId: querySnapshot.docs[0].id };
+            }
+            return { exists: false };
+        } catch (error) {
+            console.error("Error checking certificate:", error);
+            return { exists: false };
+        }
+    },
+
+    // Issue a new certificate
+    issueCertificate: async (certData) => {
+        try {
+            // certData should include: name, description, eventname, recipientname, email, uid
+            const docRef = await addDoc(collection(db, 'certificates'), {
+                ...certData,
+                issueddate: Timestamp.now(),
+                certificatetype: 'Course Completion', // Default type
+                verificationlink: window.location.origin + '/certificate/' // Partial link, will append ID in UI
+            });
+            return { success: true, certificateId: docRef.id };
+        } catch (error) {
+            console.error("Error issuing certificate:", error);
+            throw error;
         }
     }
 };
@@ -433,6 +549,7 @@ export default {
     authAPI,
     userAPI,
     eventsAPI,
+    courseAPI,
     certificatesAPI,
     communityAPI,
     supportAPI

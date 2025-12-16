@@ -2,29 +2,48 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { courses } from '../data/courses';
-import { BookOpen, CheckCircle, PlayCircle, Award } from 'lucide-react';
+import { courseAPI } from '../services/apiService';
+import { BookOpen, CheckCircle, PlayCircle, Award, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 
 const MyCourses = () => {
     const { user } = useAuth();
     const [enrolledCourses, setEnrolledCourses] = useState([]);
+    const [userProgress, setUserProgress] = useState({});
+    const [loadingProgress, setLoadingProgress] = useState(true);
 
     useEffect(() => {
         if (user) {
-            const enrolledIds = JSON.parse(localStorage.getItem(`enrolled_${user.email}`) || '[]');
-            const enrolled = courses.filter(course => enrolledIds.includes(course.id));
-            setEnrolledCourses(enrolled);
+            loadData();
         }
     }, [user]);
 
+    const loadData = async () => {
+        if (!user?.uid) return;
+        setLoadingProgress(true);
+        try {
+            // Load Enrollments
+            const enrolledIds = await courseAPI.getUserEnrollments(user.uid);
+            const enrolled = courses.filter(course => enrolledIds.includes(course.id));
+            setEnrolledCourses(enrolled);
+
+            // Load Progress
+            const progressMap = await courseAPI.getAllUserProgress(user.uid);
+            setUserProgress(progressMap);
+        } catch (error) {
+            console.error("Error loading course data:", error);
+        } finally {
+            setLoadingProgress(false);
+        }
+    };
+
     const getProgress = (courseId) => {
-        if (!user?.email) return 0;
-        const progress = JSON.parse(localStorage.getItem(`progress_${user.email}_${courseId}`) || '[]');
+        const completedLessons = userProgress[courseId] || [];
         const course = courses.find(c => c.id === courseId);
         if (!course) return 0;
         const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
-        return totalLessons === 0 ? 0 : Math.round((progress.length / totalLessons) * 100);
+        return totalLessons === 0 ? 0 : Math.round((completedLessons.length / totalLessons) * 100);
     };
 
     return (

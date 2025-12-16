@@ -115,3 +115,24 @@ Stores applications from users who want to become contributors.
 | `portfolio` | String | Link to portfolio/profile |
 | `status` | String | 'pending', 'approved', 'rejected' |
 | `createdAt` | Timestamp | Application submission time |
+
+## 9. Course Enrollments Collection (`course_enrollments`)
+Tracks which users are enrolled in which courses.
+
+| Field Name | Type | Description |
+|---|---|---|
+| `id` | String | Unique ID (format: `uid_courseId`) |
+| `uid` | String | User's UID |
+| `courseId` | String | ID of the Course |
+| `enrolledAt` | Timestamp | Enrollment timestamp |
+
+## 10. Course Progress Collection (`course_progress`)
+Tracks user progress within courses.
+
+| Field Name | Type | Description |
+|---|---|---|
+| `id` | String | Unique ID (format: `uid_courseId`) |
+| `uid` | String | User's UID |
+| `courseId` | String | ID of the Course |
+| `completedLessons` | Array[String] | List of completed lesson IDs |
+| `lastUpdated` | Timestamp | Last progress update timestamp |

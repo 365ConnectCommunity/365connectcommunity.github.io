@@ -159,52 +159,6 @@ const MyCertificates = () => {
                         </div>
                     )}
 
-                    {/* My Courses Section */}
-                    {enrolledCourses.length > 0 && (
-                        <div className="mt-12">
-                            <h2 className="text-4xl font-black mb-8 text-white drop-shadow-lg text-center">
-                                My Active Courses
-                            </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {enrolledCourses.map((course, index) => {
-                                    const progress = getProgress(course.id);
-                                    return (
-                                        <motion.div
-                                            key={course.id}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: index * 0.1 }}
-                                            className="bg-gray-800 rounded-2xl p-6 border border-gray-700 flex flex-col"
-                                        >
-                                            <div className="flex justify-between items-start mb-4">
-                                                <div>
-                                                    <h3 className="text-2xl font-bold text-white mb-2">{course.title}</h3>
-                                                    <p className="text-gray-400 text-sm">{course.level} • {course.duration}</p>
-                                                </div>
-                                                <div className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-bold">
-                                                    {progress}%
-                                                </div>
-                                            </div>
-
-                                            <div className="w-full bg-gray-700 rounded-full h-3 mb-6">
-                                                <div
-                                                    className="bg-gradient-to-r from-blue-500 to-cyan-400 h-3 rounded-full transition-all duration-500"
-                                                    style={{ width: `${progress}%` }}
-                                                ></div>
-                                            </div>
-
-                                            <a
-                                                href={`/course/${course.id}`}
-                                                className="mt-auto w-full py-3 bg-white text-black font-bold rounded-lg text-center hover:bg-gray-200 transition-colors"
-                                            >
-                                                {progress === 100 ? 'Review Course' : 'Continue Learning'}
-                                            </a>
-                                        </motion.div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )}
                 </motion.div>
             </div>
         </div>

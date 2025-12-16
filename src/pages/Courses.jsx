@@ -3,32 +3,49 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { courses } from '../data/courses';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, Clock, BarChart } from 'lucide-react';
+import { courseAPI } from '../services/apiService';
+import { BookOpen, Clock, BarChart, Loader2 } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const Courses = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [enrolledCourses, setEnrolledCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (user) {
-            const savedEnrollments = JSON.parse(localStorage.getItem(`enrolled_${user.email}`) || '[]');
-            setEnrolledCourses(savedEnrollments);
-        }
+        const loadEnrollments = async () => {
+            if (user) {
+                try {
+                    const enrolledIds = await courseAPI.getUserEnrollments(user.uid);
+                    setEnrolledCourses(enrolledIds);
+                } catch (error) {
+                    console.error("Error loading enrollments:", error);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                setLoading(false);
+            }
+        };
+        loadEnrollments();
     }, [user]);
 
-    const handleEnroll = (courseId) => {
+    const handleEnroll = async (courseId) => {
         if (!user) {
             alert('Please log in to enroll in courses.');
             navigate('/login');
             return;
         }
 
-        const newEnrollments = [...enrolledCourses, courseId];
-        localStorage.setItem(`enrolled_${user.email}`, JSON.stringify(newEnrollments));
-        setEnrolledCourses(newEnrollments);
-        navigate(`/course/${courseId}`);
+        try {
+            await courseAPI.enrollUser(user.uid, courseId);
+            setEnrolledCourses([...enrolledCourses, courseId]);
+            navigate(`/course/${courseId}`);
+        } catch (error) {
+            console.error("Error enrolling:", error);
+            alert("Failed to enroll. Please try again.");
+        }
     };
 
     return (

@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { courses } from '../data/courses';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
-import { CheckCircle, PlayCircle, Lock, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
+import { CheckCircle, PlayCircle, Lock, ChevronLeft, ChevronRight, Menu, X, Award, Loader2 } from 'lucide-react';
+import { courseAPI, certificatesAPI } from '../services/apiService';
 
 const CourseViewer = () => {
     const { courseId } = useParams();
@@ -14,35 +15,55 @@ const CourseViewer = () => {
     const [activeLesson, setActiveLesson] = useState(null);
     const [completedLessons, setCompletedLessons] = useState([]);
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [issuingCertificate, setIssuingCertificate] = useState(false);
+    const [certificateId, setCertificateId] = useState(null);
 
     useEffect(() => {
-        const foundCourse = courses.find(c => c.id === courseId);
-        if (!foundCourse) {
-            navigate('/courses');
-            return;
-        }
-        setCourse(foundCourse);
-
-        if (user) {
-            // Check enrollment
-            const enrolled = JSON.parse(localStorage.getItem(`enrolled_${user.email}`) || '[]');
-            if (!enrolled.includes(courseId)) {
-                alert('You are not enrolled in this course.');
+        const loadCourseData = async () => {
+            const foundCourse = courses.find(c => c.id === courseId);
+            if (!foundCourse) {
                 navigate('/courses');
                 return;
             }
+            setCourse(foundCourse);
 
-            // Load progress
-            const savedProgress = JSON.parse(localStorage.getItem(`progress_${user.email}_${courseId}`) || '[]');
-            setCompletedLessons(savedProgress);
+            if (user) {
+                // Check enrollment
+                try {
+                    const enrolledIds = await courseAPI.getUserEnrollments(user.uid);
+                    if (!enrolledIds.includes(courseId)) {
+                        alert('You are not enrolled in this course.');
+                        navigate('/courses');
+                        return;
+                    }
+                } catch (error) {
+                    console.error("Error checking enrollment:", error);
+                }
 
-            // Set initial active lesson (first uncompleted or simply first)
-            if (foundCourse.modules.length > 0 && foundCourse.modules[0].lessons.length > 0) {
-                setActiveLesson(foundCourse.modules[0].lessons[0]);
+                // Load progress from Firestore
+                try {
+                    const savedProgress = await courseAPI.getProgress(user.uid, courseId);
+                    setCompletedLessons(savedProgress);
+
+                    // Check if certificate already exists
+                    const certCheck = await certificatesAPI.checkCertificate(user.email, foundCourse.title);
+                    if (certCheck.exists) {
+                        setCertificateId(certCheck.certificateId);
+                    }
+                } catch (error) {
+                    console.error("Error loading progress:", error);
+                }
+
+                // Set initial active lesson (first uncompleted or simple logic)
+                if (foundCourse.modules.length > 0 && foundCourse.modules[0].lessons.length > 0) {
+                    setActiveLesson(foundCourse.modules[0].lessons[0]);
+                }
+            } else {
+                navigate('/login');
             }
-        } else {
-            navigate('/login');
-        }
+        };
+
+        loadCourseData();
     }, [courseId, user, navigate]);
 
     const handleLessonSelect = (lesson) => {
@@ -53,16 +74,54 @@ const CourseViewer = () => {
         }
     };
 
-    const markAsComplete = () => {
+    const markAsComplete = async () => {
         if (!activeLesson || !user) return;
 
         if (!completedLessons.includes(activeLesson.id)) {
             const newProgress = [...completedLessons, activeLesson.id];
             setCompletedLessons(newProgress);
-            localStorage.setItem(`progress_${user.email}_${courseId}`, JSON.stringify(newProgress));
-        }
 
-        // Auto-advance logic could go here
+            // Save to Firestore
+            await courseAPI.saveProgress(user.uid, courseId, newProgress);
+
+            // Check for Course Completion
+            const allLessonsCount = course.modules.flatMap(m => m.lessons).length;
+            if (newProgress.length === allLessonsCount) {
+                handleCourseCompletion();
+            }
+        }
+    };
+
+    const handleCourseCompletion = async () => {
+        if (!user || certificateId) return; // Already have cert or no user
+
+        setIssuingCertificate(true);
+        try {
+            // Check again to be safe
+            const check = await certificatesAPI.checkCertificate(user.email, course.title);
+            if (check.exists) {
+                setCertificateId(check.certificateId);
+            } else {
+                // Issue Certificate
+                const certData = {
+                    uid: user.uid,
+                    email: user.email,
+                    recipientname: `${user.firstname || user.displayName || 'Learner'} ${user.lastname || ''}`.trim(),
+                    eventname: course.title,
+                    description: `For successfully completing the course: ${course.title}`,
+                    name: `${course.title} Certificate`,
+                };
+
+                const result = await certificatesAPI.issueCertificate(certData);
+                if (result.success) {
+                    setCertificateId(result.certificateId);
+                }
+            }
+        } catch (error) {
+            console.error("Error issuing certificate:", error);
+        } finally {
+            setIssuingCertificate(false);
+        }
     };
 
     // Navigation Helpers
@@ -95,37 +154,11 @@ const CourseViewer = () => {
         window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${title} ${url}`, '_blank');
     };
 
-    // "Download" Certificate (Simulated by generic alert or new window for now)
-    const downloadCertificate = () => {
-        // In a real app, this would generate a PDF.
-        // For now, we'll open a print-friendly certificate window.
-        const certWindow = window.open('', '_blank');
-        certWindow.document.write(`
-            <html>
-                <head>
-                    <title>Certificate of Completion</title>
-                    <style>
-                        body { font-family: 'Arial', sans-serif; text-align: center; padding: 50px; background: #f0f2f5; }
-                        .cert { border: 10px solid #3b82f6; padding: 40px; background: white; max-width: 800px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-                        h1 { color: #1e3a8a; font-size: 48px; margin-bottom: 10px; }
-                        p { font-size: 24px; color: #4b5563; }
-                        .name { font-size: 32px; font-weight: bold; color: #111827; margin: 20px 0; border-bottom: 2px solid #e5e7eb; display: inline-block; padding-bottom: 10px; }
-                        .course { font-size: 28px; color: #3b82f6; font-weight: bold; margin: 20px 0; }
-                    </style>
-                </head>
-                <body>
-                    <div class="cert">
-                        <h1>Certificate of Completion</h1>
-                        <p>This certifies that</p>
-                        <div class="name">${user.firstName} ${user.lastName}</div>
-                        <p>has successfully completed the course</p>
-                        <div class="course">${course.title}</div>
-                        <p>on ${new Date().toLocaleDateString()}</p>
-                    </div>
-                    <script>window.print();</script>
-                </body>
-            </html>
-        `);
+    // Navigate to Certificate View
+    const viewCertificate = () => {
+        if (certificateId) {
+            navigate(`/certificate/${certificateId}`);
+        }
     };
 
     if (!course) return <div>Course not found</div>;
@@ -161,9 +194,15 @@ const CourseViewer = () => {
                         <p className="text-gray-300 mb-8 text-lg">You have successfully completed <strong>{course.title}</strong>.</p>
 
                         <div className="space-y-4">
-                            <button onClick={downloadCertificate} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2">
-                                <CheckCircle size={20} /> Download Certificate
-                            </button>
+                            {issuingCertificate ? (
+                                <div className="text-blue-400 flex items-center justify-center gap-2">
+                                    <Loader2 className="animate-spin" /> Generating Certificate...
+                                </div>
+                            ) : (
+                                <button onClick={viewCertificate} disabled={!certificateId} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <Award size={20} /> View Certificate
+                                </button>
+                            )}
                             <button onClick={shareToLinkedIn} className="w-full py-4 bg-[#0077b5] hover:bg-[#006396] text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2">
                                 <span>In</span> Share on LinkedIn
                             </button>

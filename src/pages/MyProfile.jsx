@@ -16,25 +16,7 @@ const MyProfile = () => {
         phone: ''
     });
 
-    // My Events State
-    const [myEvents, setMyEvents] = useState([]);
-    const [myEventsLoading, setMyEventsLoading] = useState(true);
 
-    useEffect(() => {
-        loadMyEvents();
-    }, []);
-
-    const loadMyEvents = async () => {
-        if (!user?.email) return;
-        try {
-            const events = await userAPI.getMyEvents(user.email);
-            setMyEvents(events);
-        } catch (err) {
-            console.error('Failed to load events', err);
-        } finally {
-            setMyEventsLoading(false);
-        }
-    };
 
 
 
@@ -219,35 +201,7 @@ const MyProfile = () => {
                         )}
                     </form>
 
-                    {/* My Events Section */}
-                    <div id="events" className="mt-12 pt-8 border-t border-gray-700">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-2xl font-bold text-white">My Events</h2>
-                            {myEventsLoading && <span className="text-blue-400">Loading events...</span>}
-                        </div>
 
-                        {!myEventsLoading && myEvents.length === 0 ? (
-                            <p className="text-gray-400">You haven't registered for any events yet.</p>
-                        ) : (
-                            <div className="grid grid-cols-1 gap-4">
-                                {myEvents.map((event) => (
-                                    <div key={event.eventid} className="bg-gray-700 rounded-lg p-4 border border-gray-600 flex justify-between items-center">
-                                        <div>
-                                            <h3 className="text-lg font-bold text-white">{event.name}</h3>
-                                            <p className="text-sm text-gray-300">
-                                                {new Date(event.startdate).toLocaleDateString()} • {event.statuscode || 'Registered'}
-                                            </p>
-                                        </div>
-                                        {event.eventtype && (
-                                            <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs font-medium border border-blue-500/30">
-                                                {event.eventtype}
-                                            </span>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
 
                     <div className="mt-12 pt-8 border-t border-gray-700">
                         <h3 className="text-xl font-bold text-white mb-4">Danger Zone</h3>
