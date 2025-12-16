@@ -9,7 +9,11 @@ const AdminLayout = () => {
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = React.useState(true);
 
-    const isSuperAdmin = user?.email === 'mianshaheerahmed@gmail.com' || user?.role === 'admin';
+    // DEBUG: Check user object
+    console.log("AdminLayout User:", user);
+
+    const safeEmail = user?.email?.toLowerCase()?.trim();
+    const isSuperAdmin = safeEmail === 'mianshaheerahmed@gmail.com' || user?.role === 'admin';
     const isContributor = user?.role === 'contributor';
 
     const menuItems = [
@@ -40,8 +44,8 @@ const AdminLayout = () => {
 
                         <nav className="flex-1 overflow-y-auto py-4">
                             {menuItems.map((item) => {
-                                // RBAC check: if item not for contributor and user is contributor, hide it
-                                if (isContributor && !item.allowContributor) return null;
+                                // RBAC check: if item not for contributor and user is contributor (and not super admin), hide it
+                                if (!isSuperAdmin && isContributor && !item.allowContributor) return null;
                                 // Super Admin check: if item requires super admin and user is not super admin, hide it
                                 if (item.allowSuperAdmin && !isSuperAdmin) return null;
 
@@ -73,7 +77,7 @@ const AdminLayout = () => {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-bold truncate">{user?.name}</p>
-                                    <p className="text-xs text-gray-400 truncate capitalize">{user?.role || (isSuperAdmin ? 'Admin' : 'User')}</p>
+                                    <p className="text-xs text-gray-400 truncate capitalize">{isSuperAdmin ? 'Super Admin' : (user?.role || 'User')}</p>
                                 </div>
                             </div>
                             <Link to="/" className="flex items-center justify-center w-full py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors text-sm font-medium">

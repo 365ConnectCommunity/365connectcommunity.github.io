@@ -13,7 +13,8 @@ const AdminRoute = () => {
     // 1. Super Admin Email always allowed
     // 2. 'admin' role allowed
     // 3. 'contributor' role allowed
-    const isSuperAdmin = user?.email === 'mianshaheerahmed@gmail.com';
+    const safeEmail = user?.email?.toLowerCase()?.trim();
+    const isSuperAdmin = safeEmail === 'mianshaheerahmed@gmail.com';
     const isRoleBasedAdmin = user?.role === 'admin';
     const isContributor = user?.role === 'contributor';
 

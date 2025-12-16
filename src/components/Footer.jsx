@@ -1,57 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Linkedin, Youtube, Mail, Github, Twitter, Globe, Facebook, Instagram } from 'lucide-react';
+import React from 'react';
+import { Linkedin, Youtube, Mail, Github, Twitter, Globe, Facebook, Instagram, Users } from 'lucide-react';
 import { supportAPI } from '../services/apiService';
 import logoNew from '../assets/images/logo-final.png';
 
 const Footer = () => {
-    const [socials, setSocials] = useState([]);
-
-    useEffect(() => {
-        loadSocials();
-    }, []);
-
-    const loadSocials = async () => {
-        try {
-            const data = await supportAPI.getSocials();
-            setSocials(data); // Show all socials
-        } catch (err) {
-            console.error('Failed to load socials', err);
-        }
-    };
-
-    const getIcon = (name) => {
-        const lowerName = name?.toLowerCase() || '';
-        if (lowerName.includes('linkedin')) return <Linkedin size={18} />;
-        if (lowerName.includes('youtube')) return <Youtube size={18} />;
-        if (lowerName.includes('github')) return <Github size={18} />;
-        if (lowerName.includes('twitter') || lowerName.includes('x')) return <Twitter size={18} />;
-        if (lowerName.includes('facebook')) return <Facebook size={18} />;
-        if (lowerName.includes('instagram')) return <Instagram size={18} />;
-        if (lowerName.includes('mail')) return <Mail size={18} />;
-        return <Globe size={18} />;
-    };
-
-    const getHoverColor = (name) => {
-        const lowerName = name?.toLowerCase() || '';
-        if (lowerName.includes('linkedin')) return 'hover:bg-blue/20 hover:text-blue';
-        if (lowerName.includes('youtube')) return 'hover:bg-red-500/20 hover:text-red-500';
-        if (lowerName.includes('github')) return 'hover:bg-gray-500/20 hover:text-white';
-        if (lowerName.includes('twitter') || lowerName.includes('x')) return 'hover:bg-sky-500/20 hover:text-sky-500';
-        if (lowerName.includes('facebook')) return 'hover:bg-blue-600/20 hover:text-blue-600';
-        if (lowerName.includes('instagram')) return 'hover:bg-pink-600/20 hover:text-pink-600';
-        return 'hover:bg-purple-500/20 hover:text-purple-500';
-    };
-
-    // Default socials if API fails
-    const defaultSocials = [
-        { name: 'LinkedIn', url: 'https://www.linkedin.com/company/365connect-community', icon: '💼' },
-        { name: 'Twitter', url: 'https://twitter.com/365connect', icon: '🐦' },
-        { name: 'YouTube', url: 'https://youtube.com', icon: '▶️' },
-        { name: 'GitHub', url: 'https://github.com/365connectcommunity', icon: '💻' }
-    ];
-
-    const displaySocials = socials.length > 0 ? socials : defaultSocials;
-
     return (
         <footer className="bg-[#0f1623] border-t border-white/5 pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-4">
@@ -90,21 +42,36 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    <div>
+                    <div className="footer-connect-section">
                         <h4 className="text-white font-semibold mb-4">Connect</h4>
-                        <div className="flex space-x-3">
-                            {displaySocials.map((social, index) => (
-                                <a
-                                    key={index}
-                                    href={social.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`p-2 rounded-full bg-white/5 text-gray-400 transition-all ${getHoverColor(social.name)}`}
-                                    title={social.name}
-                                >
-                                    {getIcon(social.name)}
-                                </a>
-                            ))}
+                        <div className="flex flex-wrap gap-3">
+                            <a href="https://instagram.com/365_connect" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="Instagram">
+                                <Instagram size={18} />
+                            </a>
+                            <a href="https://www.youtube.com/@365ConnectCommunity" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="YouTube">
+                                <Youtube size={18} />
+                            </a>
+                            <a href="https://powerusers.microsoft.com/t5/365-Connect-Community/gh-p/365ConnectCommunity" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="Microsoft User Group">
+                                <Users size={18} />
+                            </a>
+                            <a href="https://www.meetup.com/365connect/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="Meetup Community">
+                                <Users size={18} />
+                            </a>
+                            <a href="https://pk.linkedin.com/company/365-connect-community" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="LinkedIn Page">
+                                <Linkedin size={18} />
+                            </a>
+                            <a href="https://www.linkedin.com/groups/12822091/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="LinkedIn Group">
+                                <Linkedin size={18} />
+                            </a>
+                            <a href="https://github.com/365connectcommunity" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="GitHub">
+                                <Github size={18} />
+                            </a>
+                            <a href="https://365connectcommunity.github.io/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="Website">
+                                <Globe size={18} />
+                            </a>
+                            <a href="https://365connectcommunity.blogspot.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-2 rounded-full bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 border border-gray-700" title="Community Blog">
+                                <Globe size={18} />
+                            </a>
                         </div>
                     </div>
                 </div>
