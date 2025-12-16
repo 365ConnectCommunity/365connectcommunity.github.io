@@ -98,7 +98,7 @@ const Events = () => {
 
                     <div className="flex gap-2">
                         <button
-                            onClick={() => setSelectedEvent(event)}
+                            onClick={() => setSelectedEvent({ ...event, isPast })}
                             className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
                         >
                             View Details
@@ -187,7 +187,7 @@ const Events = () => {
                     </div>
                 </div>
 
-                {!isPast && event.registrationopen && (
+                {!event.isPast && event.registrationopen && (
                     <button
                         onClick={() => window.location.href = `/register?event=${event.eventid}`}
                         className="w-full px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors font-bold"
