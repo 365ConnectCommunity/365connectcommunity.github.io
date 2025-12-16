@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Linkedin, Youtube, Mail, Github, Twitter, Globe } from 'lucide-react';
+import { Linkedin, Youtube, Mail, Github, Twitter, Globe, Facebook, Instagram } from 'lucide-react';
 import { supportAPI } from '../services/apiService';
 import logoNew from '../assets/images/logo-final.png';
 
@@ -13,7 +13,7 @@ const Footer = () => {
     const loadSocials = async () => {
         try {
             const data = await supportAPI.getSocials();
-            setSocials(data.slice(0, 4)); // Limit to 4 icons for footer
+            setSocials(data); // Show all socials
         } catch (err) {
             console.error('Failed to load socials', err);
         }
@@ -25,6 +25,8 @@ const Footer = () => {
         if (lowerName.includes('youtube')) return <Youtube size={18} />;
         if (lowerName.includes('github')) return <Github size={18} />;
         if (lowerName.includes('twitter') || lowerName.includes('x')) return <Twitter size={18} />;
+        if (lowerName.includes('facebook')) return <Facebook size={18} />;
+        if (lowerName.includes('instagram')) return <Instagram size={18} />;
         if (lowerName.includes('mail')) return <Mail size={18} />;
         return <Globe size={18} />;
     };
@@ -35,6 +37,8 @@ const Footer = () => {
         if (lowerName.includes('youtube')) return 'hover:bg-red-500/20 hover:text-red-500';
         if (lowerName.includes('github')) return 'hover:bg-gray-500/20 hover:text-white';
         if (lowerName.includes('twitter') || lowerName.includes('x')) return 'hover:bg-sky-500/20 hover:text-sky-500';
+        if (lowerName.includes('facebook')) return 'hover:bg-blue-600/20 hover:text-blue-600';
+        if (lowerName.includes('instagram')) return 'hover:bg-pink-600/20 hover:text-pink-600';
         return 'hover:bg-purple-500/20 hover:text-purple-500';
     };
 
@@ -95,7 +99,7 @@ const Footer = () => {
                                     href={social.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`p-2 rounded-full bg-white/5 transition-all ${getHoverColor(social.name)}`}
+                                    className={`p-2 rounded-full bg-white/5 text-gray-400 transition-all ${getHoverColor(social.name)}`}
                                     title={social.name}
                                 >
                                     {getIcon(social.name)}

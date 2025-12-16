@@ -24,7 +24,7 @@ const Tools = () => {
                         Tools & Components
                     </h1>
 
-                    <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-100 to-purple-100 font-bold mb-8">
+                    <p className="text-2xl text-white font-bold mb-8">
                         Everything will be FREE. Always.
                     </p>
 
