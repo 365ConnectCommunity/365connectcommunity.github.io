@@ -412,9 +412,10 @@ export const blogsAPI = {
     // Get all public published blogs
     getPublishedBlogs: async () => {
         try {
-            const q = query(collection(db, 'blogs'), where('status', '==', 'published'), orderBy('publishedAt', 'desc'));
+            const q = query(collection(db, 'blogs'), where('status', '==', 'published'));
             const querySnapshot = await getDocs(q);
-            return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const blogs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            return blogs.sort((a, b) => (b.publishedAt?.seconds || 0) - (a.publishedAt?.seconds || 0));
         } catch (error) {
             console.error("Error fetching blogs:", error);
             return [];
@@ -425,14 +426,15 @@ export const blogsAPI = {
     getBlogs: async (authorId = null, status = null) => {
         try {
             let q = collection(db, 'blogs');
-            const constraints = [orderBy('createdAt', 'desc')];
+            const constraints = [];
 
             if (authorId) constraints.push(where('authorId', '==', authorId));
             if (status) constraints.push(where('status', '==', status));
 
             q = query(q, ...constraints);
             const querySnapshot = await getDocs(q);
-            return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const blogs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            return blogs.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
         } catch (error) {
             console.error("Error fetching blogs:", error);
             return [];
