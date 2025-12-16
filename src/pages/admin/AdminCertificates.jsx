@@ -15,6 +15,8 @@ const AdminCertificates = () => {
         description: 'Successfully completed the workshop'
     });
 
+    const [filterEvent, setFilterEvent] = useState('All');
+
     useEffect(() => {
         fetchCertificates();
     }, []);
@@ -24,6 +26,11 @@ const AdminCertificates = () => {
         const snapshot = await getDocs(q);
         setCertificates(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
     };
+
+    const uniqueEvents = ['All', ...new Set(certificates.map(c => c.eventname))];
+    const filteredCertificates = filterEvent === 'All'
+        ? certificates
+        : certificates.filter(c => c.eventname === filterEvent);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,9 +57,20 @@ const AdminCertificates = () => {
         <div>
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold text-white">Certificates</h1>
-                <button onClick={() => setIsModalOpen(true)} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
-                    <Plus size={20} /> Issue Certificate
-                </button>
+                <div className="flex gap-4">
+                    <select
+                        value={filterEvent}
+                        onChange={(e) => setFilterEvent(e.target.value)}
+                        className="bg-gray-800 text-white border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+                    >
+                        {uniqueEvents.map(event => (
+                            <option key={event} value={event}>{event}</option>
+                        ))}
+                    </select>
+                    <button onClick={() => setIsModalOpen(true)} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                        <Plus size={20} /> Issue Certificate
+                    </button>
+                </div>
             </div>
 
             <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
@@ -66,7 +84,7 @@ const AdminCertificates = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-700">
-                        {certificates.map((cert) => (
+                        {filteredCertificates.map((cert) => (
                             <tr key={cert.id} className="text-gray-300 hover:bg-gray-750">
                                 <td className="px-6 py-4">
                                     <div className="font-medium text-white">{cert.recipientname}</div>
