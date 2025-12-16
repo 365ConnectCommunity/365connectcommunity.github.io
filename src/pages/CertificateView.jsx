@@ -78,14 +78,14 @@ const CertificateView = () => {
                 <div className="h-full flex flex-col justify-between py-12 px-20 relative z-10">
 
                     {/* Header */}
-                    <div className="flex flex-col items-center pt-6">
+                    <div className="flex flex-col items-center pt-6 mb-8">
                         <img src={logoNew} alt="365Connect" className="h-16 mb-6" />
                         <h1 className="text-5xl font-black text-slate-900 tracking-tight uppercase mb-2">Certificate</h1>
                         <p className="text-lg text-orange-600 font-bold tracking-[0.3em] uppercase text-sm">Of Completion</p>
                     </div>
 
                     {/* Recipient Section */}
-                    <div className="flex-1 flex flex-col justify-center items-center w-full text-center -mt-4">
+                    <div className="flex-1 flex flex-col justify-center items-center w-full text-center">
                         <p className="text-base text-slate-500 font-medium mb-6 tracking-wide">PROUDLY PRESENTED TO</p>
 
                         <div className="relative inline-block mx-auto mb-8">
@@ -154,7 +154,6 @@ const CertificateView = () => {
                 @media print {
                     @page { size: landscape; margin: 0; }
                     body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                    #root { display: none; } /* Hide everything else */
                 }
                 `}
             </style>
