@@ -132,9 +132,9 @@ const MyCertificates = () => {
                                     </div>
 
                                     <div className="flex flex-col space-y-3">
-                                        {cert.verificationlink && (
+                                        {(cert.verificationlink || cert.certificateid) && (
                                             <a
-                                                href={cert.verificationlink}
+                                                href={cert.verificationlink || `/certificate/${cert.certificateid}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"

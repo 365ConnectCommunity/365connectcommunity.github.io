@@ -24,6 +24,7 @@ import OurSocials from './pages/OurSocials'
 import BecomeContributor from './pages/BecomeContributor'
 import Tools from './pages/Tools'
 import EventRegistration from './pages/EventRegistration'
+import CertificateView from './pages/CertificateView'
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -62,6 +63,7 @@ function App() {
                     <Route path="my-courses" element={<ProtectedRoute><MyCourses /></ProtectedRoute>} />
                     <Route path="courses" element={<Courses />} />
                     <Route path="course/:courseId" element={<ProtectedRoute><CourseViewer /></ProtectedRoute>} />
+                    <Route path="certificate/:id" element={<CertificateView />} />
                 </Route>
 
                 {/* Admin Portal Routes */}
