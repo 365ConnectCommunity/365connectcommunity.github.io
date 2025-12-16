@@ -51,9 +51,9 @@ const CertificateView = () => {
     if (error) return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-red-400">{error}</div>;
 
     return (
-        <div className="min-h-screen bg-neutral-900 flex flex-col items-center py-16 px-4 print:p-0 print:bg-white">
+        <div className="min-h-screen bg-neutral-900 flex flex-col items-center pt-24 pb-20 px-4 print:p-0 print:bg-white">
             {/* Action Bar */}
-            <div className="max-w-[1100px] w-full flex justify-between items-center mb-8 print:hidden">
+            <div className="max-w-[1100px] w-full flex justify-between items-center mb-12 print:hidden">
                 <div className="flex items-center gap-3 text-emerald-400 bg-emerald-400/10 px-4 py-2 rounded-full border border-emerald-400/20">
                     <CheckCircle size={18} />
                     <span className="font-semibold text-sm tracking-wide">Verified 365Connect Certificate</span>
@@ -78,7 +78,7 @@ const CertificateView = () => {
                 <div className="h-full flex flex-col justify-between py-12 px-20 relative z-10">
 
                     {/* Header */}
-                    <div className="flex flex-col items-center pt-6 mb-8">
+                    <div className="flex flex-col items-center pt-6 mb-12">
                         <img src={logoNew} alt="365Connect" className="h-16 mb-6" />
                         <h1 className="text-5xl font-black text-slate-900 tracking-tight uppercase mb-2">Certificate</h1>
                         <p className="text-lg text-orange-600 font-bold tracking-[0.3em] uppercase text-sm">Of Completion</p>
