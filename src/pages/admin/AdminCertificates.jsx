@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../services/firebase';
 import { collection, getDocs, addDoc, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
-import { Award, Plus, Trash2, Search, X } from 'lucide-react';
+import { Award, Plus, Trash2, Search, X, Eye } from 'lucide-react';
 
 const AdminCertificates = () => {
     const [certificates, setCertificates] = useState([]);
@@ -74,7 +74,10 @@ const AdminCertificates = () => {
                                 </td>
                                 <td className="px-6 py-4">{cert.eventname}</td>
                                 <td className="px-6 py-4">{cert.issueddate?.toDate().toLocaleDateString()}</td>
-                                <td className="px-6 py-4">
+                                <td className="px-6 py-4 flex gap-3">
+                                    <a href={`/certificate/${cert.id}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+                                        <Eye size={16} />
+                                    </a>
                                     <button onClick={() => handleDelete(cert.id)} className="text-red-400 hover:text-red-300"><Trash2 size={16} /></button>
                                 </td>
                             </tr>
