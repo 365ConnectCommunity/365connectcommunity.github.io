@@ -18,6 +18,9 @@ const BlogPost = () => {
         try {
             const data = await blogsAPI.getBlogById(id);
             setBlog(data);
+            if (data && data.id) {
+                blogsAPI.incrementView(data.id);
+            }
         } catch (error) {
             console.error("Error loading blog:", error);
         } finally {
@@ -76,6 +79,9 @@ const BlogPost = () => {
                             <div className="flex items-center">
                                 <Calendar size={18} className="mr-2 text-orange-500" />
                                 <span>{blog.publishedAt ? new Date(blog.publishedAt.seconds * 1000).toLocaleDateString() : 'Draft'}</span>
+                            </div>
+                            <div className="flex items-center">
+                                <span className="text-gray-400 text-sm">{blog.views || 0} views</span>
                             </div>
                             {blog.tags && blog.tags.length > 0 && (
                                 <div className="flex items-center gap-2">

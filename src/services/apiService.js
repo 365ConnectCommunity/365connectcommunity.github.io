@@ -10,7 +10,8 @@ import {
     getDoc,
     orderBy,
     Timestamp,
-    setDoc
+    setDoc,
+    increment
 } from 'firebase/firestore';
 import {
     signInWithEmailAndPassword,
@@ -473,6 +474,17 @@ export const blogsAPI = {
         } catch (error) {
             console.error("Error updating blog:", error);
             throw error;
+        }
+    },
+
+    incrementView: async (id) => {
+        try {
+            const docRef = doc(db, 'blogs', id);
+            await updateDoc(docRef, {
+                views: increment(1)
+            });
+        } catch (error) {
+            console.error("Error incrementing view:", error);
         }
     },
 

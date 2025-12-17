@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Database, Users, Calendar, Award, Share2, CheckCircle, AlertCircle, Loader, FileText } from 'lucide-react';
-import { migrateTeam, migrateEvents, migrateUsersAndUserData, migrateSocials, migrateCertificates, migrateRegistrations } from '../../services/migrationService';
+import { migrateTeam, migrateEvents, migrateUsersAndUserData, migrateSocials, migrateCertificates, migrateRegistrations, migrateBlogs } from '../../services/migrationService';
 
 
 
@@ -16,13 +16,24 @@ const AdminMigration = () => {
     if (user?.email !== 'mianshaheerahmed@gmail.com') {
         return <Navigate to="/admin" replace />;
     }
+    const migrationTasks = [
+        { id: 'team', title: 'Team Members', icon: Users, fn: migrateTeam },
+        { id: 'events', title: 'Events', icon: Calendar, fn: migrateEvents },
+        { id: 'users', title: 'User Profiles', icon: Users, fn: migrateUsersAndUserData },
+        { id: 'socials', title: 'Social Links', icon: Share2, fn: migrateSocials },
+        { id: 'certs', title: 'Certificates (Iterative)', icon: Award, fn: migrateCertificates },
+        { id: 'regs', title: 'Event Registrations (Iterative)', icon: FileText, fn: migrateRegistrations },
+        { id: 'blogs', title: 'Blog Posts', icon: FileText, fn: migrateBlogs }
+    ];
+
     const [status, setStatus] = useState({
         users: 'idle',
         events: 'idle',
         team: 'idle',
         socials: 'idle',
         certs: 'idle',
-        regs: 'idle'
+        regs: 'idle',
+        blogs: 'idle'
     });
 
     const [progress, setProgress] = useState({
@@ -31,7 +42,8 @@ const AdminMigration = () => {
         team: '',
         socials: '',
         certs: '',
-        regs: ''
+        regs: '',
+        blogs: ''
     });
 
     const handleMigration = async (type, migrateFn) => {
@@ -72,14 +84,7 @@ const AdminMigration = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-700">
-                        {[
-                            { id: 'users', title: 'Users & Profiles', icon: Users, fn: migrateUsersAndUserData },
-                            { id: 'events', title: 'Events', icon: Calendar, fn: migrateEvents },
-                            { id: 'team', title: 'Team Members', icon: Users, fn: migrateTeam },
-                            { id: 'socials', title: 'Social Links', icon: Share2, fn: migrateSocials },
-                            { id: 'certs', title: 'Certificates', icon: Award, fn: migrateCertificates },
-                            { id: 'regs', title: 'Registrations', icon: FileText, fn: migrateRegistrations }
-                        ].map((item) => (
+                        {migrationTasks.map((item) => (
                             <tr key={item.id} className="hover:bg-gray-750 transition-colors">
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">

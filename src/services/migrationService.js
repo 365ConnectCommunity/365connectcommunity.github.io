@@ -397,3 +397,50 @@ export const migrateRegistrations = async (setProgress) => {
         throw error;
     }
 };
+
+// 7. Migrate Blogs (from JSON)
+export const migrateBlogs = async (setProgress) => {
+    try {
+        setProgress('Fetching blog data from JSON...');
+        const response = await fetch('/data/blog_import.json');
+        if (!response.ok) throw new Error('Failed to load blog_import.json');
+
+        const blogs = await response.json();
+        setProgress(`Found ${blogs.length} blog posts. Starting migration...`);
+
+        const batches = chunkArray(blogs, 450);
+        let count = 0;
+
+        for (const batchData of batches) {
+            const batch = writeBatch(db);
+
+            batchData.forEach(blog => {
+                // Ensure proper types
+                const newBlog = {
+                    ...blog,
+                    createdAt: blog.createdAt ? Timestamp.fromDate(new Date(blog.createdAt)) : serverTimestamp(),
+                    publishedAt: blog.publishedAt ? Timestamp.fromDate(new Date(blog.publishedAt)) : serverTimestamp(),
+                    updatedAt: blog.updatedAt ? Timestamp.fromDate(new Date(blog.updatedAt)) : serverTimestamp(),
+                    migratedAt: serverTimestamp()
+                };
+
+                // ID: use slug or sanitize title, or let Firestore generate if we imported generic.
+                // But we want to prevent duplicates if run twice.
+                // Use slug if available, else random.
+                const docId = blog.slug || blog.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                const docRef = doc(db, 'blogs', docId);
+
+                batch.set(docRef, newBlog, { merge: true });
+            });
+
+            await batch.commit();
+            count += batchData.length;
+            setProgress(`Migrated ${count}/${blogs.length} blog posts.`);
+        }
+
+        return { success: true, count };
+    } catch (error) {
+        console.error("Migration Error:", error);
+        throw error;
+    }
+};
