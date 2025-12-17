@@ -170,6 +170,15 @@ const AdminBlogs = () => {
                             </div>
 
                             <div className="flex items-center gap-3">
+                                <a
+                                    href={`/blog/${blog.id}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-2 bg-gray-700 text-gray-400 rounded hover:text-white"
+                                    title="Preview"
+                                >
+                                    <Eye size={20} />
+                                </a>
                                 {isAdmin && blog.status === 'pending' && (
                                     <>
                                         <button
