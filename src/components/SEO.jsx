@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const SEO = ({ title, description, image, url }) => {
+const SEO = ({ title, description, image, url, keywords }) => {
     useEffect(() => {
         // Update Title
         document.title = title ? `${title} | 365Connect Community` : '365Connect Community';
@@ -22,13 +22,23 @@ const SEO = ({ title, description, image, url }) => {
         };
 
         setMetaTag('description', description);
+        setMetaTag('keywords', Array.isArray(keywords) ? keywords.join(', ') : keywords);
         setMetaTag('og:title', title);
         setMetaTag('og:description', description);
         setMetaTag('og:image', image || '/logo.png'); // Default to logo
         setMetaTag('og:url', url || window.location.href);
         setMetaTag('twitter:card', 'summary_large_image');
 
-    }, [title, description, image, url]);
+        // Update Canonical Link
+        let linkRel = document.querySelector(`link[rel="canonical"]`);
+        if (!linkRel) {
+            linkRel = document.createElement('link');
+            linkRel.setAttribute('rel', 'canonical');
+            document.head.appendChild(linkRel);
+        }
+        linkRel.setAttribute('href', url || window.location.href);
+
+    }, [title, description, image, url, keywords]);
 
     return null;
 };

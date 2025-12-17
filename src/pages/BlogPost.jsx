@@ -54,6 +54,7 @@ const BlogPost = () => {
                 description={blog.excerpt}
                 image={blog.image}
                 url={window.location.href}
+                keywords={blog.tags}
             />
             {/* Header Image */}
             {blog.image && (

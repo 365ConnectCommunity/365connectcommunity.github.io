@@ -41,7 +41,7 @@ const AdminLayout = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-900 flex text-white font-sans">
+        <div className="h-screen overflow-hidden bg-gray-900 flex text-white font-sans">
             {/* Mobile Backdrop */}
             {sidebarOpen && (
                 <div
@@ -57,7 +57,7 @@ const AdminLayout = () => {
                         initial={{ width: 0, opacity: 0 }}
                         animate={{ width: 280, opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
-                        className="bg-gray-800 border-r border-gray-700 flex-shrink-0 flex flex-col fixed inset-y-0 left-0 z-50 md:relative h-full"
+                        className="bg-gray-800 border-r border-gray-700 flex-shrink-0 flex flex-col fixed inset-y-0 left-0 z-50 md:relative min-h-screen"
                     >
                         <div className="p-6 border-b border-gray-700 flex items-center justify-between">
                             <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">Admin Portal</span>
