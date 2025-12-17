@@ -7,7 +7,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 const AdminLayout = () => {
     const { user, logout } = useAuth();
     const location = useLocation();
-    const [sidebarOpen, setSidebarOpen] = React.useState(true);
+    const [sidebarOpen, setSidebarOpen] = React.useState(window.innerWidth >= 768);
+
+    React.useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setSidebarOpen(true);
+            } else {
+                setSidebarOpen(false);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // DEBUG: Check user object
     console.log("AdminLayout User:", user);
@@ -30,6 +42,14 @@ const AdminLayout = () => {
 
     return (
         <div className="min-h-screen bg-gray-900 flex text-white font-sans">
+            {/* Mobile Backdrop */}
+            {sidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
+
             {/* Sidebar */}
             <AnimatePresence mode='wait'>
                 {sidebarOpen && (
@@ -37,10 +57,13 @@ const AdminLayout = () => {
                         initial={{ width: 0, opacity: 0 }}
                         animate={{ width: 280, opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
-                        className="bg-gray-800 border-r border-gray-700 flex-shrink-0 relative hidden md:flex flex-col"
+                        className="bg-gray-800 border-r border-gray-700 flex-shrink-0 flex flex-col fixed inset-y-0 left-0 z-50 md:relative h-full"
                     >
                         <div className="p-6 border-b border-gray-700 flex items-center justify-between">
                             <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">Admin Portal</span>
+                            <button onClick={() => setSidebarOpen(false)} className="md:hidden text-gray-400 hover:text-white">
+                                <X size={20} />
+                            </button>
                         </div>
 
                         <nav className="flex-1 overflow-y-auto py-4">
@@ -57,6 +80,7 @@ const AdminLayout = () => {
                                         to={item.path}
                                         className={`flex items-center px-6 py-3.5 mb-1 transition-all relative ${isActive ? 'text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'
                                             }`}
+                                        onClick={() => window.innerWidth < 768 && setSidebarOpen(false)}
                                     >
                                         {isActive && (
                                             <motion.div
