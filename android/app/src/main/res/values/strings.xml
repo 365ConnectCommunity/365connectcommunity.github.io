@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">365Connect Community</string>
+    <string name="title_activity_main">365Connect Community</string>
+    <string name="package_name">com.connectcommunity.app</string>
+    <string name="custom_url_scheme">com.connectcommunity.app</string>
+</resources>
