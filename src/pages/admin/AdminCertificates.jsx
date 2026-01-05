@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../services/firebase';
 import { collection, getDocs, addDoc, deleteDoc, doc, Timestamp, query, orderBy } from 'firebase/firestore';
 import { Award, Plus, Trash2, Search, X, Eye } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminCertificates = () => {
+    const { user, isAdmin } = useAuth();
     const [certificates, setCertificates] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -27,20 +29,44 @@ const AdminCertificates = () => {
         setCertificates(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
     };
 
+    // Filter by Event AND by Creator (User)
+    // Show certificate IF:
+    // 1. It matches the selected event filter (or All)
+    // AND
+    // 2. (User is Admin OR User created the certificate)
     const uniqueEvents = ['All', ...new Set(certificates.map(c => c.eventname))];
-    const filteredCertificates = filterEvent === 'All'
-        ? certificates
-        : certificates.filter(c => c.eventname === filterEvent);
+
+    const filteredCertificates = certificates.filter(c => {
+        const eventMatch = filterEvent === 'All' || c.eventname === filterEvent;
+        const userMatch = isAdmin || (c.createdBy === user?.uid);
+        return eventMatch && userMatch;
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!user) {
+            alert("You must be logged in to issue certificates.");
+            return;
+        }
         try {
             await addDoc(collection(db, 'certificates'), {
                 ...formData,
                 issueddate: Timestamp.fromDate(new Date(formData.issueddate)),
+                createdBy: user.uid,
+                createdByName: user.name || user.email,
+                createdAt: Timestamp.now()
             });
             setIsModalOpen(false);
             fetchCertificates();
+            // Reset form
+            setFormData({
+                recipientname: '',
+                email: '',
+                eventname: '',
+                certificateurl: '',
+                issueddate: '',
+                description: 'Successfully completed the workshop'
+            });
         } catch (error) {
             console.error("Error issuing certificate:", error);
         }
@@ -84,22 +110,31 @@ const AdminCertificates = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-700">
-                        {filteredCertificates.map((cert) => (
-                            <tr key={cert.id} className="text-gray-300 hover:bg-gray-750">
-                                <td className="px-6 py-4">
-                                    <div className="font-medium text-white">{cert.recipientname}</div>
-                                    <div className="text-xs text-gray-500">{cert.email}</div>
-                                </td>
-                                <td className="px-6 py-4">{cert.eventname}</td>
-                                <td className="px-6 py-4">{cert.issueddate?.toDate().toLocaleDateString()}</td>
-                                <td className="px-6 py-4 flex gap-3">
-                                    <a href={`/certificate/${cert.id}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
-                                        <Eye size={16} />
-                                    </a>
-                                    <button onClick={() => handleDelete(cert.id)} className="text-red-400 hover:text-red-300"><Trash2 size={16} /></button>
+                        {filteredCertificates.length > 0 ? (
+                            filteredCertificates.map((cert) => (
+                                <tr key={cert.id} className="text-gray-300 hover:bg-gray-750">
+                                    <td className="px-6 py-4">
+                                        <div className="font-medium text-white">{cert.recipientname}</div>
+                                        <div className="text-xs text-gray-500">{cert.email}</div>
+                                        {cert.createdByName && <div className="text-[10px] text-gray-600">By: {cert.createdByName}</div>}
+                                    </td>
+                                    <td className="px-6 py-4">{cert.eventname}</td>
+                                    <td className="px-6 py-4">{cert.issueddate?.toDate().toLocaleDateString()}</td>
+                                    <td className="px-6 py-4 flex gap-3">
+                                        <a href={`/certificate/${cert.id}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+                                            <Eye size={16} />
+                                        </a>
+                                        <button onClick={() => handleDelete(cert.id)} className="text-red-400 hover:text-red-300"><Trash2 size={16} /></button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="4" className="px-6 py-8 text-center text-gray-500">
+                                    No certificates found.
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>
